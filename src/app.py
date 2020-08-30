@@ -2,13 +2,13 @@ import sys
 import logging
 import threading
 import lib.gps as gps
+import humanize
 
 from PyQt5 import QtWidgets
 
 from lib.interface.main_window import Ui_NomadicPI
 
 import sys
-
 logger = logging.getLogger(__name__)
 
 class mainWindow(QtWidgets.QMainWindow):
@@ -20,7 +20,12 @@ class mainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.QuitButton.clicked.connect(self.exit_application)
         
+        self.update_content()
+    
+    def update_content(self):
         self.update_gps()
+        
+        threading.Timer(1, self.update_content).start()        
         
     def update_gps(self):
         if gps.gpsd_socket is None:
@@ -32,18 +37,22 @@ class mainWindow(QtWidgets.QMainWindow):
             gps_info = gps.get_current()
             
             cur_speed = gps_info.speed()
-            
+
             self.ui.CurrentSpeed.setText( str(cur_speed) )
             
+            curtime = "Local Time: " + str(gps_info.get_time(local_time=True)) + "\n" \
+                        + "UTC: " + str(gps_info.get_time())
+            
+            self.ui.LocalTime.setText( curtime )
+            self.ui.UtcTime.setText( 'UTC: ' + str(gps_info.get_time(local_time=True)) )
+                        
             cur_pos = gps_info.position()
             
             if len(cur_pos) == 2:
-                self.ui.CurrentPosition.setText("Current Position: " + str(cur_pos[0]) + ", " + str(cur_pos[1]))
+                self.ui.CurrentPosition.setText("Current Position:\n" + str(cur_pos[0]) + ", " + str(cur_pos[1]))
                     
-        except:
-            print("Need a gps fix for altitude")      
-            
-        threading.Timer(1, self.update_gps).start()
+        except Exception as e:
+            print(e)
         
     def exit_application():
         sys.exit()
