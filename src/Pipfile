@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 pyqt5 = "*"
+python-mpd2 = "*"
 
 [dev-packages]
 

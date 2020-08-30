@@ -53,9 +53,9 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>10</y>
+     <y>440</y>
      <width>451</width>
-     <height>51</height>
+     <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="RightColumn">
@@ -72,7 +72,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>360</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -119,7 +119,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
+     <y>400</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -141,7 +141,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>440</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -154,6 +154,82 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_5">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>10</y>
+     <width>451</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="RightColumn_2">
+    <item>
+     <widget class="QPushButton" name="MusicPlay">
+      <property name="text">
+       <string>Play</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_6">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>50</y>
+     <width>451</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="RightColumn_3">
+    <item>
+     <widget class="QPushButton" name="RandomPlayback">
+      <property name="text">
+       <string>RandomPlayBack</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_7">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>90</y>
+     <width>451</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="RightColumn_4">
+    <item>
+     <widget class="QPushButton" name="ConsumptionPlayback">
+      <property name="text">
+       <string>ConsumptionPlayBack</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_8">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>130</y>
+     <width>451</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="RightColumn_5">
+    <item>
+     <widget class="QPushButton" name="UpdateDatabase">
+      <property name="text">
+       <string>UpdateDatabase</string>
       </property>
      </widget>
     </item>
