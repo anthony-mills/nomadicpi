@@ -22,7 +22,7 @@
      <x>10</x>
      <y>10</y>
      <width>201</width>
-     <height>131</height>
+     <height>91</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="CurrentSpeedArea">
@@ -72,7 +72,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
+     <y>110</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -96,7 +96,7 @@
      <x>220</x>
      <y>10</y>
      <width>111</width>
-     <height>131</height>
+     <height>91</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="SpeedUnit">
@@ -119,12 +119,34 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>150</y>
      <width>321</width>
      <height>31</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="CurrentAltitude">
+      <property name="text">
+       <string>Current Altitude</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>321</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QLabel" name="TimeInfo">
       <property name="text">

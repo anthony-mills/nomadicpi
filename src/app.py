@@ -2,7 +2,6 @@ import sys
 import logging
 import threading
 import lib.gps as gps
-import humanize
 
 from PyQt5 import QtWidgets
 
@@ -28,6 +27,8 @@ class mainWindow(QtWidgets.QMainWindow):
         threading.Timer(1, self.update_content).start()        
         
     def update_gps(self):
+        gps_info = None
+        
         if gps.gpsd_socket is None:
             try:
                 gps.gps_connect(host=gps.gps_host, port=gps.gps_port)
@@ -35,24 +36,33 @@ class mainWindow(QtWidgets.QMainWindow):
                 print("Unable to connect to GPSD service at: " + str(gps.gps_host) + ":" + str(gps.gps_port))
         try:
             gps_info = gps.get_current()
-            
-            cur_speed = gps_info.speed()
-
-            self.ui.CurrentSpeed.setText( str(cur_speed) )
-            
-            curtime = "Local Time: " + str(gps_info.get_time(local_time=True)) + "\n" \
-                        + "UTC: " + str(gps_info.get_time())
-            
-            self.ui.LocalTime.setText( curtime )
-            self.ui.UtcTime.setText( 'UTC: ' + str(gps_info.get_time(local_time=True)) )
-                        
-            cur_pos = gps_info.position()
-            
-            if len(cur_pos) == 2:
-                self.ui.CurrentPosition.setText("Current Position:\n" + str(cur_pos[0]) + ", " + str(cur_pos[1]))
-                    
+        
         except Exception as e:
-            print(e)
+            print("Error: " + str(e))
+        
+        if gps_info is not None:    
+            try:
+                # Get the current GPS speed
+                cur_speed = gps_info.speed()
+                self.ui.CurrentSpeed.setText( str(cur_speed) )            
+                
+                # Get the current Altitude
+                cur_alt = gps_info.altitude()
+                self.ui.CurrentAltitude.setText( "Altitude: " + str(cur_alt) + "m" )
+                
+                # Display the time in UTC and the Local timezone
+                local_time = gps_info.get_time(local_time=True)
+                utc_time = gps_info.get_time()
+                cur_time = "Local Time: " + str(local_time) + "\n" + "UTC: " + str(utc_time)
+                self.ui.TimeInfo.setText( cur_time )
+                            
+                cur_pos = gps_info.position()
+                
+                if len(cur_pos) == 2:
+                    self.ui.CurrentPosition.setText("Current Position:\n" + str(cur_pos[0]) + ", " + str(cur_pos[1]))
+                        
+            except Exception as e:
+                print(e)
         
     def exit_application():
         sys.exit()
