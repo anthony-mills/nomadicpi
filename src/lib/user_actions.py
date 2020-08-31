@@ -48,28 +48,39 @@ class UserActions():
         """
         Update the state of any UI buttons
         """    
-        mpdStatus = self.mpd.get_status()
+        mpd_status = self.mpd.get_status()
 
-        if mpdStatus.get('updating_db') is None:
-            self.ui.UpdateDatabase.setText("Update Database")
-        else:
-            self.ui.UpdateDatabase.setText("Database Updating...")   
-
-        if mpdStatus['state'] == 'play':
+        if mpd_status['state'] == 'play':
             self.ui.MusicPlay.setText("Pause")
         else:
             self.ui.MusicPlay.setText("Play")     
                         
-        if int(mpdStatus['random']) == 0:
+        if int(mpd_status['random']) == 0:
             self.ui.RandomPlayback.setText("Enable Random Playback")
         else:
             self.ui.RandomPlayback.setText("Disable Random Playback")            
 
-        if int(mpdStatus['consume']) == 0:
+        if int(mpd_status['consume']) == 0:
             self.ui.ConsumptionPlayback.setText("Enable Consumption Playback")
         else:
-            self.ui.ConsumptionPlayback.setText("Disable Consumption Playback")            
+            self.ui.ConsumptionPlayback.setText("Disable Consumption Playback")  
         
+        self.database_update_status(mpd_status)
+    
+    def database_update_status(self, mpd_status):
+        """
+        Update the state of database update button
+        
+        Parameters
+        ----------
+        mpd_status : dict
+            Dictionary of the MPD daemons current state   
+        """            
+        if mpd_status.get('updating_db') is None:
+            self.ui.UpdateDatabase.setText("Update Database")
+        else:
+            self.ui.UpdateDatabase.setText("Database Updating...")   
+            
     def exit_application(self):
         """
         Close the MPD connection and close the application
