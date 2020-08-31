@@ -3,6 +3,7 @@ import logging
 import threading
 import lib.gps as gps
 import lib.mpd as mpd
+import lib.user_actions as user_actions
 
 from PyQt5 import QtWidgets
 
@@ -19,51 +20,32 @@ class mainWindow(QtWidgets.QMainWindow):
         # Connect to the MPD daemon
         self.mpd = mpd.MpdLib()
         self.mpd.connect_mpd()
+        self.mpd_status = {}
         
         # Setup the UI
         self.ui = Ui_NomadicPI()
         self.ui.setupUi(self)
         
-        self.ui.QuitButton.clicked.connect(self.exit_application)  
-        self.ui.MusicPlay.clicked.connect(self.mpd.play_playback)      
-        self.ui.RandomPlayback.clicked.connect(self.mpd.random_playback)
-        self.ui.ConsumptionPlayback.clicked.connect(self.mpd.consumption_playback)
-        self.ui.UpdateDatabase.clicked.connect(self.mpd.update_library)        
+        # Setup the handlers for user actions
+        self.user_actions = user_actions.UserActions(self.ui, self.mpd)
                 
         self.update_content()
-    
+        
     def update_content(self):
         """
         Create a timer and periodically update the UI information
-        """              
+        """ 
+        self.mpd_status = self.mpd.get_status()    
+                     
         self.update_gps()
         self.update_mpd()
         
-        threading.Timer(0.3, self.update_content).start()  
+        threading.Timer(1, self.update_content).start()  
         
     def update_mpd(self):
-        mpdStatus = self.mpd.get_status()
-
-        if mpdStatus.get('updating_db') is None:
-            self.ui.UpdateDatabase.setText( "Update Database" )
-        else:
-            self.ui.UpdateDatabase.setText( "Database Updating..." )   
-
-        if mpdStatus['state'] == 'play':
-            self.ui.MusicPlay.setText( "Pause" )
-        else:
-            self.ui.MusicPlay.setText( "Play" )     
-                        
-        if int(mpdStatus['random']) == 0:
-            self.ui.RandomPlayback.setText( "Enable Random Playback" )
-        else:
-            self.ui.RandomPlayback.setText( "Disable Random Playback" )            
-
-        if int(mpdStatus['consume']) == 0:
-            self.ui.ConsumptionPlayback.setText( "Enable Consumption Playback" )
-        else:
-            self.ui.ConsumptionPlayback.setText( "Disable Consumption Playback" )            
-        
+        """
+        Update the interface with any time sensitive MPD info i.e play time etc 
+        """                    
         
     def update_gps(self):
         """
@@ -74,13 +56,10 @@ class mainWindow(QtWidgets.QMainWindow):
         if gps.gpsd_socket is None:
             try:
                 gps.gps_connect(host=gps.gps_host, port=gps.gps_port)
+                gps_info = gps.get_current()
             except: 
                 print("Unable to connect to GPSD service at: " + str(gps.gps_host) + ":" + str(gps.gps_port))
-        try:
-            gps_info = gps.get_current()
-        
-        except Exception as e:
-            print("Error: " + str(e))
+
         
         if gps_info is not None:    
             try:
@@ -105,10 +84,6 @@ class mainWindow(QtWidgets.QMainWindow):
                         
             except Exception as e:
                 print(e)
-        
-    def exit_application():
-        self.mpd.close_mpd()
-        sys.exit()
 
 if __name__ == '__main__':        
     app = QtWidgets.QApplication([])
