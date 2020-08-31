@@ -46,6 +46,7 @@ class mainWindow(QtWidgets.QMainWindow):
         """
         Update the interface with any time sensitive MPD info i.e play time etc 
         """                    
+        self.user_actions.database_update_status(self.mpd_status)
         
     def update_gps(self):
         """
@@ -59,6 +60,9 @@ class mainWindow(QtWidgets.QMainWindow):
                 gps_info = gps.get_current()
             except: 
                 print("Unable to connect to GPSD service at: " + str(gps.gps_host) + ":" + str(gps.gps_port))
+                self.ui.CurrentPosition.setText("Current Position: No GPS Fix")
+                self.ui.CurrentAltitude.setText("Altitude: Unknown")
+                self.ui.TimeInfo.setText("Local Time: GPS provided time unavailable")
 
         
         if gps_info is not None:    
