@@ -1,10 +1,10 @@
 ## About Nomadic Pi
 
-Rewrite of my original Raspberry Pi based car computer in Python. The first iteration while it has proven itself over 100,000km of travel was a mismatch of technologies and hard for other to set up. 
+Rewrite of my original [Raspberry Pi based car computer](https://github.com/anthony-mills/raspberrypi-carputer) in Python with a QT based UI. 
 
-The aim with this rewrite will be extensibility so it can be modified to interface with the multitude of bluetooth car accessories. 
+The first iteration of the car computer while it has proven itself over 100,000km of travel. Caused others issues with the setup and was not the best choice of technologies for interfacing with other hardware.
 
-The first iteration was flexible but a lot of work to set it up, this rewrite will aim to ease of distribution. So this time around looking for a simplified .deb or similar installation workflow.
+So the first aim with this rewrite will be extensibility so it can be modified to interface with the multitude of bluetooth car accessories. The second goal will aim to ease of distribution and use for others. So this time around looking for a simplified .deb or similar installation workflow.
 
 With th 
 ### Licence
