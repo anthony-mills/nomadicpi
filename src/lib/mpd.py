@@ -9,7 +9,7 @@ class MpdLib():
         """
         Set the IP or hostname the MPD daemon is running on
         """        
-        self.mpd_host = mpd.host
+        self.mpd_host = mpd_host
         
     def set_mpd_port(self, mpd_port):
         """

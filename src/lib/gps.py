@@ -4,9 +4,6 @@ import logging
 import datetime
 import threading
 
-gps_host = '192.168.42.129'
-gps_port = 2947
-
 gpsd_socket = None
 gpsd_stream = None
 

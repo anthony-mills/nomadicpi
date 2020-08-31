@@ -1,4 +1,5 @@
 import sys
+import configparser
 import logging
 import threading
 import lib.gps as gps
@@ -17,10 +18,11 @@ class mainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(mainWindow, self).__init__()
 
+        self.app_config = configparser.ConfigParser()
+        self.app_config.read('config.ini')
+        
         # Connect to the MPD daemon
-        self.mpd = mpd.MpdLib()
-        self.mpd.connect_mpd()
-        self.mpd_status = {}
+        self.connect_mpd()
         
         # Setup the UI
         self.ui = Ui_NomadicPI()
@@ -30,7 +32,17 @@ class mainWindow(QtWidgets.QMainWindow):
         self.user_actions = user_actions.UserActions(self.ui, self.mpd)
                 
         self.update_content()
-        
+    
+    def connect_mpd(self):
+        """
+        Connect to the MPD daemon
+        """         
+        self.mpd = mpd.MpdLib()
+        self.mpd.set_mpd_host(self.app_config['mpd'].get('Host', 'localhost'))
+        self.mpd.set_mpd_port(self.app_config['mpd'].get('Port', '6000'))         
+        self.mpd.connect_mpd()
+        self.mpd_status = {}            
+    
     def update_content(self):
         """
         Create a timer and periodically update the UI information
@@ -56,10 +68,13 @@ class mainWindow(QtWidgets.QMainWindow):
         
         if gps.gpsd_socket is None:
             try:
-                gps.gps_connect(host=gps.gps_host, port=gps.gps_port)
+                gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
+                gpsd_port = self.app_config['gpsd'].get('Port', '2947')
+                
+                gps.gps_connect(host=gpsd_host, port=gpsd_port)
                 gps_info = gps.get_current()
             except: 
-                print("Unable to connect to GPSD service at: " + str(gps.gps_host) + ":" + str(gps.gps_port))
+                print("Unable to connect to GPSD service at: " + str(gpsd_host) + ":" + str(gpsd_port))
                 self.ui.CurrentPosition.setText("Current Position: No GPS Fix")
                 self.ui.CurrentAltitude.setText("Altitude: Unknown")
                 self.ui.TimeInfo.setText("Local Time: GPS provided time unavailable")
