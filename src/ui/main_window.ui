@@ -159,81 +159,124 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_5">
+  <widget class="QPushButton" name="UpdateDatabase">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>150</y>
+     <width>449</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>UpdateDatabase</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ConsumptionPlayback">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>110</y>
+     <width>449</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ConsumptionPlayBack</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MusicSkip">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>10</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/forward_button.png</normaloff>icons/forward_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="RandomPlayback">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>10</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MusicPlay">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>10</y>
+     <width>111</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/play_button.png</normaloff>
+     <selectedon>icons/pause_button.png</selectedon>icons/play_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MusicStop">
    <property name="geometry">
     <rect>
      <x>340</x>
      <y>10</y>
-     <width>451</width>
-     <height>31</height>
+     <width>111</width>
+     <height>86</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_2">
-    <item>
-     <widget class="QPushButton" name="MusicPlay">
-      <property name="text">
-       <string>Play</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_6">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>50</y>
-     <width>451</width>
-     <height>31</height>
-    </rect>
+   <property name="text">
+    <string/>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_3">
-    <item>
-     <widget class="QPushButton" name="RandomPlayback">
-      <property name="text">
-       <string>RandomPlayBack</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_7">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>90</y>
-     <width>451</width>
-     <height>31</height>
-    </rect>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/stop_button.png</normaloff>icons/stop_button.png</iconset>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_4">
-    <item>
-     <widget class="QPushButton" name="ConsumptionPlayback">
-      <property name="text">
-       <string>ConsumptionPlayBack</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_8">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>130</y>
-     <width>451</width>
-     <height>31</height>
-    </rect>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_5">
-    <item>
-     <widget class="QPushButton" name="UpdateDatabase">
-      <property name="text">
-       <string>UpdateDatabase</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
   </widget>
  </widget>
  <resources/>

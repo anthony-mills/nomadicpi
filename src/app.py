@@ -30,7 +30,7 @@ class mainWindow(QtWidgets.QMainWindow):
         
         # Setup the handlers for user actions
         self.user_actions = user_actions.UserActions(self.ui, self.mpd)
-                
+        self.user_actions.ui_button_state()        
         self.update_content()
     
     def connect_mpd(self):

@@ -65,7 +65,19 @@ class MpdLib():
             self.client.random(1)
         else:
             self.client.random(0)            
+
+    def stop_playback(self):
+        """
+        Stop MPD playback
+        """         
+        self.client.stop() 
         
+    def next_song(self):
+        """
+        Skip playback to the next song
+        """         
+        self.client.next()         
+                    
     def consumption_playback(self):
         """
         Change the consume playback state
