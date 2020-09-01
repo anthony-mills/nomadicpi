@@ -30,7 +30,7 @@
      <widget class="QLabel" name="CurrentSpeed">
       <property name="font">
        <font>
-        <family>Ubuntu Condensed</family>
+        <family>Open Sans Extrabold</family>
         <pointsize>50</pointsize>
         <weight>75</weight>
         <bold>true</bold>
@@ -61,6 +61,11 @@
    <layout class="QHBoxLayout" name="RightColumn">
     <item>
      <widget class="QPushButton" name="QuitButton">
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+       </font>
+      </property>
       <property name="text">
        <string>Quit</string>
       </property>
@@ -72,7 +77,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>360</y>
+     <y>400</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -80,6 +85,11 @@
    <layout class="QHBoxLayout" name="GpsInfo">
     <item>
      <widget class="QLabel" name="CurrentPosition">
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+       </font>
+      </property>
       <property name="text">
        <string>Current Position</string>
       </property>
@@ -104,8 +114,8 @@
      <widget class="QLabel" name="label">
       <property name="font">
        <font>
-        <family>Ubuntu Mono</family>
-        <pointsize>30</pointsize>
+        <family>Open Sans Extrabold</family>
+        <pointsize>25</pointsize>
        </font>
       </property>
       <property name="text">
@@ -119,7 +129,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>400</y>
+     <y>440</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -127,6 +137,11 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="CurrentAltitude">
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+       </font>
+      </property>
       <property name="text">
        <string>Current Altitude</string>
       </property>
@@ -137,103 +152,172 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="verticalLayoutWidget_2">
+  <widget class="QPushButton" name="UpdateDatabase">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>440</y>
-     <width>321</width>
-     <height>31</height>
+     <x>340</x>
+     <y>410</y>
+     <width>449</width>
+     <height>24</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QLabel" name="TimeInfo">
-      <property name="text">
-       <string>Time</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="font">
+    <font>
+     <family>Open Sans</family>
+    </font>
+   </property>
+   <property name="text">
+    <string>UpdateDatabase</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_5">
+  <widget class="QPushButton" name="ConsumptionPlayback">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>380</y>
+     <width>449</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Open Sans</family>
+    </font>
+   </property>
+   <property name="text">
+    <string>ConsumptionPlayBack</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MusicSkip">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>10</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/forward_button.png</normaloff>icons/forward_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="RandomPlayback">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>10</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MusicPlay">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>10</y>
+     <width>111</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/play_button.png</normaloff>
+     <selectedon>icons/pause_button.png</selectedon>icons/play_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MusicStop">
    <property name="geometry">
     <rect>
      <x>340</x>
      <y>10</y>
-     <width>451</width>
-     <height>31</height>
+     <width>111</width>
+     <height>86</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_2">
-    <item>
-     <widget class="QPushButton" name="MusicPlay">
-      <property name="text">
-       <string>Play</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/stop_button.png</normaloff>icons/stop_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_6">
+  <widget class="QLabel" name="MPDNowPlaying">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>50</y>
-     <width>451</width>
-     <height>31</height>
+     <x>10</x>
+     <y>110</y>
+     <width>321</width>
+     <height>61</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_3">
-    <item>
-     <widget class="QPushButton" name="RandomPlayback">
-      <property name="text">
-       <string>RandomPlayBack</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="font">
+    <font>
+     <family>Open Sans Semibold</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Now Playing</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_7">
+  <widget class="QLabel" name="MPDAlbumArt">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>90</y>
-     <width>451</width>
-     <height>31</height>
+     <x>60</x>
+     <y>200</y>
+     <width>221</width>
+     <height>191</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_4">
-    <item>
-     <widget class="QPushButton" name="ConsumptionPlayback">
-      <property name="text">
-       <string>ConsumptionPlayBack</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_8">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>130</y>
-     <width>451</width>
-     <height>31</height>
-    </rect>
+   <property name="text">
+    <string>AlbumArt</string>
    </property>
-   <layout class="QHBoxLayout" name="RightColumn_5">
-    <item>
-     <widget class="QPushButton" name="UpdateDatabase">
-      <property name="text">
-       <string>UpdateDatabase</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
  </widget>
  <resources/>

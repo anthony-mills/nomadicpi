@@ -1,4 +1,5 @@
 import sys
+from PyQt5 import QtWidgets, QtGui
 
 class UserActions():
 
@@ -10,18 +11,44 @@ class UserActions():
         self.ui_button_state()
         
         # Register the button actions
-        self.ui.QuitButton.clicked.connect(self.exit_application)  
+        self.ui.MusicPlay.setCheckable(True)        
         self.ui.MusicPlay.clicked.connect(self.music_play_press)      
+
+        self.ui.RandomPlayback.setCheckable(True)
         self.ui.RandomPlayback.clicked.connect(self.music_random_press)
+
+        self.ui.MusicSkip.clicked.connect(self.music_skip_press)        
+        self.ui.MusicStop.clicked.connect(self.music_stop_press)
+                
         self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)
         self.ui.UpdateDatabase.clicked.connect(self.music_update_press) 
-        
+        self.ui.QuitButton.clicked.connect(self.exit_application)  
+                
     def music_play_press(self):
         """
         Start playback of music
         """                
         self.mpd.play_playback()
         self.ui_button_state()
+        
+    def music_stop_press(self):
+        """
+        Stop the playback of music
+        """                
+        self.mpd.stop_playback()
+        self.ui.MusicPlay.setChecked(False)
+        self.ui_button_state()  
+        
+    def music_skip_press(self):
+        """
+        Skip playback to the next song
+        """     
+        mpd_status = self.mpd.get_status()
+
+        if mpd_status['state'] == 'play':
+            self.mpd.next_song()
+            self.ui_button_state()                 
+            self.ui.MPDAlbumArt.clear()
         
     def music_random_press(self):
         """
@@ -50,17 +77,17 @@ class UserActions():
         """    
         mpd_status = self.mpd.get_status()
 
-        if mpd_status['state'] == 'play':
-            self.ui.MusicPlay.setText("Pause")
+        if mpd_status.get('state', '') == 'play':
+            self.ui.MusicPlay.setChecked(True)
         else:
-            self.ui.MusicPlay.setText("Play")     
+            self.ui.MusicPlay.setChecked(False)   
                         
-        if int(mpd_status['random']) == 0:
-            self.ui.RandomPlayback.setText("Enable Random Playback")
+        if mpd_status.get('random', 0) == 0:
+            self.ui.RandomPlayback.setChecked(False)
         else:
-            self.ui.RandomPlayback.setText("Disable Random Playback")            
+            self.ui.RandomPlayback.setChecked(True)            
 
-        if int(mpd_status['consume']) == 0:
+        if mpd_status.get('consume', 0) == 0:
             self.ui.ConsumptionPlayback.setText("Enable Consumption Playback")
         else:
             self.ui.ConsumptionPlayback.setText("Disable Consumption Playback")  
