@@ -48,6 +48,7 @@ class UserActions():
         if mpd_status['state'] == 'play':
             self.mpd.next_song()
             self.ui_button_state()                 
+            self.ui.MPDAlbumArt.clear()
         
     def music_random_press(self):
         """
@@ -76,17 +77,17 @@ class UserActions():
         """    
         mpd_status = self.mpd.get_status()
 
-        if mpd_status['state'] == 'play':
+        if mpd_status.get('state', '') == 'play':
             self.ui.MusicPlay.setChecked(True)
         else:
             self.ui.MusicPlay.setChecked(False)   
                         
-        if int(mpd_status['random']) == 0:
+        if mpd_status.get('random', 0) == 0:
             self.ui.RandomPlayback.setChecked(False)
         else:
             self.ui.RandomPlayback.setChecked(True)            
 
-        if int(mpd_status['consume']) == 0:
+        if mpd_status.get('consume', 0) == 0:
             self.ui.ConsumptionPlayback.setText("Enable Consumption Playback")
         else:
             self.ui.ConsumptionPlayback.setText("Disable Consumption Playback")  

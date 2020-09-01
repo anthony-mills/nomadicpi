@@ -30,7 +30,7 @@
      <widget class="QLabel" name="CurrentSpeed">
       <property name="font">
        <font>
-        <family>Ubuntu Condensed</family>
+        <family>Open Sans Extrabold</family>
         <pointsize>50</pointsize>
         <weight>75</weight>
         <bold>true</bold>
@@ -61,6 +61,11 @@
    <layout class="QHBoxLayout" name="RightColumn">
     <item>
      <widget class="QPushButton" name="QuitButton">
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+       </font>
+      </property>
       <property name="text">
        <string>Quit</string>
       </property>
@@ -72,7 +77,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>360</y>
+     <y>400</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -80,6 +85,11 @@
    <layout class="QHBoxLayout" name="GpsInfo">
     <item>
      <widget class="QLabel" name="CurrentPosition">
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+       </font>
+      </property>
       <property name="text">
        <string>Current Position</string>
       </property>
@@ -104,8 +114,8 @@
      <widget class="QLabel" name="label">
       <property name="font">
        <font>
-        <family>Ubuntu Mono</family>
-        <pointsize>30</pointsize>
+        <family>Open Sans Extrabold</family>
+        <pointsize>25</pointsize>
        </font>
       </property>
       <property name="text">
@@ -119,7 +129,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>400</y>
+     <y>440</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -127,30 +137,13 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="CurrentAltitude">
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+       </font>
+      </property>
       <property name="text">
        <string>Current Altitude</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="verticalLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>440</y>
-     <width>321</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QLabel" name="TimeInfo">
-      <property name="text">
-       <string>Time</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -163,10 +156,15 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>150</y>
+     <y>410</y>
      <width>449</width>
      <height>24</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Open Sans</family>
+    </font>
    </property>
    <property name="text">
     <string>UpdateDatabase</string>
@@ -176,10 +174,15 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>110</y>
+     <y>380</y>
      <width>449</width>
      <height>24</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Open Sans</family>
+    </font>
    </property>
    <property name="text">
     <string>ConsumptionPlayBack</string>
@@ -276,6 +279,44 @@
      <width>80</width>
      <height>80</height>
     </size>
+   </property>
+  </widget>
+  <widget class="QLabel" name="MPDNowPlaying">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>321</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Open Sans Semibold</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Now Playing</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="MPDAlbumArt">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>200</y>
+     <width>221</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>AlbumArt</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>

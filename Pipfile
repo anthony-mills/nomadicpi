@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+PyQt5 = "*"
+musicbrainzngs = "*"
+diskcache = "*"
+python-resize-image = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[packages.python-mpd2]
+git = "git://github.com/Mic92/python-mpd2.git"

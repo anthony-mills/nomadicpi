@@ -1,4 +1,5 @@
 import sys
+import os.path
 import configparser
 import logging
 import threading
@@ -6,7 +7,9 @@ import lib.gps as gps
 import lib.mpd as mpd
 import lib.user_actions as user_actions
 
+from diskcache import Cache
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QPixmap
 
 from lib.interface.main_window import Ui_NomadicPI
 
@@ -20,6 +23,8 @@ class mainWindow(QtWidgets.QMainWindow):
 
         self.app_config = configparser.ConfigParser()
         self.app_config.read('config.ini')
+        
+        self.now_playing = 0;
         
         # Connect to the MPD daemon
         self.connect_mpd()
@@ -40,6 +45,7 @@ class mainWindow(QtWidgets.QMainWindow):
         self.mpd = mpd.MpdLib()
         self.mpd.set_mpd_host(self.app_config['mpd'].get('Host', 'localhost'))
         self.mpd.set_mpd_port(self.app_config['mpd'].get('Port', '6000'))         
+        self.mpd.set_art_cache(self.app_config['mpd'].get('AlbumArt', '/tmp/'))         
         self.mpd.connect_mpd()
         self.mpd_status = {}            
     
@@ -48,7 +54,7 @@ class mainWindow(QtWidgets.QMainWindow):
         Create a timer and periodically update the UI information
         """ 
         self.mpd_status = self.mpd.get_status()    
-                     
+        
         self.update_gps()
         self.update_mpd()
         
@@ -59,6 +65,33 @@ class mainWindow(QtWidgets.QMainWindow):
         Update the interface with any time sensitive MPD info i.e play time etc 
         """                    
         self.user_actions.database_update_status(self.mpd_status)
+        
+        if self.mpd_status.get('state', '') == 'play':
+            if int(self.now_playing)!=int(self.mpd_status['songid']):
+                song_data = self.mpd.currently_playing()
+                self.now_playing = song_data.get('id', 0)  
+                          
+                song_info = song_data.get('title', 'Unknown') + "\n " + song_data.get('artist', 'Unknown');
+                self.ui.MPDNowPlaying.setText(song_info)
+                
+                self.set_album_art(song_data)
+        
+        if self.mpd_status.get('state', '') == 'stop':            
+            self.ui.MPDNowPlaying.setText("Playing: N/A")
+            self.ui.MPDAlbumArt.clear()
+    
+    def set_album_art(self, song_data):
+        """
+        Update the album art displayed in the UI 
+        """                  
+        search_term = song_data.get('album', '') + ' - ' + song_data.get('artist', '')
+        cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
+        song_thumb = self.mpd.album_art(search_term, cache_key)
+
+        if type(song_thumb) is str:
+
+            song_img = QPixmap(song_thumb)
+            self.ui.MPDAlbumArt.setPixmap(song_img)
         
     def update_gps(self):
         """
@@ -77,8 +110,6 @@ class mainWindow(QtWidgets.QMainWindow):
                 print("Unable to connect to GPSD service at: " + str(gpsd_host) + ":" + str(gpsd_port))
                 self.ui.CurrentPosition.setText("Current Position: No GPS Fix")
                 self.ui.CurrentAltitude.setText("Altitude: Unknown")
-                self.ui.TimeInfo.setText("Local Time: GPS provided time unavailable")
-
         
         if gps_info is not None:    
             try:
@@ -90,12 +121,7 @@ class mainWindow(QtWidgets.QMainWindow):
                 cur_alt = gps_info.altitude()
                 self.ui.CurrentAltitude.setText( "Altitude: " + str(cur_alt) + "m" )
                 
-                # Display the time in UTC and the Local timezone
-                local_time = gps_info.get_time(local_time=True)
-                utc_time = gps_info.get_time()
-                cur_time = "Local Time: " + str(local_time) + "\n" + "UTC: " + str(utc_time)
-                self.ui.TimeInfo.setText( cur_time )
-                            
+                        
                 cur_pos = gps_info.position()
                 
                 if len(cur_pos) == 2:
