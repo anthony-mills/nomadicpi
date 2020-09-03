@@ -17,10 +17,12 @@ class UserActions():
         self.ui.RandomPlayback.setCheckable(True)
         self.ui.RandomPlayback.clicked.connect(self.music_random_press)
 
+        self.ui.ConsumptionPlayback.setCheckable(True)        
+        self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)
+        
         self.ui.MusicSkip.clicked.connect(self.music_skip_press)        
         self.ui.MusicStop.clicked.connect(self.music_stop_press)
-                
-        self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)
+        
         self.ui.UpdateDatabase.clicked.connect(self.music_update_press) 
         self.ui.QuitButton.clicked.connect(self.exit_application)  
                 
@@ -88,9 +90,9 @@ class UserActions():
             self.ui.RandomPlayback.setChecked(True)            
 
         if mpd_status.get('consume', 0) == 0:
-            self.ui.ConsumptionPlayback.setText("Enable Consumption Playback")
+            self.ui.ConsumptionPlayback.setChecked(False)
         else:
-            self.ui.ConsumptionPlayback.setText("Disable Consumption Playback")  
+            self.ui.ConsumptionPlayback.setChecked(True)  
         
         self.database_update_status(mpd_status)
     

@@ -22,7 +22,7 @@
      <x>10</x>
      <y>10</y>
      <width>201</width>
-     <height>91</height>
+     <height>94</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="CurrentSpeedArea">
@@ -44,30 +44,6 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>440</y>
-     <width>451</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="RightColumn">
-    <item>
-     <widget class="QPushButton" name="QuitButton">
-      <property name="font">
-       <font>
-        <family>Open Sans</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>Quit</string>
       </property>
      </widget>
     </item>
@@ -155,9 +131,9 @@
   <widget class="QPushButton" name="UpdateDatabase">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>410</y>
-     <width>449</width>
+     <x>20</x>
+     <y>270</y>
+     <width>261</width>
      <height>24</height>
     </rect>
    </property>
@@ -168,24 +144,6 @@
    </property>
    <property name="text">
     <string>UpdateDatabase</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="ConsumptionPlayback">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>380</y>
-     <width>449</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Open Sans</family>
-    </font>
-   </property>
-   <property name="text">
-    <string>ConsumptionPlayBack</string>
    </property>
   </widget>
   <widget class="QPushButton" name="MusicSkip">
@@ -211,7 +169,7 @@
     </size>
    </property>
   </widget>
-  <widget class="QPushButton" name="RandomPlayback">
+  <widget class="QPushButton" name="ViewPlaylist">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -225,7 +183,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+     <normaloff>icons/playlists.png</normaloff>icons/playlists.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -306,10 +264,10 @@
   <widget class="QLabel" name="MPDAlbumArt">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>200</y>
-     <width>221</width>
-     <height>191</height>
+     <x>350</x>
+     <y>110</y>
+     <width>331</width>
+     <height>261</height>
     </rect>
    </property>
    <property name="text">
@@ -317,6 +275,98 @@
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="QuitButton">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>390</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/quit_button.png</normaloff>icons/quit_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="RandomPlayback">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>390</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ConsumptionPlayback">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>390</y>
+     <width>111</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/consumption_play.png</normaloff>icons/consumption_play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="FindButton">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>390</y>
+     <width>111</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/find_button.png</normaloff>icons/find_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
    </property>
   </widget>
  </widget>

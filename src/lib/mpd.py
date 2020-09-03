@@ -6,8 +6,6 @@ import musicbrainzngs
 import urllib.request
 
 from mpd import MPDClient
-from PIL import Image
-from resizeimage import resizeimage
 
 class MpdLib():
     def __init__(self):
@@ -141,13 +139,7 @@ class MpdLib():
                     image_list = musicbrainzngs.get_release_group_image_list(mb_search['release-group-list'][0]['id'])
                     if type(image_list['images'][0]['thumbnails']['small']) is str:        
                         thumb_file = self.art_cache + str(cache_key)
-                        urllib.request.urlretrieve(image_list['images'][0]['thumbnails']['small'], thumb_file)
-                        
-                        fd_img = open(thumb_file, 'rb')
-                        img = Image.open(fd_img)
-                        img = resizeimage.resize_crop(img, [180, 180])
-                        img.save(thumb_file, img.format)
-                        fd_img.close()                     
+                        urllib.request.urlretrieve(image_list['images'][0]['thumbnails']['small'], thumb_file)             
                                                         
                         return thumb_file
             except Exception as e:
