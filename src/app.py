@@ -101,11 +101,12 @@ class mainWindow(QtWidgets.QMainWindow):
         if gps.gpsd_socket is None:
             try:
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
-                gpsd_port = self.app_config['gpsd'].get('Port', '2947')
+                gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
                 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
                 gps_info = gps.get_current()
-            except: 
+            except Exception as e:
+                print(str(e))
                 print("Unable to connect to GPSD service at: " + str(gpsd_host) + ":" + str(gpsd_port))
                 self.ui.CurrentPosition.setText("Current Position: No GPS Fix")
                 self.ui.CurrentAltitude.setText("Altitude: Unknown")
@@ -116,15 +117,24 @@ class mainWindow(QtWidgets.QMainWindow):
                 cur_speed = int(3.6 * gps_info.speed() )
                 self.ui.CurrentSpeed.setText( str(cur_speed) )            
                 
+            except Exception as e:
+                print(e)
+                
+            try:            
                 # Get the current Altitude
                 cur_alt = gps_info.altitude()
                 self.ui.CurrentAltitude.setText( "Altitude: " + str(cur_alt) + "m" )
-                
-                        
+            except Exception as e:
+                self.ui.CurrentAltitude.setText( "Altitude: 3D GPS fix needed." )
+                print(e)
+                       
+            try:                             
                 cur_pos = gps_info.position()
                 
                 if len(cur_pos) == 2:
                     self.ui.CurrentPosition.setText("Current Position:\n" + str(cur_pos[0]) + ", " + str(cur_pos[1]))
+            except Exception as e:
+                self.ui.CurrentPosition.setText("Current Position: No GPS fix.")
                         
             except Exception as e:
                 print(e)
