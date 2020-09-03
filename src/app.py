@@ -7,7 +7,6 @@ import lib.gps as gps
 import lib.mpd as mpd
 import lib.user_actions as user_actions
 
-from diskcache import Cache
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 
