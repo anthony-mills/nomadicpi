@@ -32,6 +32,9 @@ class mainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_NomadicPI()
         self.ui.setupUi(self)
         
+        # Connect to GPSD
+        self.update_gps()
+                
         # Setup the handlers for user actions
         self.user_actions = user_actions.UserActions(self.ui, self.mpd)
         self.user_actions.ui_button_state()        
@@ -54,7 +57,9 @@ class mainWindow(QtWidgets.QMainWindow):
         """ 
         self.mpd_status = self.mpd.get_status()    
         
-        self.update_gps()
+        if gps.gpsd_socket is not None:
+            self.update_gps()
+            
         self.update_mpd()
         
         threading.Timer(1, self.update_content).start()  

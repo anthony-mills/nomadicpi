@@ -249,6 +249,7 @@ def gps_connect(host="127.0.0.1", port=2947):
     global gpsd_socket, gpsd_stream, verbose_output, state
     logger.debug("Connecting to gpsd socket at {}:{}".format(host, port))
     gpsd_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    gpsd_socket.settimeout(5)
     gpsd_socket.connect((host, port))
     gpsd_stream = gpsd_socket.makefile(mode="rw")
     logger.debug("Waiting for welcome message")
