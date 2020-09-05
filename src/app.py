@@ -78,15 +78,19 @@ class mainWindow(QtWidgets.QMainWindow):
         self.user_actions.database_update_status(self.mpd_status)
         
         if self.mpd_status.get('state', '') == 'play':
+            song_data = self.mpd.currently_playing()
+            
+            if self.ui.MPDAlbumArt.pixmap() is None:
+                self.set_album_art(song_data)
+                
             if int(self.now_playing)!=int(self.mpd_status['songid']):
-                song_data = self.mpd.currently_playing()
                 self.now_playing = song_data.get('id', 0)  
                           
                 song_info = song_data.get('title', 'Unknown') + '\n ' + song_data.get('artist', 'Unknown');
                 self.ui.MPDNowPlaying.setText(song_info)
                 
                 self.set_album_art(song_data)
-            
+
             m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60) 
             song_elapsed = "%02d:%02d" % (m, s)   
             
@@ -95,9 +99,8 @@ class mainWindow(QtWidgets.QMainWindow):
             
             self.ui.SongPlayTime.setText(str(song_elapsed) + ' / ' + str(song_duration))
         
-        if self.mpd_status.get('state', '') == 'stop':            
-            self.ui.MPDNowPlaying.setText('Playing: N/A')
-            self.ui.MPDAlbumArt.clear()
+        if self.mpd_status.get('state', '') == 'stop':
+            self.now_playing = 0            
     
     def set_album_art(self, song_data):
         """
@@ -128,7 +131,10 @@ class mainWindow(QtWidgets.QMainWindow):
                 self.ui.CurrentPosition.setText('Current Position: No GPS Fix')
                 self.ui.CurrentAltitude.setText('Altitude: Unknown')
         else:
-            self.gps_info = gps.get_current()
+            try:
+                self.gps_info = gps.get_current()
+            except Exception as e:
+                pass            
             
             if self.gps_info is not None:    
                 try:

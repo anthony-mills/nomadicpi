@@ -34,7 +34,10 @@ class UserActions():
         """                
         self.mpd.stop_playback()
         self.ui.MusicPlay.setChecked(False)
-        self.ui_button_state()  
+        self.ui_button_state() 
+        self.ui.SongPlayTime.clear()
+        self.ui.MPDNowPlaying.clear()
+        self.ui.MPDAlbumArt.clear()          
         
     def music_skip_press(self):
         """

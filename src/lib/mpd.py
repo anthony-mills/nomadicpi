@@ -104,7 +104,7 @@ class MpdLib():
         """
         Stop MPD playback
         """         
-        self.client.stop() 
+        self.client.stop()
         
     def next_song(self):
         """

@@ -252,7 +252,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Now Playing</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -271,7 +271,7 @@
     <string/>
    </property>
    <property name="text">
-    <string>AlbumArt</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
