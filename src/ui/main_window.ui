@@ -67,7 +67,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Current Position</string>
+       <string>Current Position: No GPS fix.</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -119,7 +119,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Current Altitude</string>
+       <string>Current Altitude: No GPS fix.</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

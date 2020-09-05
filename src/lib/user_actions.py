@@ -84,15 +84,16 @@ class UserActions():
         else:
             self.ui.MusicPlay.setChecked(False)   
                         
-        if mpd_status.get('random', 0) == 0:
-            self.ui.RandomPlayback.setChecked(False)
+        if int(mpd_status.get('random', 0)) == 1:
+            self.ui.RandomPlayback.setChecked(True)
         else:
-            self.ui.RandomPlayback.setChecked(True)            
+            self.ui.RandomPlayback.setChecked(False)            
 
-        if mpd_status.get('consume', 0) == 0:
-            self.ui.ConsumptionPlayback.setChecked(False)
+        if int(mpd_status.get('consume', 0)) == 1:
+            self.ui.ConsumptionPlayback.setChecked(True) 
         else:
-            self.ui.ConsumptionPlayback.setChecked(True)  
+            self.ui.ConsumptionPlayback.setChecked(False)           
+ 
         
         self.database_update_status(mpd_status)
     
@@ -115,4 +116,4 @@ class UserActions():
         Close the MPD connection and close the application
         """                
         self.mpd.close_mpd()
-        sys.exit()
+        sys.exit(0)

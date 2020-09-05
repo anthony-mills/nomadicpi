@@ -250,7 +250,13 @@ def gps_connect(host="127.0.0.1", port=2947):
     logger.debug("Connecting to gpsd socket at {}:{}".format(host, port))
     gpsd_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     gpsd_socket.settimeout(5)
-    gpsd_socket.connect((host, port))
+    
+    try:
+        gpsd_socket.connect((host, port))
+    except:
+        print("Unable to connect to GPSD service")
+        return
+        
     gpsd_stream = gpsd_socket.makefile(mode="rw")
     logger.debug("Waiting for welcome message")
     welcome_raw = gpsd_stream.readline()
