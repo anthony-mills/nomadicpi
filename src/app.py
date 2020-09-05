@@ -19,13 +19,18 @@ class mainWindow(QtWidgets.QMainWindow):
     
     # Folder for album art
     art_cache = '/tmp'
+    
+    # Desired date / time format
+    dt_format = "%A %d %B %Y %-I:%M %p"
+    
+    # Track the GPS state with this variable
+    gps_info = None
 
     def __init__(self):
         super(mainWindow, self).__init__()
         
         self.app_config = configparser.ConfigParser()
         self.app_config.read('config.ini')
-        
         self.now_playing = 0;
         
         # Connect to the MPD daemon
@@ -35,9 +40,6 @@ class mainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_NomadicPI()
         self.ui.setupUi(self)
         
-        # Connect to GPSD
-        self.update_gps()
-                
         # Setup the handlers for user actions
         self.user_actions = user_actions.UserActions(self.ui, self.mpd)
         self.user_actions.ui_button_state()        
@@ -61,11 +63,11 @@ class mainWindow(QtWidgets.QMainWindow):
         Create a timer and periodically update the UI information
         """ 
         self.mpd_status = self.mpd.get_status()    
-        
-        if gps.gpsd_socket is not None:
-            self.update_gps()
             
         self.update_mpd()
+        
+        # Update GPS related information 
+        self.update_gps()
         
         threading.Timer(1, self.update_content).start()  
         
@@ -84,6 +86,14 @@ class mainWindow(QtWidgets.QMainWindow):
                 self.ui.MPDNowPlaying.setText(song_info)
                 
                 self.set_album_art(song_data)
+            
+            m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60) 
+            song_elapsed = "%02d:%02d" % (m, s)   
+            
+            m, s = divmod(round(float(self.mpd_status.get('duration', 0))), 60) 
+            song_duration = "%02d:%02d" % (m, s)               
+            
+            self.ui.SongPlayTime.setText(str(song_elapsed) + ' / ' + str(song_duration))
         
         if self.mpd_status.get('state', '') == 'stop':            
             self.ui.MPDNowPlaying.setText('Playing: N/A')
@@ -106,48 +116,51 @@ class mainWindow(QtWidgets.QMainWindow):
         """
         Get the current GPS information and update the UI
         """                
-        gps_info = None
-        
         if gps.gpsd_socket is None:
             try:
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
                 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
-                gps_info = gps.get_current()
             except Exception as e:
                 print(str(e))
                 print('Unable to connect to GPSD service at: ' + str(gpsd_host) + ':' + str(gpsd_port))
                 self.ui.CurrentPosition.setText('Current Position: No GPS Fix')
                 self.ui.CurrentAltitude.setText('Altitude: Unknown')
-        
-        if gps_info is not None:    
-            try:
-                # Get the current GPS speed and convert from m/s to km/h
-                cur_speed = int(3.6 * gps_info.speed() )
-                self.ui.CurrentSpeed.setText( str(cur_speed) )            
+        else:
+            self.gps_info = gps.get_current()
+            
+            if self.gps_info is not None:    
+                try:
+                    # Get the current GPS speed and convert from m/s to km/h
+                    cur_speed = int(3.6 * self.gps_info.speed() )
+                    self.ui.CurrentSpeed.setText( str(cur_speed) )            
+                    
+                except Exception as e:
+                    print(e)
+                    
+                try:            
+                    # Get the current Altitude
+                    cur_alt = self.gps_info.altitude()
+                    self.ui.CurrentAltitude.setText( 'Altitude: ' + str(cur_alt) + 'm' )
+                except Exception as e:
+                    self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )
+                    print(e)
+                           
+                try:                             
+                    cur_pos = self.gps_info.position()
+                    
+                    if len(cur_pos) == 2:
+                        self.ui.CurrentPosition.setText('Current Position:\n' + str(cur_pos[0]) + ', ' + str(cur_pos[1]))
+                except Exception as e:
+                    self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
+
+                try:                             
+                    cur_time = self.gps_info.get_time(True)
+                    self.setWindowTitle(self.app_config['app'].get('AppName', '') + ' - ' + cur_time.strftime(self.dt_format)) 
+                except Exception as e:
+                    print(e)
                 
-            except Exception as e:
-                print(e)
-                
-            try:            
-                # Get the current Altitude
-                cur_alt = gps_info.altitude()
-                self.ui.CurrentAltitude.setText( 'Altitude: ' + str(cur_alt) + 'm' )
-            except Exception as e:
-                self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )
-                print(e)
-                       
-            try:                             
-                cur_pos = gps_info.position()
-                
-                if len(cur_pos) == 2:
-                    self.ui.CurrentPosition.setText('Current Position:\n' + str(cur_pos[0]) + ', ' + str(cur_pos[1]))
-            except Exception as e:
-                self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
-                        
-            except Exception as e:
-                print(e)
 
 if __name__ == '__main__':        
     app = QtWidgets.QApplication([])

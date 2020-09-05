@@ -469,6 +469,22 @@
     </size>
    </property>
   </widget>
+  <widget class="QLabel" name="SongPlayTime">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>366</y>
+     <width>341</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
