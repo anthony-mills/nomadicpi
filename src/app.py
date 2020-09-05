@@ -8,7 +8,7 @@ import lib.mpd as mpd
 import lib.user_actions as user_actions
 
 from PyQt5 import QtWidgets
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QMovie
 
 from lib.interface.main_window import Ui_NomadicPI
 
@@ -16,10 +16,13 @@ import sys
 logger = logging.getLogger(__name__)
 
 class mainWindow(QtWidgets.QMainWindow):
+    
+    # Folder for album art
+    art_cache = '/tmp'
 
     def __init__(self):
         super(mainWindow, self).__init__()
-
+        
         self.app_config = configparser.ConfigParser()
         self.app_config.read('config.ini')
         
@@ -45,9 +48,11 @@ class mainWindow(QtWidgets.QMainWindow):
         Connect to the MPD daemon
         """         
         self.mpd = mpd.MpdLib()
+        self.art_cache = self.app_config['mpd'].get('AlbumArt', '/tmp/')     
         self.mpd.set_mpd_host(self.app_config['mpd'].get('Host', 'localhost'))
         self.mpd.set_mpd_port(self.app_config['mpd'].get('Port', '6000'))         
-        self.mpd.set_art_cache(self.app_config['mpd'].get('AlbumArt', '/tmp/'))         
+        self.mpd.set_art_cache(self.art_cache)   
+
         self.mpd.connect_mpd()
         self.mpd_status = {}            
     
@@ -75,13 +80,13 @@ class mainWindow(QtWidgets.QMainWindow):
                 song_data = self.mpd.currently_playing()
                 self.now_playing = song_data.get('id', 0)  
                           
-                song_info = song_data.get('title', 'Unknown') + "\n " + song_data.get('artist', 'Unknown');
+                song_info = song_data.get('title', 'Unknown') + '\n ' + song_data.get('artist', 'Unknown');
                 self.ui.MPDNowPlaying.setText(song_info)
                 
                 self.set_album_art(song_data)
         
         if self.mpd_status.get('state', '') == 'stop':            
-            self.ui.MPDNowPlaying.setText("Playing: N/A")
+            self.ui.MPDNowPlaying.setText('Playing: N/A')
             self.ui.MPDAlbumArt.clear()
     
     def set_album_art(self, song_data):
@@ -112,9 +117,9 @@ class mainWindow(QtWidgets.QMainWindow):
                 gps_info = gps.get_current()
             except Exception as e:
                 print(str(e))
-                print("Unable to connect to GPSD service at: " + str(gpsd_host) + ":" + str(gpsd_port))
-                self.ui.CurrentPosition.setText("Current Position: No GPS Fix")
-                self.ui.CurrentAltitude.setText("Altitude: Unknown")
+                print('Unable to connect to GPSD service at: ' + str(gpsd_host) + ':' + str(gpsd_port))
+                self.ui.CurrentPosition.setText('Current Position: No GPS Fix')
+                self.ui.CurrentAltitude.setText('Altitude: Unknown')
         
         if gps_info is not None:    
             try:
@@ -128,18 +133,18 @@ class mainWindow(QtWidgets.QMainWindow):
             try:            
                 # Get the current Altitude
                 cur_alt = gps_info.altitude()
-                self.ui.CurrentAltitude.setText( "Altitude: " + str(cur_alt) + "m" )
+                self.ui.CurrentAltitude.setText( 'Altitude: ' + str(cur_alt) + 'm' )
             except Exception as e:
-                self.ui.CurrentAltitude.setText( "Altitude: 3D GPS fix needed." )
+                self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )
                 print(e)
                        
             try:                             
                 cur_pos = gps_info.position()
                 
                 if len(cur_pos) == 2:
-                    self.ui.CurrentPosition.setText("Current Position:\n" + str(cur_pos[0]) + ", " + str(cur_pos[1]))
+                    self.ui.CurrentPosition.setText('Current Position:\n' + str(cur_pos[0]) + ', ' + str(cur_pos[1]))
             except Exception as e:
-                self.ui.CurrentPosition.setText("Current Position: No GPS fix.")
+                self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
                         
             except Exception as e:
                 print(e)

@@ -10,20 +10,15 @@ class UserActions():
         # Set the initial button state from the MPD state
         self.ui_button_state()
         
-        # Register the button actions
-        self.ui.MusicPlay.setCheckable(True)        
+        # Register the button actions     
         self.ui.MusicPlay.clicked.connect(self.music_play_press)      
-
-        self.ui.RandomPlayback.setCheckable(True)
-        self.ui.RandomPlayback.clicked.connect(self.music_random_press)
-
-        self.ui.ConsumptionPlayback.setCheckable(True)        
-        self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)
-        
+        self.ui.RandomPlayback.clicked.connect(self.music_random_press)        
+        self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)     
+        self.ui.UpdateDatabase.clicked.connect(self.music_update_press) 
+                
         self.ui.MusicSkip.clicked.connect(self.music_skip_press)        
         self.ui.MusicStop.clicked.connect(self.music_stop_press)
         
-        self.ui.UpdateDatabase.clicked.connect(self.music_update_press) 
         self.ui.QuitButton.clicked.connect(self.exit_application)  
                 
     def music_play_press(self):
@@ -107,9 +102,9 @@ class UserActions():
             Dictionary of the MPD daemons current state   
         """            
         if mpd_status.get('updating_db') is None:
-            self.ui.UpdateDatabase.setText("Update Database")
+            self.ui.UpdateDatabase.setChecked(False)
         else:
-            self.ui.UpdateDatabase.setText("Database Updating...")   
+            self.ui.UpdateDatabase.setChecked(True) 
             
     def exit_application(self):
         """

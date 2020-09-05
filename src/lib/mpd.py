@@ -8,11 +8,23 @@ import urllib.request
 from mpd import MPDClient
 
 class MpdLib():
-    def __init__(self):
-        self.mpd_host = '127.0.0.1'
-        self.mpd_port = 6600
-        self.art_cache = '/tmp/'
-        
+    """
+    Handle functionality related to MPD communication in the player
+    """      
+    
+    # Default image to display when album art is not found
+    not_found = "not_found.png"
+    
+    # Default IP of the MPD server
+    mpd_host = '127.0.0.1'
+    
+    # Default port the MPD service is running on
+    mpd_port = 6600
+    
+    # Default directory for storing album art
+    art_cache = '/tmp/'          
+    
+    def __init__(self):        
         musicbrainzngs.set_useragent("NomadicPI", "v0.0.1", "https://github.com/anthony-mills/nomadicpi")    
         
     def set_mpd_host(self, mpd_host):
@@ -144,6 +156,8 @@ class MpdLib():
                         return thumb_file
             except Exception as e:
                 print("Unable to get album art: " + str(e))
+                
+                return self.art_cache + str(self.not_found)
 
     def consumption_playback(self):
         """
