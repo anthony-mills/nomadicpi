@@ -105,7 +105,22 @@ class MpdLib():
         Stop MPD playback
         """         
         self.client.stop()
+
+    def mpd_stats(self):
+        """
+        Return stats about the MPD daemon; uptime, size of music db etc
+        """         
+        return self.client.stats()
+
+    def playlist_info(self, item_id = None):
+        """
+        Return stats about the current playlist
         
+        :param: int
+        :return: array        
+        """         
+        return self.client.playlistinfo( item_id )
+                        
     def next_song(self):
         """
         Skip playback to the next song
@@ -158,6 +173,8 @@ class MpdLib():
                 print("Unable to get album art: " + str(e))
                 
                 return self.art_cache + str(self.not_found)
+    
+    
 
     def consumption_playback(self):
         """

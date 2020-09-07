@@ -77,6 +77,8 @@ class mainWindow(QtWidgets.QMainWindow):
         """                    
         self.user_actions.database_update_status(self.mpd_status)
         
+        print(self.mpd_status)
+
         if self.mpd_status.get('state', '') == 'play':
             song_data = self.mpd.currently_playing()
             
@@ -86,11 +88,25 @@ class mainWindow(QtWidgets.QMainWindow):
             if int(self.now_playing)!=int(self.mpd_status['songid']):
                 self.now_playing = song_data.get('id', 0)  
                           
-                song_info = song_data.get('title', 'Unknown') + '\n ' + song_data.get('artist', 'Unknown');
+                song_info = 'Playing: ' + song_data.get('artist', 'Unknown') + '\n ' + song_data.get('title', 'Unknown');
+
                 self.ui.MPDNowPlaying.setText(song_info)
                 
                 self.set_album_art(song_data)
-
+                
+                next_song = self.mpd_status.get('nextsongid', None)
+                if next_song is not None:
+                    try:
+                        next_up = self.mpd.playlist_info(next_song)
+                        
+                        if len(next_up) == 1:
+                            #print(next_up)
+                            next_song = next_up[0]
+                            song_info = 'Next: ' + next_song.get('artist', 'Unknown') + '\n ' + next_song.get('title', 'Unknown');
+                            self.ui.MPDNextPlaying.setText(song_info)                            
+                    except:
+                        pass
+                
             m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60) 
             song_elapsed = "%02d:%02d" % (m, s)   
             
