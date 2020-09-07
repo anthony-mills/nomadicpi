@@ -6,7 +6,10 @@ The first iteration of the car computer while it has proven itself over 100,000k
 
 So the first aim with this rewrite will be extensibility so it can be modified to interface with the multitude of bluetooth car accessories. The second goal will aim to ease of distribution and use for others. So this time around looking for a simplified .deb or similar installation workflow.
 
-With th 
+### Screenshots
+
+![Playing Music](/screenshots/1.png?raw=true "Playing music with no GPS fix")
+
 ### Licence
 
 Copyright (C) 2020 [Anthony Mills](http://www.anthony-mills.com)

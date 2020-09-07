@@ -76,8 +76,6 @@ class mainWindow(QtWidgets.QMainWindow):
         Update the interface with any time sensitive MPD info i.e play time etc 
         """                    
         self.user_actions.database_update_status(self.mpd_status)
-        
-        print(self.mpd_status)
 
         if self.mpd_status.get('state', '') == 'play':
             song_data = self.mpd.currently_playing()
@@ -100,7 +98,6 @@ class mainWindow(QtWidgets.QMainWindow):
                         next_up = self.mpd.playlist_info(next_song)
                         
                         if len(next_up) == 1:
-                            #print(next_up)
                             next_song = next_up[0]
                             song_info = 'Next: ' + next_song.get('artist', 'Unknown') + '\n ' + next_song.get('title', 'Unknown');
                             self.ui.MPDNextPlaying.setText(song_info)                            
