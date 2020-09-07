@@ -6,8 +6,6 @@ name = "pypi"
 [packages]
 PyQt5 = "*"
 musicbrainzngs = "*"
-diskcache = "*"
-python-resize-image = "*"
 
 [dev-packages]
 

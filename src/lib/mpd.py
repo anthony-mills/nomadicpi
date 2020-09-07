@@ -6,15 +6,25 @@ import musicbrainzngs
 import urllib.request
 
 from mpd import MPDClient
-from PIL import Image
-from resizeimage import resizeimage
 
 class MpdLib():
-    def __init__(self):
-        self.mpd_host = '127.0.0.1'
-        self.mpd_port = 6600
-        self.art_cache = '/tmp/'
-        
+    """
+    Handle functionality related to MPD communication in the player
+    """      
+    
+    # Default image to display when album art is not found
+    not_found = "not_found.png"
+    
+    # Default IP of the MPD server
+    mpd_host = '127.0.0.1'
+    
+    # Default port the MPD service is running on
+    mpd_port = 6600
+    
+    # Default directory for storing album art
+    art_cache = '/tmp/'          
+    
+    def __init__(self):        
         musicbrainzngs.set_useragent("NomadicPI", "v0.0.1", "https://github.com/anthony-mills/nomadicpi")    
         
     def set_mpd_host(self, mpd_host):
@@ -94,8 +104,23 @@ class MpdLib():
         """
         Stop MPD playback
         """         
-        self.client.stop() 
+        self.client.stop()
+
+    def mpd_stats(self):
+        """
+        Return stats about the MPD daemon; uptime, size of music db etc
+        """         
+        return self.client.stats()
+
+    def playlist_info(self, item_id = None):
+        """
+        Return stats about the current playlist
         
+        :param: int
+        :return: array        
+        """         
+        return self.client.playlistinfo( item_id )
+                        
     def next_song(self):
         """
         Skip playback to the next song
@@ -141,17 +166,15 @@ class MpdLib():
                     image_list = musicbrainzngs.get_release_group_image_list(mb_search['release-group-list'][0]['id'])
                     if type(image_list['images'][0]['thumbnails']['small']) is str:        
                         thumb_file = self.art_cache + str(cache_key)
-                        urllib.request.urlretrieve(image_list['images'][0]['thumbnails']['small'], thumb_file)
-                        
-                        fd_img = open(thumb_file, 'rb')
-                        img = Image.open(fd_img)
-                        img = resizeimage.resize_crop(img, [180, 180])
-                        img.save(thumb_file, img.format)
-                        fd_img.close()                     
+                        urllib.request.urlretrieve(image_list['images'][0]['thumbnails']['small'], thumb_file)             
                                                         
                         return thumb_file
             except Exception as e:
                 print("Unable to get album art: " + str(e))
+                
+                return self.art_cache + str(self.not_found)
+    
+    
 
     def consumption_playback(self):
         """

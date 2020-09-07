@@ -10,18 +10,15 @@ class UserActions():
         # Set the initial button state from the MPD state
         self.ui_button_state()
         
-        # Register the button actions
-        self.ui.MusicPlay.setCheckable(True)        
+        # Register the button actions     
         self.ui.MusicPlay.clicked.connect(self.music_play_press)      
-
-        self.ui.RandomPlayback.setCheckable(True)
-        self.ui.RandomPlayback.clicked.connect(self.music_random_press)
-
+        self.ui.RandomPlayback.clicked.connect(self.music_random_press)        
+        self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)     
+        self.ui.UpdateDatabase.clicked.connect(self.music_update_press) 
+                
         self.ui.MusicSkip.clicked.connect(self.music_skip_press)        
         self.ui.MusicStop.clicked.connect(self.music_stop_press)
-                
-        self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)
-        self.ui.UpdateDatabase.clicked.connect(self.music_update_press) 
+        
         self.ui.QuitButton.clicked.connect(self.exit_application)  
                 
     def music_play_press(self):
@@ -37,7 +34,10 @@ class UserActions():
         """                
         self.mpd.stop_playback()
         self.ui.MusicPlay.setChecked(False)
-        self.ui_button_state()  
+        self.ui_button_state() 
+        self.ui.SongPlayTime.clear()
+        self.ui.MPDNowPlaying.clear()
+        self.ui.MPDAlbumArt.clear()          
         
     def music_skip_press(self):
         """
@@ -82,15 +82,16 @@ class UserActions():
         else:
             self.ui.MusicPlay.setChecked(False)   
                         
-        if mpd_status.get('random', 0) == 0:
-            self.ui.RandomPlayback.setChecked(False)
+        if int(mpd_status.get('random', 0)) == 1:
+            self.ui.RandomPlayback.setChecked(True)
         else:
-            self.ui.RandomPlayback.setChecked(True)            
+            self.ui.RandomPlayback.setChecked(False)            
 
-        if mpd_status.get('consume', 0) == 0:
-            self.ui.ConsumptionPlayback.setText("Enable Consumption Playback")
+        if int(mpd_status.get('consume', 0)) == 1:
+            self.ui.ConsumptionPlayback.setChecked(True) 
         else:
-            self.ui.ConsumptionPlayback.setText("Disable Consumption Playback")  
+            self.ui.ConsumptionPlayback.setChecked(False)           
+ 
         
         self.database_update_status(mpd_status)
     
@@ -104,13 +105,13 @@ class UserActions():
             Dictionary of the MPD daemons current state   
         """            
         if mpd_status.get('updating_db') is None:
-            self.ui.UpdateDatabase.setText("Update Database")
+            self.ui.UpdateDatabase.setChecked(False)
         else:
-            self.ui.UpdateDatabase.setText("Database Updating...")   
+            self.ui.UpdateDatabase.setChecked(True) 
             
     def exit_application(self):
         """
         Close the MPD connection and close the application
         """                
         self.mpd.close_mpd()
-        sys.exit()
+        sys.exit(0)

@@ -22,7 +22,7 @@
      <x>10</x>
      <y>10</y>
      <width>201</width>
-     <height>91</height>
+     <height>94</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="CurrentSpeedArea">
@@ -49,30 +49,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>440</y>
-     <width>451</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="RightColumn">
-    <item>
-     <widget class="QPushButton" name="QuitButton">
-      <property name="font">
-       <font>
-        <family>Open Sans</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>Quit</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_3">
    <property name="geometry">
     <rect>
@@ -91,7 +67,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Current Position</string>
+       <string>Current Position: No GPS fix.</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -143,7 +119,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Current Altitude</string>
+       <string>Current Altitude: No GPS fix.</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -151,42 +127,6 @@
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QPushButton" name="UpdateDatabase">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>410</y>
-     <width>449</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Open Sans</family>
-    </font>
-   </property>
-   <property name="text">
-    <string>UpdateDatabase</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="ConsumptionPlayback">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>380</y>
-     <width>449</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Open Sans</family>
-    </font>
-   </property>
-   <property name="text">
-    <string>ConsumptionPlayBack</string>
-   </property>
   </widget>
   <widget class="QPushButton" name="MusicSkip">
    <property name="geometry">
@@ -196,6 +136,9 @@
      <width>101</width>
      <height>86</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Skip Song</string>
    </property>
    <property name="text">
     <string/>
@@ -211,7 +154,7 @@
     </size>
    </property>
   </widget>
-  <widget class="QPushButton" name="RandomPlayback">
+  <widget class="QPushButton" name="ViewPlaylist">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -220,12 +163,15 @@
      <height>86</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Current Playlist</string>
+   </property>
    <property name="text">
     <string/>
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+     <normaloff>icons/playlists.png</normaloff>icons/playlists.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -243,6 +189,9 @@
      <height>86</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Play / Pause Music</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -257,6 +206,9 @@
      <height>80</height>
     </size>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="MusicStop">
    <property name="geometry">
@@ -266,6 +218,9 @@
      <width>111</width>
      <height>86</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Stop Music Playback</string>
    </property>
    <property name="text">
     <string/>
@@ -285,9 +240,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>120</y>
      <width>321</width>
-     <height>61</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">
@@ -297,26 +252,265 @@
     </font>
    </property>
    <property name="text">
-    <string>Now Playing</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="MPDAlbumArt">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>200</y>
-     <width>221</width>
-     <height>191</height>
+     <x>350</x>
+     <y>110</y>
+     <width>331</width>
+     <height>250</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string/>
+   </property>
    <property name="text">
-    <string>AlbumArt</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="QuitButton">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>390</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Exit Application</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/quit_button.png</normaloff>icons/quit_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="RandomPlayback">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>390</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Enable / Disable Random Playback</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ConsumptionPlayback">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>390</y>
+     <width>111</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Enable / Disable Consumption Playback</string>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/consumption_play.png</normaloff>icons/consumption_play.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="FindButton">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>390</y>
+     <width>111</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Browse Music Collection</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/find_button.png</normaloff>icons/find_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="UpdateDatabase">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>105</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Update Music Store</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/update_db_button.png</normaloff>
+     <normalon>icons/not_available_button.png</normalon>icons/update_db_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="NetworkButton">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>200</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Network Status</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/wifi_button.png</normaloff>icons/wifi_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="LocationButton">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>295</y>
+     <width>101</width>
+     <height>86</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Location Information</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/map_button.png</normaloff>icons/map_button.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>80</width>
+     <height>80</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLabel" name="SongPlayTime">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>366</y>
+     <width>341</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="MPDNextPlaying">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>200</y>
+     <width>321</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Open Sans</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
