@@ -124,7 +124,7 @@ class MpdLib():
     def next_song(self):
         """
         Skip playback to the next song
-        """         
+        """        
         self.client.next()         
 
     def currently_playing(self):

@@ -92,7 +92,7 @@ class mainWindow(QtWidgets.QMainWindow):
                 
                 self.set_album_art(song_data)
                 
-                next_song = self.mpd_status.get('nextsongid', None)
+                next_song = self.mpd_status.get('nextsong', None)
                 if next_song is not None:
                     try:
                         next_up = self.mpd.playlist_info(next_song)
@@ -103,7 +103,15 @@ class mainWindow(QtWidgets.QMainWindow):
                             self.ui.MPDNextPlaying.setText(song_info)                            
                     except:
                         pass
-                
+ 
+                playlist_length = self.mpd_status.get('playlistlength', None)
+
+                if isinstance(playlist_length, str):
+                    try:
+                        self.ui.MPDPlaylistInfo.setText('Songs Pending: ' + str(playlist_length))                         
+                    except:
+                        pass
+                                       
             m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60) 
             song_elapsed = "%02d:%02d" % (m, s)   
             
