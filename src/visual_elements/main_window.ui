@@ -28,7 +28,7 @@
    <property name="currentIndex">
     <number>0</number>
    </property>
-   <widget class="QWidget" name="page">
+   <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
      <property name="geometry">
       <rect>
@@ -45,8 +45,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/forward_button.png</normaloff>icons/forward_button.png</iconset>
+      <iconset theme="media-skip-forward"/>
      </property>
      <property name="iconSize">
       <size>
@@ -71,8 +70,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/stop_button.png</normaloff>icons/stop_button.png</iconset>
+      <iconset theme="media-playback-stop"/>
      </property>
      <property name="iconSize">
       <size>
@@ -97,8 +95,7 @@
       <string notr="true"/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/consumption_play.png</normaloff>icons/consumption_play.png</iconset>
+      <iconset theme="media-playlist-repeat"/>
      </property>
      <property name="iconSize">
       <size>
@@ -126,9 +123,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/update_db_button.png</normaloff>
-       <normalon>icons/not_available_button.png</normalon>icons/update_db_button.png</iconset>
+      <iconset theme="view-refresh"/>
      </property>
      <property name="iconSize">
       <size>
@@ -175,8 +170,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/find_button.png</normaloff>icons/find_button.png</iconset>
+      <iconset theme="tools-media-optical-copy"/>
      </property>
      <property name="iconSize">
       <size>
@@ -201,9 +195,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/play_button.png</normaloff>
-       <selectedon>icons/pause_button.png</selectedon>icons/play_button.png</iconset>
+      <iconset theme="media-playback-start"/>
      </property>
      <property name="iconSize">
       <size>
@@ -231,8 +223,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/map_button.png</normaloff>icons/map_button.png</iconset>
+      <iconset theme="map-globe"/>
      </property>
      <property name="iconSize">
       <size>
@@ -257,8 +248,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/wifi_button.png</normaloff>icons/wifi_button.png</iconset>
+      <iconset theme="network-cellular-signal-good-symbolic"/>
      </property>
      <property name="iconSize">
       <size>
@@ -283,8 +273,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/quit_button.png</normaloff>icons/quit_button.png</iconset>
+      <iconset theme="exit"/>
      </property>
      <property name="iconSize">
       <size>
@@ -309,8 +298,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/random_play.png</normaloff>icons/random_play.png</iconset>
+      <iconset theme="media-playlist-shuffle"/>
      </property>
      <property name="iconSize">
       <size>
@@ -498,9 +486,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/update_db_button.png</normaloff>
-       <normalon>icons/not_available_button.png</normalon>icons/update_db_button.png</iconset>
+      <iconset theme="view-media-playlist"/>
      </property>
      <property name="iconSize">
       <size>
@@ -560,7 +546,134 @@
     <zorder>PlaylistDetailsButton</zorder>
     <zorder>CurrentSpeed_2</zorder>
    </widget>
-   <widget class="QWidget" name="page_2"/>
+   <widget class="QWidget" name="current_playlist">
+    <widget class="QPushButton" name="DeleteButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>140</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="trash-empty"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="PlaylistContents">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>31</y>
+       <width>661</width>
+       <height>431</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="PlaylistCount">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>-1</y>
+       <width>651</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0 Playlist Items</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="UpButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>20</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="up"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="DownButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>380</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="down"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="HomeButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>260</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="gohome"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <resources/>
