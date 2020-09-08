@@ -538,6 +538,46 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QMdiArea" name="appContent">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>830</width>
+     <height>490</height>
+    </rect>
+   </property>
+   <property name="background">
+    <brush brushstyle="NoBrush">
+     <color alpha="255">
+      <red>159</red>
+      <green>159</green>
+      <blue>159</blue>
+     </color>
+    </brush>
+   </property>
+  </widget>
+  <zorder>appContent</zorder>
+  <zorder>horizontalLayoutWidget</zorder>
+  <zorder>horizontalLayoutWidget_3</zorder>
+  <zorder>horizontalLayoutWidget_4</zorder>
+  <zorder>verticalLayoutWidget</zorder>
+  <zorder>MusicSkip</zorder>
+  <zorder>ViewPlaylist</zorder>
+  <zorder>MusicPlay</zorder>
+  <zorder>MusicStop</zorder>
+  <zorder>MPDNowPlaying</zorder>
+  <zorder>MPDAlbumArt</zorder>
+  <zorder>QuitButton</zorder>
+  <zorder>RandomPlayback</zorder>
+  <zorder>ConsumptionPlayback</zorder>
+  <zorder>FindButton</zorder>
+  <zorder>UpdateDatabase</zorder>
+  <zorder>NetworkButton</zorder>
+  <zorder>LocationButton</zorder>
+  <zorder>SongPlayTime</zorder>
+  <zorder>MPDNextPlaying</zorder>
+  <zorder>MPDPlaylistInfo</zorder>
  </widget>
  <resources/>
  <connections/>
