@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string>NomadicPi</string>
   </property>
+  <property name="windowIcon">
+   <iconset theme="audio-headphones"/>
+  </property>
   <widget class="QStackedWidget" name="appContent">
    <property name="geometry">
     <rect>
@@ -26,14 +29,14 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
      <property name="geometry">
       <rect>
        <x>580</x>
-       <y>10</y>
+       <y>5</y>
        <width>101</width>
        <height>86</height>
       </rect>
@@ -58,7 +61,7 @@
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>10</y>
+       <y>5</y>
        <width>111</width>
        <height>86</height>
       </rect>
@@ -154,11 +157,11 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="FindButton">
+    <widget class="QPushButton" name="CollectionButton">
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>105</y>
+       <y>100</y>
        <width>101</width>
        <height>86</height>
       </rect>
@@ -183,7 +186,7 @@
      <property name="geometry">
       <rect>
        <x>460</x>
-       <y>10</y>
+       <y>5</y>
        <width>111</width>
        <height>86</height>
       </rect>
@@ -236,7 +239,7 @@
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>200</y>
+       <y>197</y>
        <width>101</width>
        <height>86</height>
       </rect>
@@ -414,7 +417,7 @@
      <property name="font">
       <font>
        <family>Open Sans Extrabold</family>
-       <pointsize>50</pointsize>
+       <pointsize>80</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -474,7 +477,7 @@
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>10</y>
+       <y>5</y>
        <width>101</width>
        <height>86</height>
       </rect>
@@ -495,10 +498,10 @@
       </size>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="CurrentSpeed_2">
+    <widget class="QLabel" name="SpeedUnit">
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -525,7 +528,7 @@
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <zorder>FindButton</zorder>
+    <zorder>CollectionButton</zorder>
     <zorder>QuitButton</zorder>
     <zorder>MPDNowPlaying</zorder>
     <zorder>MusicPlay</zorder>
@@ -544,20 +547,23 @@
     <zorder>MPDPlaylistInfo</zorder>
     <zorder>SongPlayTime</zorder>
     <zorder>PlaylistDetailsButton</zorder>
-    <zorder>CurrentSpeed_2</zorder>
+    <zorder>SpeedUnit</zorder>
    </widget>
    <widget class="QWidget" name="current_playlist">
-    <widget class="QPushButton" name="DeleteButton">
+    <widget class="QPushButton" name="PlaylistDeleteButton">
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>140</y>
+       <y>198</y>
        <width>101</width>
        <height>86</height>
       </rect>
      </property>
      <property name="toolTip">
       <string>Skip Song</string>
+     </property>
+     <property name="statusTip">
+      <string>Clear Playlist</string>
      </property>
      <property name="text">
       <string/>
@@ -575,40 +581,70 @@
     <widget class="QListWidget" name="PlaylistContents">
      <property name="geometry">
       <rect>
-       <x>15</x>
-       <y>31</y>
+       <x>10</x>
+       <y>10</y>
        <width>661</width>
        <height>431</height>
       </rect>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="viewMode">
+      <enum>QListView::ListMode</enum>
+     </property>
+     <property name="batchSize">
+      <number>2000</number>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="selectionRectVisible">
+      <bool>true</bool>
+     </property>
+     <property name="currentRow">
+      <number>-1</number>
+     </property>
+     <property name="sortingEnabled">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QLabel" name="PlaylistCount">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>-1</y>
-       <width>651</width>
-       <height>31</height>
+       <x>10</x>
+       <y>440</y>
+       <width>661</width>
+       <height>41</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>0 Playlist Items</string>
+      <string>0 Items</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="UpButton">
+    <widget class="QPushButton" name="PlaylistUpButton">
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>20</y>
+       <y>5</y>
        <width>101</width>
        <height>86</height>
       </rect>
      </property>
      <property name="toolTip">
       <string>Skip Song</string>
+     </property>
+     <property name="statusTip">
+      <string>Scroll Up</string>
      </property>
      <property name="text">
       <string/>
@@ -623,17 +659,20 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="DownButton">
+    <widget class="QPushButton" name="PlaylistDownButton">
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>380</y>
+       <y>390</y>
        <width>101</width>
        <height>86</height>
       </rect>
      </property>
      <property name="toolTip">
       <string>Skip Song</string>
+     </property>
+     <property name="statusTip">
+      <string>Scroll Down</string>
      </property>
      <property name="text">
       <string/>
@@ -652,13 +691,16 @@
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>260</y>
+       <y>102</y>
        <width>101</width>
        <height>86</height>
       </rect>
      </property>
      <property name="toolTip">
       <string>Skip Song</string>
+     </property>
+     <property name="statusTip">
+      <string>Return Home</string>
      </property>
      <property name="text">
       <string/>
@@ -673,7 +715,39 @@
       </size>
      </property>
     </widget>
+    <widget class="QPushButton" name="CollectionButton2">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>295</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="statusTip">
+      <string>Browse Collection</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="tools-media-optical-copy">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
    </widget>
+   <widget class="QWidget" name="network_status"/>
+   <widget class="QWidget" name="browse_files"/>
+   <widget class="QWidget" name="car_location"/>
   </widget>
  </widget>
  <resources/>

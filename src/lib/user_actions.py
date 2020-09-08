@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtGui
 
 class UserActions():
+    selected_playlist_item = 0
 
     def __init__(self, ui, mpd):
         self.ui = ui
@@ -10,7 +11,7 @@ class UserActions():
         # Set the initial button state from the MPD state
         self.ui_button_state()
         
-        # Register the button actions     
+        # Register the button actions on the home page
         self.ui.MusicPlay.clicked.connect(self.music_play_press)      
         self.ui.RandomPlayback.clicked.connect(self.music_random_press)        
         self.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)     
@@ -18,9 +19,71 @@ class UserActions():
                 
         self.ui.MusicSkip.clicked.connect(self.music_skip_press)        
         self.ui.MusicStop.clicked.connect(self.music_stop_press)
+
+        self.ui.PlaylistDetailsButton.clicked.connect(self.view_playlist_widget)        
+        self.ui.QuitButton.clicked.connect(self.exit_application)
         
-        self.ui.QuitButton.clicked.connect(self.exit_application)  
-                
+        # Register the button actions on the current playlist page
+        self.ui.HomeButton.clicked.connect(self.view_home_widget) 
+        self.ui.PlaylistUpButton.clicked.connect(self.playlist_scroll_up) 
+        self.ui.PlaylistDownButton.clicked.connect(self.playlist_scroll_down)
+                           
+    def change_page(self, widget_id):
+        """
+        Change the visible widget in use
+        """
+        try:
+            self.ui.appContent.setCurrentIndex(widget_id)
+        except:
+            pass
+
+    def view_home_widget(self):
+        """
+        Change the visible widget to the application home view
+        """
+        self.change_page(0)
+
+    def view_playlist_widget(self):
+        """
+        Change the visible widget to the current playlist view
+        """
+        self.change_page(1)
+        
+        mpd_status = self.mpd.get_status()
+        playlist_length = mpd_status.get('playlistlength', 0)
+        self.ui.PlaylistCount.setText(str(playlist_length) + " Items")
+        self.playlist_items()
+
+    def playlist_scroll_up(self):
+        """
+        Select the playlist item above the current selection
+        """
+        if self.selected_playlist_item > 0:
+            self.selected_playlist_item -= 1           
+            self.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
+            
+    def playlist_scroll_down(self):
+        """
+        Select the playlist item below the current selection
+        """
+        mpd_status = self.mpd.get_status()
+        playlist_length = mpd_status.get('playlistlength', 0)
+        
+        if int(self.selected_playlist_item) < int(playlist_length):
+            self.selected_playlist_item += 1
+            self.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
+                        
+    def playlist_items(self):
+        """
+        Populate the list widget with the contents of the playlist
+        """
+        mpd_playlist = self.mpd.playlist_contents()
+        
+        if len(mpd_playlist) > 0:
+            self.ui.PlaylistContents.addItems(mpd_playlist)
+            
+            self.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
+        
     def music_play_press(self):
         """
         Start playback of music

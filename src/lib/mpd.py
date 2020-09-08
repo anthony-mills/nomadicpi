@@ -112,6 +112,15 @@ class MpdLib():
         """         
         return self.client.stats()
 
+    def playlist_contents(self):
+        """
+        Return contents of the current playlist
+        
+        :param: int
+        :return: array        
+        """         
+        return self.client.playlist()
+        
     def playlist_info(self, item_id = None):
         """
         Return stats about the current playlist

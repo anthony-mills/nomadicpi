@@ -40,6 +40,8 @@ class mainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_NomadicPI()
         self.ui.setupUi(self)
         
+        self.ui.appContent.setCurrentIndex(0)
+        
         # Setup the handlers for user actions
         self.user_actions = user_actions.UserActions(self.ui, self.mpd)
         self.user_actions.ui_button_state()        
