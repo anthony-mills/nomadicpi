@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NomadicPI</class>
+ <widget class="QWidget" name="NomadicPI">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>NomadicPi</string>
+  </property>
+  <widget class="QStackedWidget" name="appContent">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>490</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="home">
+    <widget class="QPushButton" name="MusicSkip">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>10</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="media-skip-forward"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="MusicStop">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>10</y>
+       <width>111</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Stop Music Playback</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="media-playback-stop"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ConsumptionPlayback">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>390</y>
+       <width>111</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Enable / Disable Consumption Playback</string>
+     </property>
+     <property name="text">
+      <string notr="true"/>
+     </property>
+     <property name="icon">
+      <iconset theme="media-playlist-repeat"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="UpdateDatabase">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>390</y>
+       <width>111</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Update Music Store</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="view-refresh"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDAlbumArt">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>110</y>
+       <width>331</width>
+       <height>250</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="FindButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>105</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Browse Music Collection</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="tools-media-optical-copy"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="MusicPlay">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>10</y>
+       <width>111</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Play / Pause Music</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="media-playback-start"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="LocationButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>295</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Location Information</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="map-globe"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="NetworkButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>200</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Network Status</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="network-cellular-signal-good-symbolic"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="QuitButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>390</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Exit Application</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="exit"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="RandomPlayback">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>390</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Enable / Disable Random Playback</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="media-playlist-shuffle"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDNextPlaying">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>321</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDNowPlaying">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>321</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans Semibold</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="CurrentPosition">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>400</y>
+       <width>319</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
+     <property name="text">
+      <string>Current Position: No GPS fix.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="CurrentAltitude">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>440</y>
+       <width>319</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
+     <property name="text">
+      <string>Current Altitude: No GPS fix.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="CurrentSpeed">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>191</width>
+       <height>92</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans Extrabold</family>
+       <pointsize>50</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDPlaylistInfo">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>360</y>
+       <width>321</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="SongPlayTime">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>366</y>
+       <width>341</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="PlaylistDetailsButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>10</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Update Music Store</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="view-media-playlist"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="CurrentSpeed_2">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>0</y>
+       <width>120</width>
+       <height>92</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans Extrabold</family>
+       <pointsize>30</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string>KM/H</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <zorder>FindButton</zorder>
+    <zorder>QuitButton</zorder>
+    <zorder>MPDNowPlaying</zorder>
+    <zorder>MusicPlay</zorder>
+    <zorder>CurrentAltitude</zorder>
+    <zorder>MPDNextPlaying</zorder>
+    <zorder>CurrentSpeed</zorder>
+    <zorder>UpdateDatabase</zorder>
+    <zorder>LocationButton</zorder>
+    <zorder>MPDAlbumArt</zorder>
+    <zorder>CurrentPosition</zorder>
+    <zorder>MusicSkip</zorder>
+    <zorder>MusicStop</zorder>
+    <zorder>NetworkButton</zorder>
+    <zorder>RandomPlayback</zorder>
+    <zorder>ConsumptionPlayback</zorder>
+    <zorder>MPDPlaylistInfo</zorder>
+    <zorder>SongPlayTime</zorder>
+    <zorder>PlaylistDetailsButton</zorder>
+    <zorder>CurrentSpeed_2</zorder>
+   </widget>
+   <widget class="QWidget" name="current_playlist">
+    <widget class="QPushButton" name="DeleteButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>140</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="trash-empty"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="PlaylistContents">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>31</y>
+       <width>661</width>
+       <height>431</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="PlaylistCount">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>-1</y>
+       <width>651</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0 Playlist Items</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="UpButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>20</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="up"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="DownButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>380</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="down"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="HomeButton">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>260</y>
+       <width>101</width>
+       <height>86</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Skip Song</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="gohome"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

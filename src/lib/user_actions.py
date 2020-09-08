@@ -36,6 +36,7 @@ class UserActions():
         self.ui.MusicPlay.setChecked(False)
         self.ui_button_state() 
         self.ui.SongPlayTime.clear()
+        self.ui.MPDNextPlaying.clear()
         self.ui.MPDNowPlaying.clear()
         self.ui.MPDAlbumArt.clear()          
         

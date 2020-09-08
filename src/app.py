@@ -10,7 +10,7 @@ import lib.user_actions as user_actions
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap, QMovie
 
-from lib.interface.main_window import Ui_NomadicPI
+from ui.interface.main_window import Ui_NomadicPI
 
 import sys
 logger = logging.getLogger(__name__)
