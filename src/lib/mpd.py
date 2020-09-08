@@ -119,7 +119,7 @@ class MpdLib():
         :param: int
         :return: array        
         """         
-        return self.client.playlist()
+        return self.client.playlistinfo()
         
     def playlist_info(self, item_id = None):
         """

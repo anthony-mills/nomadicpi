@@ -69,6 +69,7 @@ class UserActions():
         mpd_status = self.mpd.get_status()
         playlist_length = mpd_status.get('playlistlength', 0)
         
+        
         if int(self.selected_playlist_item) < int(playlist_length):
             self.selected_playlist_item += 1
             self.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
@@ -80,9 +81,10 @@ class UserActions():
         mpd_playlist = self.mpd.playlist_contents()
         
         if len(mpd_playlist) > 0:
-            self.ui.PlaylistContents.addItems(mpd_playlist)
-            
-            self.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
+            for mpd_item in mpd_playlist:
+                song_name = 'Song ID: ' + str(mpd_item.get('id', 0)) + ' - ' + mpd_item.get('title', 'Unknown') + ' - ' + mpd_item.get('artist', 'Unknown')
+                self.ui.PlaylistContents.addItem(song_name)
+                self.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
         
     def music_play_press(self):
         """

@@ -587,11 +587,29 @@
        <height>431</height>
       </rect>
      </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans Semibold</family>
+       <pointsize>12</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+       <stylestrategy>PreferAntialias</stylestrategy>
+      </font>
+     </property>
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>
      </property>
      <property name="viewMode">
       <enum>QListView::ListMode</enum>
+     </property>
+     <property name="modelColumn">
+      <number>0</number>
      </property>
      <property name="batchSize">
       <number>2000</number>
