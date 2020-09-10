@@ -10,6 +10,8 @@ So the first aim with this rewrite will be extensibility so it can be modified t
 
 ![Playing Music](/screenshots/1.png?raw=true "Playing music with no GPS fix")
 
+![Playlist Management](/screenshots/2.png?raw=true "Managing the current playlist")
+
 ### Licence
 
 Copyright (C) 2020 [Anthony Mills](http://www.anthony-mills.com)
