@@ -112,6 +112,15 @@ class MpdLib():
         """         
         return self.client.stats()
 
+    def playlist_contents(self):
+        """
+        Return contents of the current playlist
+        
+        :param: int
+        :return: array        
+        """         
+        return self.client.playlistinfo()
+        
     def playlist_info(self, item_id = None):
         """
         Return stats about the current playlist
@@ -127,6 +136,28 @@ class MpdLib():
         """        
         self.client.next()         
 
+    def play_song(self, song_id):
+        """
+        Play a song via its MPD id
+        
+        :param: int
+        """        
+        self.client.playid(song_id)
+        
+    def remove_song(self, song_id):
+        """
+        Remove a song from the current playlist via its MPD id
+        
+        :param: int
+        """        
+        self.client.deleteid(song_id)                
+
+    def wipe_playlist(self):
+        """
+        Wipe the current playlist
+        """        
+        self.client.clear() 
+                
     def currently_playing(self):
         """
         Return information about the current song playing
