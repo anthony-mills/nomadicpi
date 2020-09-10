@@ -28,7 +28,8 @@ class UserActions():
         self.ui.PlaylistUpButton.clicked.connect(self.playlist_scroll_up) 
         self.ui.PlaylistDownButton.clicked.connect(self.playlist_scroll_down)
         self.ui.PlaylistContents.itemClicked.connect(self.select_playlist_item)
-        self.ui.PlayPlaylistItem.clicked.connect(self.play_playlist_item)                           
+        self.ui.PlayPlaylistItem.clicked.connect(self.play_playlist_item)
+        self.ui.PlaylistItemDeleteButton.clicked.connect(self.remove_playlist_item)                           
 
     def change_page(self, widget_id):
         """
@@ -50,12 +51,17 @@ class UserActions():
         Change the visible widget to the current playlist view
         """
         self.change_page(1)
+        self.update_playlist_contents()
         
+    def update_playlist_contents(self):
+        """
+        Update the contents of the playlist window
+        """
         mpd_status = self.mpd.get_status()
         playlist_length = mpd_status.get('playlistlength', 0)
         self.ui.PlaylistCount.setText(str(playlist_length) + " Items")
         self.playlist_items()
-
+        
     def play_playlist_item(self):
         """
         Play a playlist item        
@@ -63,8 +69,17 @@ class UserActions():
         song_id = self.playlist_song_id()
         
         self.mpd.play_song( song_id )
+        
+    def remove_playlist_item(self):
+        """
+        Remove a song from the playlist
+        """        
+        song_id = self.playlist_song_id(1)
+        
+        self.mpd.remove_song( song_id )  
+        self.update_playlist_contents()      
 
-    def playlist_song_id(self):
+    def playlist_song_id(self, take = None ):
         """
         Return the song ID for the currently selected playlist item
         
@@ -75,7 +90,12 @@ class UserActions():
         """        
         try:
             song_row = self.ui.PlaylistContents.currentRow()
-            song_value = (self.ui.PlaylistContents.item(song_row)).text()
+            
+            if take is None:
+                song_value = (self.ui.PlaylistContents.item(song_row)).text()
+            else:
+                song_value = (self.ui.PlaylistContents.takeItem(song_row)).text()
+                
             song_value = (song_value.split('-',1))[0][9:]      
             
             return int(song_value)

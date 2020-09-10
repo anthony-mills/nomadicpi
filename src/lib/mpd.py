@@ -142,8 +142,22 @@ class MpdLib():
         
         :param: int
         """        
-        self.client.playid(song_id)       
+        self.client.playid(song_id)
         
+    def remove_song(self, song_id):
+        """
+        Remove a song from the current playlist via its MPD id
+        
+        :param: int
+        """        
+        self.client.deleteid(song_id)                
+
+    def wipe_playlist(self):
+        """
+        Wipe the current playlist
+        """        
+        self.client.clear() 
+                
     def currently_playing(self):
         """
         Return information about the current song playing
