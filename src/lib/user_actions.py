@@ -27,7 +27,9 @@ class UserActions():
         self.ui.HomeButton.clicked.connect(self.view_home_widget) 
         self.ui.PlaylistUpButton.clicked.connect(self.playlist_scroll_up) 
         self.ui.PlaylistDownButton.clicked.connect(self.playlist_scroll_down)
-                           
+        self.ui.PlaylistContents.itemClicked.connect(self.select_playlist_item)
+        self.ui.PlayPlaylistItem.clicked.connect(self.play_playlist_item)                           
+
     def change_page(self, widget_id):
         """
         Change the visible widget in use
@@ -54,6 +56,39 @@ class UserActions():
         self.ui.PlaylistCount.setText(str(playlist_length) + " Items")
         self.playlist_items()
 
+    def play_playlist_item(self):
+        """
+        Play a playlist item        
+        """        
+        song_id = self.playlist_song_id()
+        
+        self.mpd.play_song( song_id )
+
+    def playlist_song_id(self):
+        """
+        Return the song ID for the currently selected playlist item
+        
+        Returns
+        -------
+        int
+            Numeric MPD id of the selected song 
+        """        
+        try:
+            song_row = self.ui.PlaylistContents.currentRow()
+            song_value = (self.ui.PlaylistContents.item(song_row)).text()
+            song_value = (song_value.split('-',1))[0][9:]      
+            
+            return int(song_value)
+        except:
+            pass
+                    
+    def select_playlist_item(self):
+        """
+        Execute method when a select playlist item
+        """        
+        self.selected_playlist_item = self.ui.PlaylistContents.currentRow()
+        
+
     def playlist_scroll_up(self):
         """
         Select the playlist item above the current selection
@@ -68,7 +103,6 @@ class UserActions():
         """
         mpd_status = self.mpd.get_status()
         playlist_length = mpd_status.get('playlistlength', 0)
-        
         
         if int(self.selected_playlist_item) < int(playlist_length):
             self.selected_playlist_item += 1

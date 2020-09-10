@@ -136,6 +136,14 @@ class MpdLib():
         """        
         self.client.next()         
 
+    def play_song(self, song_id):
+        """
+        Play a song via its MPD id
+        
+        :param: int
+        """        
+        self.client.playid(song_id)       
+        
     def currently_playing(self):
         """
         Return information about the current song playing

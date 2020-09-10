@@ -17,7 +17,8 @@
    <string>NomadicPi</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="audio-headphones"/>
+   <iconset theme="audio-headphones">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QStackedWidget" name="appContent">
    <property name="geometry">
@@ -48,7 +49,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="media-skip-forward"/>
+      <iconset theme="media-skip-forward">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -73,7 +75,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="media-playback-stop"/>
+      <iconset theme="media-playback-stop">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -98,7 +101,8 @@
       <string notr="true"/>
      </property>
      <property name="icon">
-      <iconset theme="media-playlist-repeat"/>
+      <iconset theme="media-playlist-repeat">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -126,7 +130,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="view-refresh"/>
+      <iconset theme="view-refresh">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -173,7 +178,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="tools-media-optical-copy"/>
+      <iconset theme="tools-media-optical-copy">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -198,7 +204,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="media-playback-start"/>
+      <iconset theme="media-playback-start">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -226,7 +233,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="map-globe"/>
+      <iconset theme="map-globe">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -251,7 +259,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="network-cellular-signal-good-symbolic"/>
+      <iconset theme="network-cellular-signal-good-symbolic">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -276,7 +285,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="exit"/>
+      <iconset theme="exit">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -301,7 +311,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="media-playlist-shuffle"/>
+      <iconset theme="media-playlist-shuffle">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -489,7 +500,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="view-media-playlist"/>
+      <iconset theme="view-media-playlist">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -550,17 +562,17 @@
     <zorder>SpeedUnit</zorder>
    </widget>
    <widget class="QWidget" name="current_playlist">
-    <widget class="QPushButton" name="PlaylistDeleteButton">
+    <widget class="QPushButton" name="PlaylistItemDeleteButton">
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>198</y>
+       <y>165</y>
        <width>101</width>
-       <height>86</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="toolTip">
-      <string>Skip Song</string>
+      <string>Delete Song</string>
      </property>
      <property name="statusTip">
       <string>Clear Playlist</string>
@@ -569,7 +581,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="trash-empty"/>
+      <iconset theme="edit-clear">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -655,11 +668,11 @@
        <x>690</x>
        <y>5</y>
        <width>101</width>
-       <height>86</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="toolTip">
-      <string>Skip Song</string>
+      <string>Scroll Up</string>
      </property>
      <property name="statusTip">
       <string>Scroll Up</string>
@@ -668,7 +681,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="up"/>
+      <iconset theme="up">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -681,13 +695,13 @@
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>390</y>
+       <y>405</y>
        <width>101</width>
-       <height>86</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="toolTip">
-      <string>Skip Song</string>
+      <string>Scroll Down</string>
      </property>
      <property name="statusTip">
       <string>Scroll Down</string>
@@ -696,7 +710,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="down"/>
+      <iconset theme="down">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -709,13 +724,13 @@
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>102</y>
+       <y>325</y>
        <width>101</width>
-       <height>86</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="toolTip">
-      <string>Skip Song</string>
+      <string>Application Home</string>
      </property>
      <property name="statusTip">
       <string>Return Home</string>
@@ -724,7 +739,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="gohome"/>
+      <iconset theme="gohome">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -733,17 +749,17 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="CollectionButton2">
+    <widget class="QPushButton" name="PlayPlaylistItem">
      <property name="geometry">
       <rect>
        <x>690</x>
-       <y>295</y>
+       <y>85</y>
        <width>101</width>
-       <height>86</height>
+       <height>71</height>
       </rect>
      </property>
      <property name="toolTip">
-      <string>Skip Song</string>
+      <string>Play Song</string>
      </property>
      <property name="statusTip">
       <string>Browse Collection</string>
@@ -752,8 +768,36 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="tools-media-optical-copy">
+      <iconset theme="media-playback-start">
        <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="DeletePlaylist">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>245</y>
+       <width>101</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Wipe Playlist</string>
+     </property>
+     <property name="statusTip">
+      <string>Browse Collection</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="trash-empty"/>
      </property>
      <property name="iconSize">
       <size>
