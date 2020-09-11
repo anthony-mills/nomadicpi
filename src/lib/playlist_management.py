@@ -13,6 +13,7 @@ class PlaylistManagement():
         self.ui.PlaylistUpButton.clicked.connect(self.playlist_scroll_up) 
         self.ui.PlaylistDownButton.clicked.connect(self.playlist_scroll_down)
         self.ui.PlaylistContents.itemClicked.connect(self.select_playlist_item)
+        self.ui.PlaylistContents.itemDoubleClicked.connect(self.play_playlist_item)
         self.ui.PlayPlaylistItem.clicked.connect(self.play_playlist_item)
         self.ui.PlaylistItemDeleteButton.clicked.connect(self.remove_playlist_item) 
 
