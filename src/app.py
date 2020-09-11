@@ -31,6 +31,8 @@ class mainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(mainWindow, self).__init__()
         
+        self.setFixedSize(800, 490) 
+        
         self.app_config = configparser.ConfigParser()
         self.app_config.read('config.ini')
         self.now_playing = 0;

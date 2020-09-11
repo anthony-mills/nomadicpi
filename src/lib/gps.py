@@ -11,13 +11,13 @@ state = {}
 
 cur_gps = {
     'latitude' : None,
-    'longitude': None, 
+    'longitude': None,
     'speed' : None,
     'utc': None,
     'time' : None,
-    'altitude': None, 
+    'altitude': None,
     'precision' : None,
-    'direction': None,      
+    'direction': None,
 }
 
 gpsTimeFormat = '%Y-%m-%dT%H:%M:%S.%fZ'
@@ -110,8 +110,8 @@ class GpsResponse(object):
             result.sats_valid = len(
                 [sat for sat in last_sky['satellites'] if sat['used'] == True])
         else:
-            result.sats = 0;
-            result.sats_valid = 0;
+            result.sats = 0
+            result.sats_valid = 0
 
         result.mode = last_tpv['mode']
 
@@ -250,13 +250,13 @@ def gps_connect(host="127.0.0.1", port=2947):
     logger.debug("Connecting to gpsd socket at {}:{}".format(host, port))
     gpsd_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     gpsd_socket.settimeout(5)
-    
+
     try:
         gpsd_socket.connect((host, port))
     except:
         print("Unable to connect to GPSD service")
         return
-        
+
     gpsd_stream = gpsd_socket.makefile(mode="rw")
     logger.debug("Waiting for welcome message")
     welcome_raw = gpsd_stream.readline()
