@@ -113,7 +113,8 @@ class NomadicPi():
         # Update GPS related information 
         self.update_gps()
         
-        threading.Timer(1, self.update_content).start()  
+        self.update_loop = threading.Timer(1, self.update_content)
+        self.update_loop.start()
         
     def update_mpd(self):
         """
@@ -230,5 +231,6 @@ class NomadicPi():
         """
         Close the MPD connection and close the application
         """
+        self.update_loop.cancel()
         self.mpd.close_mpd()
         sys.exit(0)                    
