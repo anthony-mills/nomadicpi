@@ -51,6 +51,8 @@ class UserActions():
         self.mpd.play_playback()
         self.ui_button_state()
 
+        mpd_status = self.mpd.get_status()
+
     def music_stop_press(self):
         """
         Stop the playback of music
@@ -103,8 +105,10 @@ class UserActions():
 
         if mpd_status.get('state', '') == 'play':
             self.ui.MusicPlay.setChecked(True)
+            self.ui.MusicPlay.setIcon(QtGui.QIcon.fromTheme("media-playback-pause"))
         else:
             self.ui.MusicPlay.setChecked(False)
+            self.ui.MusicPlay.setIcon(QtGui.QIcon.fromTheme("media-playback-start"))
 
         if int(mpd_status.get('random', 0)) == 1:
             self.ui.RandomPlayback.setChecked(True)
