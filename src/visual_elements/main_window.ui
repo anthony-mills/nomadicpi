@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -810,7 +810,7 @@
    </widget>
    <widget class="QWidget" name="network_status"/>
    <widget class="QWidget" name="browse_files">
-    <widget class="QListView" name="FileList">
+    <widget class="QListWidget" name="FileList">
      <property name="geometry">
       <rect>
        <x>10</x>

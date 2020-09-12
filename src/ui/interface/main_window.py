@@ -282,7 +282,7 @@ class Ui_NomadicPI(object):
         self.appContent.addWidget(self.network_status)
         self.browse_files = QtWidgets.QWidget()
         self.browse_files.setObjectName("browse_files")
-        self.FileList = QtWidgets.QListView(self.browse_files)
+        self.FileList = QtWidgets.QListWidget(self.browse_files)
         self.FileList.setGeometry(QtCore.QRect(10, 10, 660, 430))
         self.FileList.setObjectName("FileList")
         self.FileListUp = QtWidgets.QPushButton(self.browse_files)
@@ -340,7 +340,7 @@ class Ui_NomadicPI(object):
         self.appContent.addWidget(self.car_location)
 
         self.retranslateUi(NomadicPI)
-        self.appContent.setCurrentIndex(2)
+        self.appContent.setCurrentIndex(3)
         self.PlaylistContents.setCurrentRow(-1)
         QtCore.QMetaObject.connectSlotsByName(NomadicPI)
 
