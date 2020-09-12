@@ -67,6 +67,7 @@ class mainWindow(QtWidgets.QMainWindow):
         try:
             self.current_playlist.update_playlist_contents()
             self.application_home.update_playlist_count()
+            self.mpd_files.filesystem_items()
         except Exception as e:
             pass                    
     

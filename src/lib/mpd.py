@@ -156,7 +156,7 @@ class MpdLib():
         """
         self.client.clear()
 
-    def ls_mpd_path(self, path='/'):
+    def ls_mpd_path(self, file_path=None):
         """
         List the contents of an MPD path
         
@@ -171,12 +171,14 @@ class MpdLib():
             Dictionary of items / folders located under the requested path                 
         """
         try:
-            path_contents = self.client.lsinfo(path)
+            if type(file_path) is str:
+                path_contents = self.client.lsinfo(file_path)       
+            else:
+                path_contents = self.client.lsinfo() 
+            return path_contents
         except Exception as e:
-            print("Unable to read contents of path: " + path + " - " + str(e))
+            print("Unable to read contents of path: " + str(file_path) + " - " + str(e))
         
-        return path_contents
-
     def currently_playing(self):
         """
         Return information about the current song playing

@@ -819,6 +819,18 @@
        <height>430</height>
       </rect>
      </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="viewMode">
+      <enum>QListView::ListMode</enum>
+     </property>
+     <property name="selectionRectVisible">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="FileListUp">
      <property name="geometry">

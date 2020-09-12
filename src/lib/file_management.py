@@ -1,3 +1,5 @@
+from PyQt5 import QtGui
+
 class FileManagement():
     selected_file_item = 0
     path_file_count = 0
@@ -11,7 +13,7 @@ class FileManagement():
         self.ui.FileListUp.clicked.connect(self.playlist_scroll_up)
         self.ui.FileListDown.clicked.connect(self.playlist_scroll_down)
 
-        self.ui.FileParentDirectory.clicked.connect(self.filesystem_items)
+        self.ui.FileOpenFolder.clicked.connect(self.open_folder)
             
     def view_home_widget(self):
         """
@@ -38,7 +40,18 @@ class FileManagement():
             self.selected_file_item += 1
             self.ui.FileList.setCurrentRow(self.selected_file_item)
 
-    def filesystem_items(self, path='/'):
+    def open_folder(self):
+        """
+        Attempt to open the selected folder
+        """        
+        try:
+            file_path = (self.ui.FileList.item(self.ui.FileList.currentRow())).text()
+            self.filesystem_items(file_path)
+        except Exception as e:
+            print('Unable to open selected folder: ' + str(e))
+            
+                
+    def filesystem_items(self, file_path=None):
         """
         Populate the list widget with the contents of the MPD filesystem
         
@@ -47,13 +60,27 @@ class FileManagement():
         string
             File System Path on the MPD filesystem             
         """
-        mpd_filelist = self.mpd.ls_mpd_path()
+        mpd_filelist = self.mpd.ls_mpd_path(file_path)
         
-        self.path_file_count = len(mpd_filelist) 
+        item_count = 0
         
-        self.ui.FileCount.setText('Directory Items: ' + str(self.path_file_count)) 
+        if type(mpd_filelist) is list:
+            self.path_file_count = len(mpd_filelist) 
         
-        for dir_item in mpd_filelist:
-            if dir_item.get('directory', None) is not None:
-                self.ui.FileList.addItem(dir_item['directory'])
-                self.ui.FileList.setCurrentRow(self.selected_file_item)
+            self.ui.FileCount.setText('Directory Items: ' + str(self.path_file_count)) 
+            self.ui.FileList.clear()
+            for dir_item in mpd_filelist:
+                if dir_item.get('directory', None) is not None:
+                    self.ui.FileList.addItem(dir_item['directory'])
+                    new_item = self.ui.FileList.item(item_count)
+                    new_item.setIcon(QtGui.QIcon.fromTheme("tag-folder"))                    
+                    
+                if dir_item.get('file', None) is not None:
+                    file_item = 'Artist: ' + dir_item.get('artist', '') + '\nSong: ' + dir_item.get('title', '') + '\nFile: ' + dir_item.get('file', '') + '\n'
+                    self.ui.FileList.addItem(file_item)
+                    new_item = self.ui.FileList.item(item_count)
+                    new_item.setIcon(QtGui.QIcon.fromTheme("emblem-music-symbolic"))
+                    
+                item_count +=1
+
+            self.ui.FileList.setCurrentRow(self.selected_file_item)
