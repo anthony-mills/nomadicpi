@@ -21,6 +21,7 @@ class UserActions():
         self.ui.MusicStop.clicked.connect(self.music_stop_press)
 
         self.ui.PlaylistDetailsButton.clicked.connect(self.view_playlist_widget)
+        self.ui.CollectionButton.clicked.connect(self.view_file_management)        
         self.ui.QuitButton.clicked.connect(self.exit_application)
 
     def change_page(self, widget_id):
@@ -43,6 +44,12 @@ class UserActions():
         Change the visible widget to the current playlist view
         """
         self.change_page(1)
+        
+    def view_file_management(self):
+        """
+        Change the visible widget to the filesystem view
+        """
+        self.change_page(3)        
 
     def music_play_press(self):
         """

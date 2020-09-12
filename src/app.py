@@ -7,6 +7,7 @@ import lib.gps as gps
 import lib.mpd as mpd
 import lib.application_home as application_home
 import lib.playlist_management as playlist_management
+import lib.file_management as file_management
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
@@ -51,6 +52,9 @@ class mainWindow(QtWidgets.QMainWindow):
         # Setup the handlers for user actions on the playlist page
         self.current_playlist = playlist_management.PlaylistManagement(self.ui, self.mpd)  
         
+        # Setup the handlers for user actions on the file management page
+        self.mpd_files = file_management.FileManagement(self.ui, self.mpd)          
+        
         self.ui.appContent.setCurrentIndex(0)      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
                 
@@ -60,8 +64,11 @@ class mainWindow(QtWidgets.QMainWindow):
         """
         Call any methods that need to happen at page change
         """
-        self.current_playlist.update_playlist_contents()
-        self.application_home.update_playlist_count()
+        try:
+            self.current_playlist.update_playlist_contents()
+            self.application_home.update_playlist_count()
+        except Exception as e:
+            pass                    
     
     def connect_mpd(self):
         """
@@ -97,9 +104,6 @@ class mainWindow(QtWidgets.QMainWindow):
 
         if self.mpd_status.get('state', '') == 'play':
             song_data = self.mpd.currently_playing()
-            
-            if self.ui.MPDAlbumArt.pixmap() is None:
-                self.set_album_art(song_data)
                 
             if int(self.now_playing)!=int(self.mpd_status['songid']):
                 self.now_playing = song_data.get('id', 0)  
@@ -124,6 +128,9 @@ class mainWindow(QtWidgets.QMainWindow):
  
                 self.application_home.update_playlist_count()
                                        
+            if self.ui.MPDAlbumArt.pixmap() is None:
+                self.set_album_art(song_data)
+                                                       
             m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60) 
             song_elapsed = "%02d:%02d" % (m, s)   
             
@@ -200,7 +207,6 @@ class mainWindow(QtWidgets.QMainWindow):
                 except Exception as e:
                     print(e)
                 
-
 if __name__ == '__main__':        
     app = QtWidgets.QApplication([])
     application = mainWindow()
