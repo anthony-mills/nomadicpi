@@ -848,7 +848,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="up"/>
+      <iconset theme="up">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -923,6 +924,18 @@
        <width>101</width>
        <height>71</height>
       </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
      </property>
      <property name="toolTip">
       <string>Add File / Folder to Playlist</string>
