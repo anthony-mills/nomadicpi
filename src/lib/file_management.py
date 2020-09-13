@@ -82,6 +82,8 @@ class FileManagement():
         else:
             self.nomadic.mpd.add_to_playlist(item_text)
             
+        self.set_item_count()
+            
     def open_parent_folder(self):
         """
         Attempt to open the parent folder of the current directory
@@ -107,6 +109,17 @@ class FileManagement():
         except Exception as e:
             print('Unable to open selected folder: ' + str(e))
             
+    def set_item_count(self):
+        """
+        Set the directory item count and the current playlist length
+        """                
+        try:
+            mpd_playlist = self.nomadic.mpd.playlist_contents()
+            
+            item_text = 'Directory Items: ' + str(self.dir_info['count']) + ' / Playlist Items: ' + str(len(mpd_playlist))
+            self.nomadic.ui.FileCount.setText(item_text)     
+        except Exception as e:
+            print(str(e))
                 
     def filesystem_items(self, file_path=None):
         """
@@ -117,50 +130,52 @@ class FileManagement():
         string
             File System Path on the MPD filesystem             
         """
-        mpd_filelist = self.nomadic.mpd.ls_mpd_path(file_path)
-        
-        if file_path is not None:
-            path_unique = len(set(self.dir_info['path'])) == len(self.dir_info['path'])
+        try:
+            mpd_filelist = self.nomadic.mpd.ls_mpd_path(file_path)
             
-            if path_unique:
-                self.dir_info['path'].append(file_path)
-            
-        item_count = 0
-        
-        if type(mpd_filelist) is list:
-            self.dir_info['count'] = len(mpd_filelist) 
-        
-            self.nomadic.ui.FileCount.setText('Directory Items: ' + str(self.dir_info['count'])) 
-            self.nomadic.ui.FileList.clear()
-            
-            self.dir_info['contents'] = []
-            
-            for dir_item in mpd_filelist:
-                if dir_item.get('directory', None) is not None:
-                    self.nomadic.ui.FileList.addItem(dir_item['directory'])
-                    new_item = self.nomadic.ui.FileList.item(item_count)
-                    new_item.setIcon(self.icons['folder'])                    
-                    
-                    self.dir_info['contents'].append({
-                        'id' : item_count,
-                        'value' : dir_item['directory'],
-                        'type' : 'directory'
-                    })                    
-                    
-                if dir_item.get('file', None) is not None:                   
-                    file_item = 'Artist: ' + dir_item.get('artist', '') + '\nSong: ' + dir_item.get('title', '') + '\nFile: ' + dir_item.get('file', '') + '\n'
-                    self.nomadic.ui.FileList.addItem(file_item)
-                    new_item = self.nomadic.ui.FileList.item(item_count)
-                    new_item.setIcon(self.icons['file'])
-                    
-                    self.dir_info['contents'].append({
-                        'id' : item_count,
-                        'value' : dir_item.get('file', ''),
-                        'type' : 'directory'
-                    })                     
-                    
-                item_count +=1
-                self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
+            if file_path is not None:
+                path_unique = len(set(self.dir_info['path'])) == len(self.dir_info['path'])
                 
-            #print(self.dir_info)
+                if path_unique:
+                    self.dir_info['path'].append(file_path)
+                
+            item_count = 0
+            
+            if type(mpd_filelist) is list:
+                self.dir_info['count'] = len(mpd_filelist) 
+                
+                self.set_item_count()
+                
+                self.nomadic.ui.FileList.clear()
+                
+                self.dir_info['contents'] = []
+                
+                for dir_item in mpd_filelist:
+                    if dir_item.get('directory', None) is not None:
+                        self.nomadic.ui.FileList.addItem(dir_item['directory'])
+                        new_item = self.nomadic.ui.FileList.item(item_count)
+                        new_item.setIcon(self.icons['folder'])                    
+                        
+                        self.dir_info['contents'].append({
+                            'id' : item_count,
+                            'value' : dir_item['directory'],
+                            'type' : 'directory'
+                        })                    
+                        
+                    if dir_item.get('file', None) is not None:                   
+                        file_item = '\nArtist: ' + dir_item.get('artist', '') + '\nSong: ' + dir_item.get('title', '') + '\nFile: ' + dir_item.get('file', '') + '\n'
+                        self.nomadic.ui.FileList.addItem(file_item)
+                        new_item = self.nomadic.ui.FileList.item(item_count)
+                        new_item.setIcon(self.icons['file'])
+                        
+                        self.dir_info['contents'].append({
+                            'id' : item_count,
+                            'value' : dir_item.get('file', ''),
+                            'type' : 'directory'
+                        })                     
+                        
+                    item_count +=1
+                    self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
+        except Exception as e:
+            print(str(e))
 
