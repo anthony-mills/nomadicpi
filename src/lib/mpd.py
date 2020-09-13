@@ -156,6 +156,20 @@ class MpdLib():
         """
         self.client.clear()
 
+    def add_to_playlist(self, path):
+        """
+        Add file or directory to the current playlist
+        
+        Params
+        -------
+        string
+            Directory or File Path to add      
+        """
+        try:
+            self.client.add(path)
+        except Exception as e:
+            print("Unable to add path to MP: " + str(path) + " - " + str(e))
+
     def ls_mpd_path(self, file_path=None):
         """
         List the contents of an MPD path
