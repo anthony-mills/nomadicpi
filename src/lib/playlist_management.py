@@ -12,6 +12,7 @@ class PlaylistManagement():
         self.nomadic.ui.PlaylistContents.itemDoubleClicked.connect(self.play_playlist_item)
         self.nomadic.ui.PlayPlaylistItem.clicked.connect(self.play_playlist_item)
         self.nomadic.ui.PlaylistItemDeleteButton.clicked.connect(self.remove_playlist_item)
+        self.nomadic.ui.DeletePlaylist.clicked.connect(self.wipe_playlist)
 
     def update_playlist_contents(self):
         """
@@ -39,6 +40,15 @@ class PlaylistManagement():
         self.nomadic.mpd.remove_song(song_id)
         self.update_playlist_contents()
 
+    def wipe_playlist(self):
+        """
+        Clear the contents of the current playlist
+        """
+        self.nomadic.ui.PlaylistContents.clear()
+        self.nomadic.application_home.music_stop_press()
+        self.nomadic.mpd.wipe_playlist()
+        self.update_playlist_contents()
+        
     def playlist_song_id(self, take=None):
         """
         Return the song ID for the currently selected playlist item
