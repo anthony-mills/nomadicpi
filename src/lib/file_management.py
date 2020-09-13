@@ -2,8 +2,19 @@ from PyQt5 import QtGui
 
 class FileManagement():
     selected_file_item = 0
-    path_file_count = 0
 
+    dir_info = {
+        'contents' : None,
+        'count' : 0,
+        'path' : None,   
+        'last_path' : None,
+    }
+    
+    icons = {
+        'file' : None,
+        'folder' : None
+    }
+    
     def __init__(self, nomadic):
         self.nomadic = nomadic
 
@@ -13,7 +24,11 @@ class FileManagement():
         self.nomadic.ui.FileListDown.clicked.connect(self.playlist_scroll_down)
 
         self.nomadic.ui.FileOpenFolder.clicked.connect(self.open_folder)
-
+        
+        # Set the Icon for files and directorys
+        self.icons['file'] = QtGui.QIcon.fromTheme("emblem-music-symbolic")
+        self.icons['folder'] = QtGui.QIcon.fromTheme("tag-folder")
+        
     def playlist_scroll_up(self):
         """
         Select the playlist item above the current selection
@@ -26,7 +41,7 @@ class FileManagement():
         """
         Select the playlist item below the current selection
         """
-        if int(self.selected_file_item) < int(self.path_file_count):
+        if int(self.selected_file_item) < int(self.dir_info['count']):
             self.selected_file_item += 1
             self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
 
@@ -52,25 +67,25 @@ class FileManagement():
         """
         mpd_filelist = self.nomadic.mpd.ls_mpd_path(file_path)
         
+        
         item_count = 0
         
         if type(mpd_filelist) is list:
-            self.path_file_count = len(mpd_filelist) 
+            self.dir_info['count'] = len(mpd_filelist) 
         
-            self.nomadic.ui.FileCount.setText('Directory Items: ' + str(self.path_file_count)) 
+            self.nomadic.ui.FileCount.setText('Directory Items: ' + str(self.dir_info['count'])) 
             self.nomadic.ui.FileList.clear()
             for dir_item in mpd_filelist:
                 if dir_item.get('directory', None) is not None:
                     self.nomadic.ui.FileList.addItem(dir_item['directory'])
                     new_item = self.nomadic.ui.FileList.item(item_count)
-                    new_item.setIcon(QtGui.QIcon.fromTheme("tag-folder"))                    
+                    new_item.setIcon(self.icons['folder'])                    
                     
                 if dir_item.get('file', None) is not None:
                     file_item = 'Artist: ' + dir_item.get('artist', '') + '\nSong: ' + dir_item.get('title', '') + '\nFile: ' + dir_item.get('file', '') + '\n'
                     self.nomadic.ui.FileList.addItem(file_item)
                     new_item = self.nomadic.ui.FileList.item(item_count)
-                    new_item.setIcon(QtGui.QIcon.fromTheme("emblem-music-symbolic"))
+                    new_item.setIcon(self.icons['file'])
                     
                 item_count +=1
-
-            self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
+                self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
