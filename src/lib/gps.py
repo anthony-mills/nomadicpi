@@ -157,7 +157,8 @@ class GpsResponse(object):
         return self.alt
 
     def movement(self):
-        """ Get the speed and direction of the current movement as dict
+        """ 
+        Get the speed and direction of the current movement as dict
         The speed is the horizontal speed.
         The climb is the vertical speed
         The track is te direction of the motion
@@ -166,8 +167,29 @@ class GpsResponse(object):
         """
         if self.mode < 3:
             raise NoFixError("Needs at least 3D fix")
-        return {"speed": self.hspeed, "track": self.track, "climb": self.climb}
+            
+        direction = self.deg_to_compass( self.track )
+        
+        return {
+            "speed": self.hspeed, 
+            "track": self.track, 
+            "climb": self.climb, 
+            "direction" : direction, 
+            "altitude" : self.alt,
+            "sats" : self.sats_valid
+        }
 
+    def deg_to_compass(self, num):
+        """ 
+        Translate a heading in degrees to a human readable compass direction 
+        :param int 
+        :return: string
+        """
+                
+        val=int((num/22.5)+.5)
+        arr=["North","NNE","NE","ENE","East","ESE", "SE", "SSE","South","SSW","SW","WSW","West","WNW","NW","NNW"]
+        return arr[(val % 16)]
+        
     def speed_vertical(self):
         """ Get the vertical speed with the small movements filtered out.
         Needs at least 2D fix

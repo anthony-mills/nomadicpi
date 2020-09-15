@@ -131,7 +131,7 @@ class Ui_NomadicPI(object):
         self.CurrentPosition.setAlignment(QtCore.Qt.AlignCenter)
         self.CurrentPosition.setObjectName("CurrentPosition")
         self.CurrentAltitude = QtWidgets.QLabel(self.home)
-        self.CurrentAltitude.setGeometry(QtCore.QRect(10, 440, 319, 29))
+        self.CurrentAltitude.setGeometry(QtCore.QRect(10, 440, 319, 41))
         font = QtGui.QFont()
         font.setFamily("Open Sans")
         self.CurrentAltitude.setFont(font)
@@ -349,7 +349,7 @@ class Ui_NomadicPI(object):
         self.appContent.addWidget(self.car_location)
 
         self.retranslateUi(NomadicPI)
-        self.appContent.setCurrentIndex(3)
+        self.appContent.setCurrentIndex(0)
         self.PlaylistContents.setCurrentRow(-1)
         QtCore.QMetaObject.connectSlotsByName(NomadicPI)
 

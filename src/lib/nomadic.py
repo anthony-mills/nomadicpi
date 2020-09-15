@@ -208,8 +208,16 @@ class NomadicPi():
                     
                 try:            
                     # Get the current Altitude
-                    cur_alt = self.gps_info.altitude()
-                    self.ui.CurrentAltitude.setText( 'Altitude: ' + str(cur_alt) + 'm' )
+                    
+                    heading = self.gps_info.movement()
+                    
+                    track = round(heading['track'])
+                    
+                    heading_info = 'Altitude: ' + str(heading['altitude']) + \
+                                'm\nHeading: ' + str(track) + \
+                                ' degrees ' + heading['direction']
+                    
+                    self.ui.CurrentAltitude.setText( heading_info )
                 except Exception as e:
                     self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )
                     print(e)
@@ -222,11 +230,6 @@ class NomadicPi():
                 except Exception as e:
                     self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
 
-                try:                             
-                    cur_time = self.gps_info.get_time(True)
-                    self.setWindowTitle(self.app_config['app'].get('AppName', '') + ' - ' + cur_time.strftime(self.dt_format)) 
-                except Exception as e:
-                    print(e)
                     
     def exit_application(self):
         """
