@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -401,7 +401,7 @@
        <x>10</x>
        <y>440</y>
        <width>319</width>
-       <height>29</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
