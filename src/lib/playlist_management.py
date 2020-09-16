@@ -101,6 +101,7 @@ class PlaylistManagement():
         """
         Populate the list widget with the contents of the playlist
         """
+        self.nomadic.ui.PlaylistContents.clear()
         mpd_playlist = self.nomadic.mpd.playlist_contents()
 
         if len(mpd_playlist) > 0:
