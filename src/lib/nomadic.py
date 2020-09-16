@@ -33,6 +33,9 @@ class NomadicPi():
     
     # Track the GPS state with this variable
     gps_info = None
+    
+    speed_unit = 'kmh'
+    speed_modifier = 1
 
     def __init__(self, ui):
         self.ui = ui
@@ -43,7 +46,7 @@ class NomadicPi():
         # Connect to the MPD daemon
         self.connect_mpd()
         self.get_mpd_status()
-        
+            
         # Setup the handlers for user actions on the application home
         self.application_home = application_home.UserActions(self)
         self.application_home.ui_button_state()        
@@ -56,8 +59,20 @@ class NomadicPi():
         
         self.ui.appContent.setCurrentIndex(self.pages['home'])      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
-                
-        self.update_content()          
+
+        self.speed_units()                
+        self.update_content() 
+        
+    def speed_units(self):
+        """
+        Control the unit used for speed of travel km/h of mp/h
+        """        
+        speed_units = self.app_config['app'].get('SpeedUnit', '')
+        
+        if speed_units == 'mph':
+            self.speed_unit = 'mph'
+            self.speed_modifier = 1.6
+            self.ui.SpeedUnit.setText('MP/H')
         
     def application_page_changed(self):
         """
@@ -200,7 +215,7 @@ class NomadicPi():
             if self.gps_info is not None:    
                 try:
                     # Get the current GPS speed and convert from m/s to km/h
-                    cur_speed = int(3.6 * self.gps_info.speed() )
+                    cur_speed = int(int(3.6 * self.gps_info.speed()) * self.speed_modifier )
                     self.ui.CurrentSpeed.setText( str(cur_speed) )            
                     
                 except Exception as e:

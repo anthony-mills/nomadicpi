@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 import musicbrainzngs
 import urllib.request
@@ -54,7 +55,8 @@ class MpdLib():
         try:
             self.client.connect(self.mpd_host, self.mpd_port)
         except Exception as e:
-            print("MPD Error: " + str(e))
+            print("MPD Error: Cannot connect to the MPD daemon.")
+            sys.exit(1)
 
     def get_status(self):
         """
