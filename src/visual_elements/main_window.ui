@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -808,7 +808,50 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="network_status"/>
+   <widget class="QWidget" name="network_status">
+    <widget class="QPushButton" name="NetworkReturnHome">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>10</y>
+       <width>101</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Application Home</string>
+     </property>
+     <property name="statusTip">
+      <string>Scroll Up</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="gohome">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="NetworkPlaceHolder">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>131</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Network Status</string>
+     </property>
+    </widget>
+   </widget>
    <widget class="QWidget" name="browse_files">
     <widget class="QListWidget" name="FileList">
      <property name="geometry">
@@ -1028,7 +1071,50 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="car_location"/>
+   <widget class="QWidget" name="car_location">
+    <widget class="QPushButton" name="LocationReturnHome">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>10</y>
+       <width>101</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Application Home</string>
+     </property>
+     <property name="statusTip">
+      <string>Scroll Up</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset theme="gohome">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>80</width>
+       <height>80</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>131</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Location Information</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <resources/>

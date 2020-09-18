@@ -20,7 +20,9 @@ class UserActions():
         self.nomadic.ui.MusicStop.clicked.connect(self.music_stop_press)
 
         self.nomadic.ui.PlaylistDetailsButton.clicked.connect(self.view_playlist_widget)
-        self.nomadic.ui.CollectionButton.clicked.connect(self.view_file_management)        
+        self.nomadic.ui.CollectionButton.clicked.connect(self.view_file_management)
+        self.nomadic.ui.NetworkButton.clicked.connect(self.view_network_widget)
+        self.nomadic.ui.LocationButton.clicked.connect(self.view_location_widget)                
         self.nomadic.ui.QuitButton.clicked.connect(self.nomadic.exit_application)
 
     def change_page(self, widget_id):
@@ -37,7 +39,19 @@ class UserActions():
         Change the visible widget to the current playlist view
         """
         self.change_page(self.nomadic.pages['playlist'])
-        
+
+    def view_network_widget(self):
+        """
+        Change the visible widget to the network view
+        """
+        self.change_page(self.nomadic.pages['network'])
+
+    def view_location_widget(self):
+        """
+        Change the visible widget to the location view
+        """
+        self.change_page(self.nomadic.pages['location'])
+                        
     def view_file_management(self):
         """
         Change the visible widget to the filesystem view
