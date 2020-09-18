@@ -8,6 +8,8 @@ import lib.gps as gps
 import lib.mpd as mpd
 import lib.application_home as application_home
 import lib.playlist_management as playlist_management
+import lib.location_status as location_status
+import lib.network_status as network_status
 import lib.file_management as file_management
 
 from PyQt5 import QtWidgets
@@ -56,7 +58,13 @@ class NomadicPi():
         
         # Setup the handlers for user actions on the file management page
         self.mpd_files = file_management.FileManagement(self)          
+
+        # Setup the handlers for user actions on the network page
+        self.network_status = network_status.NetworkStatus(self)  
         
+        # Setup the handlers for user actions on the location page
+        self.location_status = location_status.LocationStatus(self)  
+                        
         self.ui.appContent.setCurrentIndex(self.pages['home'])      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
 
