@@ -130,12 +130,15 @@ class NomadicPi():
         """
         Create a timer and periodically update the UI information
         """ 
-        self.get_mpd_status()    
-            
-        self.update_mpd()
         
-        # Update GPS related information 
-        self.update_gps()
+        # Only update the home page if the widget is visible
+        if (self.ui.appContent.currentIndex() == 0):
+            self.get_mpd_status()    
+                
+            self.update_mpd()
+            
+            # Update GPS related information 
+            self.update_gps()
         
         self.update_loop = threading.Timer(1, self.update_content)
         self.update_loop.start()
