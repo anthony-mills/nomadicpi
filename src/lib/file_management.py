@@ -83,6 +83,9 @@ class FileManagement():
             self.nomadic.mpd.add_to_playlist(item_text)
             
         self.set_item_count()
+
+        if self.nomadic.mpd_status.get('state', '') == 'stop':
+            self.nomadic.mpd.play_playback()
             
     def open_parent_folder(self):
         """
