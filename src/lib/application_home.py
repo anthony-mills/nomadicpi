@@ -21,7 +21,7 @@ class UserActions():
 
         self.nomadic.ui.PlaylistDetailsButton.clicked.connect(self.view_playlist_widget)
         self.nomadic.ui.CollectionButton.clicked.connect(self.view_file_management)
-        self.nomadic.ui.NetworkButton.clicked.connect(self.view_network_widget)
+        self.nomadic.ui.SystemButton.clicked.connect(self.view_system_widget)
         self.nomadic.ui.LocationButton.clicked.connect(self.view_location_widget)                
         self.nomadic.ui.QuitButton.clicked.connect(self.nomadic.exit_application)
 
@@ -40,11 +40,11 @@ class UserActions():
         """
         self.change_page(self.nomadic.pages['playlist'])
 
-    def view_network_widget(self):
+    def view_system_widget(self):
         """
-        Change the visible widget to the network view
+        Change the visible widget to the system status / settings view
         """
-        self.change_page(self.nomadic.pages['network'])
+        self.change_page(self.nomadic.pages['system'])
 
     def view_location_widget(self):
         """
