@@ -9,7 +9,7 @@ import lib.mpd as mpd
 import lib.application_home as application_home
 import lib.playlist_management as playlist_management
 import lib.location_status as location_status
-import lib.network_status as network_status
+import lib.system_status as system_status
 import lib.file_management as file_management
 
 from PyQt5 import QtWidgets
@@ -22,7 +22,7 @@ class NomadicPi():
     pages = {
         'home' : 0,
         'playlist' : 1,
-        'network' : 2,
+        'system' : 2,
         'files' : 3,
         'location' : 4        
     }
@@ -59,8 +59,8 @@ class NomadicPi():
         # Setup the handlers for user actions on the file management page
         self.mpd_files = file_management.FileManagement(self)          
 
-        # Setup the handlers for user actions on the network page
-        self.network_status = network_status.NetworkStatus(self)  
+        # Setup the handlers for user actions on the system status page
+        self.system_status = system_status.SystemStatus(self)  
         
         # Setup the handlers for user actions on the location page
         self.location_status = location_status.LocationStatus(self)  
@@ -132,13 +132,16 @@ class NomadicPi():
         """ 
         
         # Only update the home page if the widget is visible
-        if (self.ui.appContent.currentIndex() == 0):
+        if (self.ui.appContent.currentIndex() == self.pages['home']):
             self.get_mpd_status()    
                 
             self.update_mpd()
             
             # Update GPS related information 
             self.update_gps()
+
+        if (self.ui.appContent.currentIndex() == self.pages['system']):
+            self.system_status.show_system_status()
         
         self.update_loop = threading.Timer(1, self.update_content)
         self.update_loop.start()

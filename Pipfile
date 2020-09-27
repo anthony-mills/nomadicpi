@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 PyQt5 = "*"
 musicbrainzngs = "*"
+psutil = "*"
+humanize = "*"
 
 [dev-packages]
 
