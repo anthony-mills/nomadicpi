@@ -84,7 +84,7 @@ class FileManagement():
             
         self.set_item_count()
 
-        if self.nomadic.mpd_status.get('state', '') == 'stop':
+        if self.nomadic.mpd_status['state'] == 'stop':
             self.nomadic.mpd.play_playback()
             
     def open_parent_folder(self):
