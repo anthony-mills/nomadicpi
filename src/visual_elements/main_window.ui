@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
+    <width>800</width>
     <height>480</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -851,11 +851,11 @@
       <string>Load Average: </string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="SystemStatsLabel">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>100</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -885,7 +885,7 @@
       <string>Memory Available:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="MPDStatsLabel">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -906,11 +906,11 @@
       <string>MPD</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="NetworkStatsLabel">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>320</y>
+       <y>350</y>
        <width>71</width>
        <height>31</height>
       </rect>
@@ -931,7 +931,7 @@
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>150</y>
+       <y>160</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -944,7 +944,7 @@
      <property name="geometry">
       <rect>
        <x>470</x>
-       <y>150</y>
+       <y>160</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -979,11 +979,11 @@
       <string>CPU Frequency:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="DiskStatsLabel">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>180</y>
+       <y>190</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -1077,6 +1077,48 @@
      <property name="text">
       <string>Stored:</string>
      </property>
+    </widget>
+    <widget class="QTableWidget" name="SystemFileSystems">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>662</width>
+       <height>108</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContents</enum>
+     </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideMiddle</enum>
+     </property>
+     <property name="columnCount">
+      <number>5</number>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>132</number>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column/>
+     <column/>
+     <column/>
+     <column/>
+     <column/>
     </widget>
    </widget>
    <widget class="QWidget" name="browse_files">

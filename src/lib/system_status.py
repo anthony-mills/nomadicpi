@@ -2,6 +2,8 @@ import humanize
 import psutil
 import datetime as dt
 
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
+
 class SystemStatus():
 
     def __init__(self, nomadic):
@@ -15,8 +17,29 @@ class SystemStatus():
     def show_system_status(self):
         self.update_load_avg()
         self.cpu_stats()
+        self.disk_info()
         self.update_system_memory()
         self.mpd_daemon()
+
+    def disk_info(self):
+        """
+        Update the state of the file systems
+        """ 
+        system_disks = psutil.disk_partitions()
+        
+        row = 0
+        self.nomadic.ui.SystemFileSystems.setColumnCount(5)
+        self.nomadic.ui.SystemFileSystems.setRowCount(len(system_disks))
+        self.nomadic.ui.SystemFileSystems.setHorizontalHeaderLabels(('Device', 'Mount', 'Type', 'Size', 'Usage'))
+        
+        for filesystem in system_disks:
+            self.nomadic.ui.SystemFileSystems.setItem(row,0, QTableWidgetItem(filesystem.device))
+            self.nomadic.ui.SystemFileSystems.setItem(row,1, QTableWidgetItem(filesystem.mountpoint))
+            self.nomadic.ui.SystemFileSystems.setItem(row,2, QTableWidgetItem(filesystem.fstype))
+            used = psutil.disk_usage(filesystem.mountpoint)
+            self.nomadic.ui.SystemFileSystems.setItem(row,3, QTableWidgetItem(humanize.naturalsize(used.total)))
+            self.nomadic.ui.SystemFileSystems.setItem(row,4, QTableWidgetItem(str(used.percent) + '%'))
+            row +=1
 
     def mpd_daemon(self):
         """
