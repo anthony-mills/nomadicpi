@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -253,13 +253,14 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Network Status</string>
+      <string>System Status / Settings</string>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="system-run"/>
+      <iconset theme="system-run">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -841,7 +842,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>50</y>
+       <y>130</y>
        <width>231</width>
        <height>21</height>
       </rect>
@@ -853,9 +854,9 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>71</width>
+       <x>10</x>
+       <y>90</y>
+       <width>151</width>
        <height>31</height>
       </rect>
      </property>
@@ -868,14 +869,14 @@
       </font>
      </property>
      <property name="text">
-      <string>System</string>
+      <string>System Info</string>
      </property>
     </widget>
     <widget class="QLabel" name="SystemMemoryAvail">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>160</y>
        <width>221</width>
        <height>21</height>
       </rect>
@@ -887,8 +888,8 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>130</y>
+       <x>10</x>
+       <y>10</y>
        <width>71</width>
        <height>31</height>
       </rect>
@@ -908,8 +909,8 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>210</y>
+       <x>10</x>
+       <y>320</y>
        <width>71</width>
        <height>31</height>
       </rect>
@@ -930,7 +931,7 @@
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>70</y>
+       <y>150</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -943,7 +944,7 @@
      <property name="geometry">
       <rect>
        <x>470</x>
-       <y>70</y>
+       <y>150</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -956,7 +957,7 @@
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>50</y>
+       <y>130</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -969,13 +970,112 @@
      <property name="geometry">
       <rect>
        <x>470</x>
-       <y>50</y>
+       <y>130</y>
        <width>201</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
       <string>CPU Frequency:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Ubuntu Condensed</family>
+       <pointsize>16</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Disks</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDArtists">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>231</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Artists:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDPlaytime">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>231</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Playtime:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDAlbums">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>40</y>
+       <width>201</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Albums:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDUptime">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>70</y>
+       <width>201</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Uptime:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDSongs">
+     <property name="geometry">
+      <rect>
+       <x>470</x>
+       <y>40</y>
+       <width>211</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Songs:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MPDStored">
+     <property name="geometry">
+      <rect>
+       <x>470</x>
+       <y>70</y>
+       <width>211</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stored:</string>
      </property>
     </widget>
    </widget>
