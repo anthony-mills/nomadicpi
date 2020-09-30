@@ -20,6 +20,7 @@ class SystemStatus():
         self.disk_info()
         self.update_system_memory()
         self.mpd_daemon()
+        self.network_info()
 
     def disk_info(self):
         """
@@ -40,6 +41,31 @@ class SystemStatus():
             self.nomadic.ui.SystemFileSystems.setItem(row,3, QTableWidgetItem(humanize.naturalsize(used.total)))
             self.nomadic.ui.SystemFileSystems.setItem(row,4, QTableWidgetItem(str(used.percent) + '%'))
             row +=1
+
+    def network_info(self):
+        """
+        Update the state of the network interfaces
+        """ 
+        network_interfaces = psutil.net_if_addrs()
+        interface_activity = psutil.net_io_counters(pernic=True)
+
+        row = 0
+        self.nomadic.ui.SystemNetwork.setColumnCount(4)
+        self.nomadic.ui.SystemNetwork.setRowCount(len(network_interfaces))
+        self.nomadic.ui.SystemNetwork.setHorizontalHeaderLabels(('Device', 'IP', 'Sent', 'Received'))
+        
+        for interface in network_interfaces:
+            if interface != 'lo':     
+                
+                self.nomadic.ui.SystemNetwork.setItem(row,0, QTableWidgetItem(interface))
+
+                if network_interfaces[interface][0].address is not None:
+                    self.nomadic.ui.SystemNetwork.setItem(row,1, QTableWidgetItem(network_interfaces[interface][0].address))
+                if interface_activity[interface].bytes_sent is not None:
+                    self.nomadic.ui.SystemNetwork.setItem(row,2, QTableWidgetItem(humanize.naturalsize(interface_activity[interface].bytes_sent)))
+                if interface_activity[interface].bytes_recv is not None:
+                    self.nomadic.ui.SystemNetwork.setItem(row,3, QTableWidgetItem(humanize.naturalsize(interface_activity[interface].bytes_recv)))
+                row +=1
 
     def mpd_daemon(self):
         """
