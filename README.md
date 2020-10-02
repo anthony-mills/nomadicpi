@@ -13,6 +13,9 @@ So the first aim with this rewrite will be extensibility so it can be modified t
 ![Playlist Management](/screenshots/2.png?raw=true "Managing the current playlist")
 
 ![MPD File Management](/screenshots/3.png?raw=true "Viewing files in the MPD store")
+
+![Nomadic System Stats](/screenshots/4.png?raw=true "Stats related to the system")
+
 ### Licence
 
 Copyright (C) 2020 [Anthony Mills](http://www.anthony-mills.com)
