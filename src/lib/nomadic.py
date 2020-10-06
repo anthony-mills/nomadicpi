@@ -79,7 +79,7 @@ class NomadicPi():
         
         if speed_units == 'mph':
             self.speed_unit = 'mph'
-            self.speed_modifier = 1.6
+            self.speed_modifier = 0.62137119
             self.ui.SpeedUnit.setText('MP/H')
         
     def application_page_changed(self):
