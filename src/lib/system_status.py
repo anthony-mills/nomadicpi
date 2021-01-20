@@ -74,54 +74,61 @@ class SystemStatus():
         daemon_state = self.nomadic.mpd.mpd_stats()
         
         if type(daemon_state['artists']) is str:
-            self.nomadic.ui.MPDArtists.setText('Artists: ' + daemon_state['artists'])
+            self.nomadic.ui.MPDArtists.setText(f"Artists: {daemon_state['artists']}")
         else:
-             self.nomadic.ui.MPDArtists.setText('Artists: Unknown')
+             self.nomadic.ui.MPDArtists.setText("Artists: Unknown")
         
         if type(daemon_state['albums']) is str:
-            self.nomadic.ui.MPDAlbums.setText('Albums: ' + daemon_state['albums'])
+            self.nomadic.ui.MPDAlbums.setText(f"Albums: {daemon_state['albums']}")
         else:
-             self.nomadic.ui.MPDAlbums.setText('Albums: Unknown')
+             self.nomadic.ui.MPDAlbums.setText("Albums: Unknown")
              
         if type(daemon_state['songs']) is str:
-            self.nomadic.ui.MPDSongs.setText('Songs: ' + daemon_state['songs'])
+            self.nomadic.ui.MPDSongs.setText(f"Songs: {daemon_state['songs']}")
         else:
-             self.nomadic.ui.MPDSongs.setText('Songs: Unknown')
+             self.nomadic.ui.MPDSongs.setText("Songs: Unknown")
 
         if type(daemon_state['playtime']) is str:
-            mpd_playtime = humanize.naturaldelta(dt.timedelta(seconds=int(daemon_state['playtime'])))
-            self.nomadic.ui.MPDPlaytime.setText('Playtime: ' + mpd_playtime[0].upper() + mpd_playtime[1:])
+            playtime = int(daemon_state['playtime'])
+
+            if playtime > 0:
+                mpd_playtime = humanize.naturaldelta(dt.timedelta(seconds=int(playtime)))
+                playtime = mpd_playtime[0].upper() + mpd_playtime[1:]
+            else:
+                playtime = "N/A"
+
+            self.nomadic.ui.MPDPlaytime.setText(f"Playtime: {playtime}")
         else:
-            self.nomadic.ui.MPDPlaytime.setText('Playtime: Unknown')
+            self.nomadic.ui.MPDPlaytime.setText("Playtime: Unknown")
         
         if type(daemon_state['uptime']) is str:
             mpd_uptime = humanize.naturaldelta(dt.timedelta(seconds=int(daemon_state['uptime'])))
-            self.nomadic.ui.MPDUptime.setText('Uptime: ' + mpd_uptime[0].upper() + mpd_uptime[1:])
+            self.nomadic.ui.MPDUptime.setText(f"Uptime: {mpd_uptime[0].upper() + mpd_uptime[1:]}")
         else:
-            self.nomadic.ui.MPDUptime.setText('Uptime: Unknown')
+            self.nomadic.ui.MPDUptime.setText("Uptime: Unknown")
              
         if type(daemon_state['db_playtime']) is str:
             mpd_stored = humanize.naturaldelta(dt.timedelta(seconds=int(daemon_state['db_playtime'])))            
-            self.nomadic.ui.MPDStored.setText('Stored: ' + mpd_stored[0].upper() + mpd_stored[1:])
+            self.nomadic.ui.MPDStored.setText(f"Stored: {mpd_stored[0].upper() + mpd_stored[1:]}")
         else:
-            self.nomadic.ui.MPDStored.setText('Stored: Unknown')                
+            self.nomadic.ui.MPDStored.setText("Stored: Unknown")                
         
     def cpu_stats(self):
         """
         Update the CPU related statistics
         """        
         cpu_usage = psutil.cpu_percent(interval=1)
-        self.nomadic.ui.SystemCPUUsage.setText('CPU Usage: ' + str(cpu_usage) + '%')
+        self.nomadic.ui.SystemCPUUsage.setText(f"CPU Usage: {cpu_usage}%")
 
         cpu_freq = psutil.cpu_freq()
-        self.nomadic.ui.SystemCPUFreq.setText('CPU Frequency: ' + str(round(cpu_freq[0])) + ' Mhz')
+        self.nomadic.ui.SystemCPUFreq.setText(f"CPU Frequency: {round(cpu_freq[0])} Mhz")
                 
     def update_load_avg(self):
         """
         Update the system section with the current load average
         """        
         load_avg = psutil.getloadavg()
-        self.nomadic.ui.SystemLoadAvg.setText('Load Average: ' + str(load_avg[0]))
+        self.nomadic.ui.SystemLoadAvg.setText(f"Load Average: {load_avg[0]}")
 
     def update_system_memory(self):
         """
@@ -129,11 +136,11 @@ class SystemStatus():
         """        
         mem_usage = psutil.virtual_memory()
         
-        mem_total = 'Total Memory: ' + humanize.naturalsize(mem_usage[0])
+        mem_total = f"Total Memory: {humanize.naturalsize(mem_usage[0])}"
         self.nomadic.ui.SystemMemoryAvail.setText(mem_total)
                 
-        mem_used = 'Memory Used: ' + humanize.naturalsize(mem_usage[3])
+        mem_used = f"Memory Used: {humanize.naturalsize(mem_usage[3])}"
         self.nomadic.ui.SystemMemoryUsed.setText(mem_used)
                 
-        mem_percent = 'Memory Utilisation: ' + str(mem_usage[2]) + '%'
+        mem_percent = f"Memory Utilisation: {mem_usage[2]}%"
         self.nomadic.ui.SystemMemoryUtilisation.setText(mem_percent)
