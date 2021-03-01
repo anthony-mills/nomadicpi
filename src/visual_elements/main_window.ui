@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -581,8 +581,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="edit-clear">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/remove_item.png</normaloff>icons/remove_item.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -681,8 +681,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="up">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/up.png</normaloff>icons/up.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -710,8 +710,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/down.png</normaloff>icons/down.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -739,8 +739,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="gohome">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/home.png</normaloff>icons/home.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -768,8 +768,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="media-playback-start">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/media_play.png</normaloff>icons/media_play.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -797,8 +797,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="trash-empty">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/trash.png</normaloff>icons/trash.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -828,8 +828,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="gohome">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/home.png</normaloff>icons/home.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1204,8 +1204,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="up">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/up.png</normaloff>icons/up.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1233,8 +1233,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="down">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/down.png</normaloff>icons/down.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1262,8 +1262,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="gohome">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/home.png</normaloff>icons/home.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1300,8 +1300,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="add">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/add.png</normaloff>icons/add.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1326,8 +1326,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="tag-folder">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/folder.png</normaloff>icons/folder.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1352,8 +1352,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="go-parent-folder">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/parent_folder.png</normaloff>icons/parent_folder.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1404,8 +1404,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="gohome">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset>
+       <normaloff>icons/home.png</normaloff>icons/home.png</iconset>
      </property>
      <property name="iconSize">
       <size>
