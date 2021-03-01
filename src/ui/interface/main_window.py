@@ -148,7 +148,7 @@ class Ui_NomadicPI(object):
         self.CurrentAltitude.setAlignment(QtCore.Qt.AlignCenter)
         self.CurrentAltitude.setObjectName("CurrentAltitude")
         self.CurrentSpeed = QtWidgets.QLabel(self.home)
-        self.CurrentSpeed.setGeometry(QtCore.QRect(10, 0, 191, 92))
+        self.CurrentSpeed.setGeometry(QtCore.QRect(10, 5, 191, 92))
         font = QtGui.QFont()
         font.setFamily("Open Sans Extrabold")
         font.setPointSize(80)
@@ -183,7 +183,7 @@ class Ui_NomadicPI(object):
         self.PlaylistDetailsButton.setCheckable(False)
         self.PlaylistDetailsButton.setObjectName("PlaylistDetailsButton")
         self.SpeedUnit = QtWidgets.QLabel(self.home)
-        self.SpeedUnit.setGeometry(QtCore.QRect(210, 0, 120, 92))
+        self.SpeedUnit.setGeometry(QtCore.QRect(210, 5, 120, 92))
         font = QtGui.QFont()
         font.setFamily("Open Sans Extrabold")
         font.setPointSize(30)
@@ -484,7 +484,7 @@ class Ui_NomadicPI(object):
         self.appContent.addWidget(self.car_location)
 
         self.retranslateUi(NomadicPI)
-        self.appContent.setCurrentIndex(3)
+        self.appContent.setCurrentIndex(0)
         self.PlaylistContents.setCurrentRow(-1)
         QtCore.QMetaObject.connectSlotsByName(NomadicPI)
 

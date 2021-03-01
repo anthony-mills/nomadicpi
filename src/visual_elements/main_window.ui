@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -420,7 +420,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>0</y>
+       <y>5</y>
        <width>191</width>
        <height>92</height>
       </rect>
@@ -517,7 +517,7 @@
      <property name="geometry">
       <rect>
        <x>210</x>
-       <y>0</y>
+       <y>5</y>
        <width>120</width>
        <height>92</height>
       </rect>
