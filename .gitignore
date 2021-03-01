@@ -3,3 +3,4 @@
 *$py.class
 *.pyc
 src/album_art/*
+**/*.pyc
