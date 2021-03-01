@@ -18,9 +18,10 @@ class mainWindow(QtWidgets.QMainWindow):
         # Setup the UI
         self.ui = Ui_NomadicPI()
         self.ui.setupUi(self)
+        self.showFullScreen()
                 
         self.nomadic = nomadic_pi.NomadicPi(self.ui)
-        self.showMaximized() 
+        #self.showMaximized() 
         app.aboutToQuit.connect(self.nomadic.exit_application)
                 
 if __name__ == '__main__':        

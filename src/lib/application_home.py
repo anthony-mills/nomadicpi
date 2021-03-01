@@ -115,10 +115,10 @@ class UserActions():
          
         if self.nomadic.mpd_status.get('state', '') == 'play':
             self.nomadic.ui.MusicPlay.setChecked(True)
-            self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon.fromTheme("media-playback-pause"))
+            self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon("visual_elements/icons/media_pause.png"))
         else:
             self.nomadic.ui.MusicPlay.setChecked(False)
-            self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon.fromTheme("media-playback-start"))
+            self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon("visual_elements/icons/media_play.png"))
 
         if int(self.nomadic.mpd_status.get('random', 0)) == 1:
             self.nomadic.ui.RandomPlayback.setChecked(True)
