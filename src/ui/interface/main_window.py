@@ -134,7 +134,7 @@ class Ui_NomadicPI(object):
         self.MPDNowPlaying.setWordWrap(True)
         self.MPDNowPlaying.setObjectName("MPDNowPlaying")
         self.CurrentPosition = QtWidgets.QLabel(self.home)
-        self.CurrentPosition.setGeometry(QtCore.QRect(10, 400, 319, 29))
+        self.CurrentPosition.setGeometry(QtCore.QRect(10, 395, 319, 35))
         font = QtGui.QFont()
         font.setFamily("Open Sans")
         self.CurrentPosition.setFont(font)
