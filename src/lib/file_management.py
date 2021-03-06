@@ -25,8 +25,8 @@ class FileManagement():
         self.nomadic.ui.FileList.itemDoubleClicked.connect(self.handle_item_double_click)
         
         # Set the Icon for files and directorys
-        self.icons['file'] = QtGui.QIcon.fromTheme("emblem-music-symbolic")
-        self.icons['folder'] = QtGui.QIcon.fromTheme("tag-folder")
+        self.icons['file'] = QtGui.QIcon(QtGui.QPixmap("visual_elements/icons/music16x.png"))
+        self.icons['folder'] = QtGui.QIcon(QtGui.QPixmap("visual_elements/icons/folder16x.png"))
     
     def reset_file_state(self):
         self.dir_info = {
