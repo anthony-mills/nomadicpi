@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -995,9 +995,9 @@
     <widget class="QLabel" name="SystemMemoryUsed">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>250</x>
        <y>120</y>
-       <width>201</width>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
@@ -1008,9 +1008,9 @@
     <widget class="QLabel" name="SystemMemoryUtilisation">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>460</x>
        <y>120</y>
-       <width>201</width>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
@@ -1021,9 +1021,9 @@
     <widget class="QLabel" name="SystemCPUUsage">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>250</x>
        <y>100</y>
-       <width>201</width>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
@@ -1034,9 +1034,9 @@
     <widget class="QLabel" name="SystemCPUFreq">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>460</x>
        <y>100</y>
-       <width>201</width>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
@@ -1094,9 +1094,9 @@
     <widget class="QLabel" name="MPDAlbums">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>250</x>
        <y>30</y>
-       <width>201</width>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
@@ -1107,9 +1107,9 @@
     <widget class="QLabel" name="MPDUptime">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>250</x>
        <y>50</y>
-       <width>201</width>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
@@ -1120,9 +1120,9 @@
     <widget class="QLabel" name="MPDSongs">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>460</x>
        <y>30</y>
-       <width>211</width>
+       <width>221</width>
        <height>21</height>
       </rect>
      </property>
@@ -1133,9 +1133,9 @@
     <widget class="QLabel" name="MPDStored">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>460</x>
        <y>50</y>
-       <width>211</width>
+       <width>221</width>
        <height>21</height>
       </rect>
      </property>
