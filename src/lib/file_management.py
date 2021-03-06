@@ -73,19 +73,20 @@ class FileManagement():
     def add_item_to_playlist(self):
         """
         Add the selected item to the playlist
-        """        
-        item_text = self.nomadic.ui.FileList.item(self.selected_file_item).text()
+        """
+        if self.nomadic.ui.FileList.item is not None:    
+            item_text = self.nomadic.ui.FileList.item(self.selected_file_item).text()
 
-        if "File" in item_text:
-            file_path = item_text.rsplit('File: ', 1)[-1].rstrip('\n')
-            self.nomadic.mpd.add_to_playlist(file_path)
-        else:
-            self.nomadic.mpd.add_to_playlist(item_text)
-            
-        self.set_item_count()
+            if "File" in item_text:
+                file_path = item_text.rsplit('File: ', 1)[-1].rstrip('\n')
+                self.nomadic.mpd.add_to_playlist(file_path)
+            else:
+                self.nomadic.mpd.add_to_playlist(item_text)
+                
+            self.set_item_count()
 
-        if self.nomadic.mpd_status['state'] == 'stop':
-            self.nomadic.mpd.play_playback()
+            if self.nomadic.mpd_status['state'] == 'stop':
+                self.nomadic.mpd.play_playback()
             
     def open_parent_folder(self):
         """
