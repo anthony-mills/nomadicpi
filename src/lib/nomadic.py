@@ -44,7 +44,7 @@ class NomadicPi():
     def __init__(self, ui):
         self.ui = ui
         self.app_config = configparser.ConfigParser()
-        self.app_config.read(os.path.abspath(os.getcwd()) + '/config.ini')
+        self.app_config.read(os.path.dirname(os.path.abspath(__file__)) + '/../config.ini')
         self.now_playing = 0;
         
         # Connect to the MPD daemon
