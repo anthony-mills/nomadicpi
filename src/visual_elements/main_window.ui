@@ -24,13 +24,13 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>10</y>
      <width>800</width>
      <height>490</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -41,6 +41,11 @@
        <width>101</width>
        <height>86</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
      </property>
      <property name="toolTip">
       <string>Skip Song</string>
@@ -67,6 +72,11 @@
        <width>111</width>
        <height>86</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
      </property>
      <property name="toolTip">
       <string>Stop Music Playback</string>
@@ -123,6 +133,11 @@
        <height>86</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Update Music Store</string>
      </property>
@@ -151,6 +166,11 @@
        <width>331</width>
        <height>250</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
      </property>
      <property name="toolTip">
       <string/>
@@ -197,6 +217,11 @@
        <height>86</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Play / Pause Music</string>
      </property>
@@ -226,6 +251,11 @@
        <height>86</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Location Information</string>
      </property>
@@ -251,6 +281,11 @@
        <width>101</width>
        <height>86</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
      </property>
      <property name="toolTip">
       <string>System Status / Settings</string>
@@ -278,6 +313,11 @@
        <height>86</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Exit Application</string>
      </property>
@@ -303,6 +343,11 @@
        <width>101</width>
        <height>86</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
      </property>
      <property name="toolTip">
       <string>Enable / Disable Random Playback</string>
@@ -477,6 +522,11 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -492,6 +542,11 @@
        <width>101</width>
        <height>86</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+      </font>
      </property>
      <property name="toolTip">
       <string>Update Music Store</string>
@@ -562,6 +617,11 @@
     <zorder>SpeedUnit</zorder>
    </widget>
    <widget class="QWidget" name="current_playlist">
+    <property name="font">
+     <font>
+      <family>Open Sans</family>
+     </font>
+    </property>
     <widget class="QPushButton" name="PlaylistItemDeleteButton">
      <property name="geometry">
       <rect>
@@ -809,6 +869,11 @@
     </widget>
    </widget>
    <widget class="QWidget" name="system_status">
+    <property name="font">
+     <font>
+      <family>Open Sans</family>
+     </font>
+    </property>
     <widget class="QPushButton" name="SystemReturnHome">
      <property name="geometry">
       <rect>
@@ -862,7 +927,7 @@
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu Condensed</family>
+       <family>Open Sans</family>
        <pointsize>16</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -896,7 +961,7 @@
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu Condensed</family>
+       <family>Open Sans Condensed</family>
        <pointsize>16</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -917,7 +982,7 @@
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu Condensed</family>
+       <family>Open Sans Condensed</family>
        <pointsize>16</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -990,7 +1055,7 @@
      </property>
      <property name="font">
       <font>
-       <family>Ubuntu Condensed</family>
+       <family>Open Sans Condensed</family>
        <pointsize>16</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -1166,6 +1231,11 @@
     </widget>
    </widget>
    <widget class="QWidget" name="browse_files">
+    <property name="font">
+     <font>
+      <family>Open Sans</family>
+     </font>
+    </property>
     <widget class="QListWidget" name="FileList">
      <property name="geometry">
       <rect>
@@ -1373,6 +1443,7 @@
      </property>
      <property name="font">
       <font>
+       <family>Open Sans</family>
        <pointsize>16</pointsize>
       </font>
      </property>
@@ -1385,6 +1456,11 @@
     </widget>
    </widget>
    <widget class="QWidget" name="car_location">
+    <property name="font">
+     <font>
+      <family>Open Sans</family>
+     </font>
+    </property>
     <widget class="QPushButton" name="LocationReturnHome">
      <property name="geometry">
       <rect>
@@ -1419,7 +1495,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>131</width>
+       <width>201</width>
        <height>16</height>
       </rect>
      </property>
