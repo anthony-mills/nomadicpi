@@ -1,5 +1,4 @@
 import sys
-import os.path
 import configparser
 import logging
 import threading
@@ -39,12 +38,15 @@ class NomadicPi():
     speed_unit = 'kmh'
     speed_modifier = 1
     
+    base_path = ''
+    
     location_text = None;
 
     def __init__(self, ui):
         self.ui = ui
         self.app_config = configparser.ConfigParser()
-        self.app_config.read(os.path.dirname(os.path.abspath(__file__)) + '/../config.ini')
+
+        self.app_config.read(ui.base_path + 'config.ini')
         self.now_playing = 0;
         
         # Connect to the MPD daemon
