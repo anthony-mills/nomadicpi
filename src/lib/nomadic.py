@@ -12,9 +12,9 @@ import lib.location_status as location_status
 import lib.system_status as system_status
 import lib.file_management as file_management
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QPixmap, QMovie
+from PyQt5.QtGui import QPixmap
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +38,8 @@ class NomadicPi():
     
     speed_unit = 'kmh'
     speed_modifier = 1
+    
+    location_text = None;
 
     def __init__(self, ui):
         self.ui = ui
@@ -64,7 +66,11 @@ class NomadicPi():
         
         # Setup the handlers for user actions on the location page
         self.location_status = location_status.LocationStatus(self)  
-                        
+                       
+        self.location_text = QtGui.QFont()
+        self.location_text.setFamily("Open Sans")
+        self.location_text.setPointSize(10)
+                                
         self.ui.appContent.setCurrentIndex(self.pages['home'])      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
 
@@ -210,6 +216,9 @@ class NomadicPi():
         Get the current GPS information and update the UI
         """                
         if gps.gpsd_socket is None:
+            self.ui.CurrentPosition.setFont(self.location_text)    
+            self.ui.CurrentAltitude.setFont(self.location_text)
+            
             try:
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
@@ -233,8 +242,8 @@ class NomadicPi():
                     self.ui.CurrentSpeed.setText( str(cur_speed) )            
                     
                 except Exception as e:
-                    print(e)
-                    
+                    print(e)         
+                           
                 try:            
                     # Get the current Altitude
                     
