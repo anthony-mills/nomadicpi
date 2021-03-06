@@ -157,25 +157,29 @@ class FileManagement():
                     if dir_item.get('directory', None) is not None:
                         self.nomadic.ui.FileList.addItem(dir_item['directory'])
                         new_item = self.nomadic.ui.FileList.item(item_count)
-                        new_item.setIcon(self.icons['folder'])                    
-                        
+                                                
                         self.dir_info['contents'].append({
                             'id' : item_count,
                             'value' : dir_item['directory'],
                             'type' : 'directory'
                         })                    
                         
+                        if new_item is not None:                 
+                            new_item.setIcon(self.icons['folder'])                          
+                        
                     if dir_item.get('file', None) is not None:                   
                         file_item = '\nArtist: ' + dir_item.get('artist', '') + '\nSong: ' + dir_item.get('title', '') + '\nFile: ' + dir_item.get('file', '') + '\n'
                         self.nomadic.ui.FileList.addItem(file_item)
                         new_item = self.nomadic.ui.FileList.item(item_count)
-                        new_item.setIcon(self.icons['file'])
-                        
+
                         self.dir_info['contents'].append({
                             'id' : item_count,
                             'value' : dir_item.get('file', ''),
                             'type' : 'directory'
-                        })                     
+                        })
+                        
+                        if new_item is not None:                 
+                            new_item.setIcon(self.icons['file'])                                              
                         
                     item_count +=1
                     self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
