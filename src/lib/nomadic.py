@@ -127,7 +127,7 @@ class NomadicPi():
         Connect to the MPD daemon
         """         
         self.mpd = mpd.MpdLib()
-        self.art_cache = self.app_config['mpd'].get('AlbumArt', '/tmp/')     
+        self.art_cache = self.ui.base_path + (self.app_config['mpd'].get('AlbumArt', '/tmp/'))
         self.mpd.set_mpd_host(self.app_config['mpd'].get('Host', 'localhost'))
         self.mpd.set_mpd_port(self.app_config['mpd'].get('Port', '6000'))         
         self.mpd.set_art_cache(self.art_cache)   
