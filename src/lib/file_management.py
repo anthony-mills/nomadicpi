@@ -25,8 +25,8 @@ class FileManagement():
         self.nomadic.ui.FileList.itemDoubleClicked.connect(self.handle_item_double_click)
         
         # Set the Icon for files and directorys
-        self.icons['file'] = QtGui.QIcon(QtGui.QPixmap("visual_elements/icons/music16x.png"))
-        self.icons['folder'] = QtGui.QIcon(QtGui.QPixmap("visual_elements/icons/folder16x.png"))
+        self.icons['file'] = QtGui.QIcon(QtGui.QPixmap(self.nomadic.ui.base_path + "visual_elements/icons/music16x.png"))
+        self.icons['folder'] = QtGui.QIcon(QtGui.QPixmap(self.nomadic.ui.base_path + "visual_elements/icons/folder16x.png"))
     
     def reset_file_state(self):
         self.dir_info = {
@@ -73,19 +73,22 @@ class FileManagement():
     def add_item_to_playlist(self):
         """
         Add the selected item to the playlist
-        """        
-        item_text = self.nomadic.ui.FileList.item(self.selected_file_item).text()
+        """
+        if self.nomadic.ui.FileList.item is not None:    
+            item_text = self.nomadic.ui.FileList.item(self.selected_file_item).text()
 
-        if "File" in item_text:
-            file_path = item_text.rsplit('File: ', 1)[-1].rstrip('\n')
-            self.nomadic.mpd.add_to_playlist(file_path)
-        else:
-            self.nomadic.mpd.add_to_playlist(item_text)
-            
-        self.set_item_count()
-
-        if self.nomadic.mpd_status['state'] == 'stop':
-            self.nomadic.mpd.play_playback()
+            if "File" in item_text:
+                file_path = item_text.rsplit('File: ', 1)[-1].rstrip('\n')
+                self.nomadic.mpd.add_to_playlist(file_path)
+            else:
+                self.nomadic.mpd.add_to_playlist(item_text)
+                
+            self.nomadic.mpd_status = self.nomadic.get_mpd_status()
+            if self.nomadic.mpd_status['state'] == 'stop':
+                self.nomadic.mpd.play_playback()
+                self.nomadic.get_mpd_status()
+                
+            self.set_item_count()
             
     def open_parent_folder(self):
         """
@@ -157,25 +160,29 @@ class FileManagement():
                     if dir_item.get('directory', None) is not None:
                         self.nomadic.ui.FileList.addItem(dir_item['directory'])
                         new_item = self.nomadic.ui.FileList.item(item_count)
-                        new_item.setIcon(self.icons['folder'])                    
-                        
+                                                
                         self.dir_info['contents'].append({
                             'id' : item_count,
                             'value' : dir_item['directory'],
                             'type' : 'directory'
                         })                    
                         
+                        if new_item is not None:                 
+                            new_item.setIcon(self.icons['folder'])                          
+                        
                     if dir_item.get('file', None) is not None:                   
                         file_item = '\nArtist: ' + dir_item.get('artist', '') + '\nSong: ' + dir_item.get('title', '') + '\nFile: ' + dir_item.get('file', '') + '\n'
                         self.nomadic.ui.FileList.addItem(file_item)
                         new_item = self.nomadic.ui.FileList.item(item_count)
-                        new_item.setIcon(self.icons['file'])
-                        
+
                         self.dir_info['contents'].append({
                             'id' : item_count,
                             'value' : dir_item.get('file', ''),
                             'type' : 'directory'
-                        })                     
+                        })
+                        
+                        if new_item is not None:                 
+                            new_item.setIcon(self.icons['file'])                                              
                         
                     item_count +=1
                     self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
