@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="home">
     <widget class="QPushButton" name="MusicSkip">
@@ -549,7 +549,7 @@
       </font>
      </property>
      <property name="toolTip">
-      <string>Update Music Store</string>
+      <string>View Media Queue</string>
      </property>
      <property name="text">
       <string/>
@@ -848,7 +848,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Wipe Playlist</string>
+      <string>Remove Song</string>
      </property>
      <property name="statusTip">
       <string>Browse Collection</string>
@@ -1364,7 +1364,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Add File / Folder to Playlist</string>
+      <string>Queue File For Playback</string>
      </property>
      <property name="text">
       <string/>
