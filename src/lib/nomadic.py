@@ -141,10 +141,17 @@ class NomadicPi():
         
         # Only update the home page if the widget is visible
         if (self.ui.appContent.currentIndex() == self.pages['home']):
-            self.get_mpd_status()    
-                
-            self.update_mpd()
             
+            try:
+                self.get_mpd_status()    
+                self.update_mpd()
+            except Exception as e:
+                print(e)
+
+                # Attempt to reconnect to MPD exception is normally a client timeout
+                print("Attempting to reconnect to MPD Daemon..")
+                self.connect_mpd()
+                
             # Update GPS related information 
             self.update_gps()
 
