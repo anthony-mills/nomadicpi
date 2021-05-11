@@ -219,6 +219,21 @@ class NomadicPi():
 
             song_img = QPixmap(song_thumb)
             self.ui.MPDAlbumArt.setPixmap(song_img)
+    
+    def connect_gps(self):
+        """
+        Connect to the GPPS daemon
+        """           
+        try:
+            gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
+            gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
+                
+            gps.gps_connect(host=gpsd_host, port=gpsd_port)
+        except Exception as e:
+            print(str(e))
+            print('Unable to connect to GPSD service at: ' + str(gpsd_host) + ':' + str(gpsd_port))
+            self.ui.CurrentPosition.setText('Current Position: No GPS Fix')
+            self.ui.CurrentAltitude.setText('Altitude: Unknown')        
         
     def update_gps(self):
         """
@@ -228,20 +243,12 @@ class NomadicPi():
             self.ui.CurrentPosition.setFont(self.location_text)    
             self.ui.CurrentAltitude.setFont(self.location_text)
             
-            try:
-                gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
-                gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
-                
-                gps.gps_connect(host=gpsd_host, port=gpsd_port)
-            except Exception as e:
-                print(str(e))
-                print('Unable to connect to GPSD service at: ' + str(gpsd_host) + ':' + str(gpsd_port))
-                self.ui.CurrentPosition.setText('Current Position: No GPS Fix')
-                self.ui.CurrentAltitude.setText('Altitude: Unknown')
+            self.connect_gps()
         else:
             try:
                 self.gps_info = gps.get_current()
             except Exception as e:
+                self.connect_gps()
                 pass            
             
             if self.gps_info is not None:    
