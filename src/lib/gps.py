@@ -276,7 +276,7 @@ def gps_connect(host="127.0.0.1", port=2947):
     try:
         gpsd_socket.connect((host, port))
     except:
-        print("Unable to connect to GPSD service")
+        logger.error("Unable to connect to GPSD service")
         return
 
     gpsd_stream = gpsd_socket.makefile(mode="rw")
@@ -301,11 +301,13 @@ def get_current():
     :return: GpsResponse
     """
     global gpsd_stream, verbose_output
-    logger.debug("Polling gps")
+    
     gpsd_stream.write("?POLL;\n")
     gpsd_stream.flush()
     raw = gpsd_stream.readline()
     response = json.loads(raw)
+    
+    logger.debug(response)
     if response['class'] != 'POLL':
         raise Exception(
             "Unexpected message received from gps: {}".format(response['class']))

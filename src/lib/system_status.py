@@ -1,8 +1,11 @@
 import humanize 
 import psutil
 import datetime as dt
+import logging
 
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
+
+logger = logging.getLogger(__name__)
 
 class SystemStatus():
 

@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 class PlaylistManagement():
     selected_playlist_item = 0
 
@@ -28,6 +32,8 @@ class PlaylistManagement():
         Play a playlist item
         """
         song_id = self.playlist_song_id()
+        
+        logger.debug(f"Requesting MPD playback of playlist item #{song_id}")
 
         self.nomadic.mpd.play_song(song_id)
 
@@ -36,7 +42,8 @@ class PlaylistManagement():
         Remove a song from the playlist
         """
         song_id = self.playlist_song_id(True)
-
+        logger.debug(f"Requesting MPD removal of playlist item #{song_id}")
+        
         self.nomadic.mpd.remove_song(song_id)
         self.update_playlist_contents()
 
@@ -44,6 +51,7 @@ class PlaylistManagement():
         """
         Clear the contents of the current playlist
         """
+        logger.debug("Clearing the contents of the current playlist.")
         self.nomadic.ui.PlaylistContents.clear()
         self.nomadic.application_home.music_stop_press()
         self.nomadic.mpd.wipe_playlist()

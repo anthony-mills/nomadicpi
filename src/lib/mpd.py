@@ -1,10 +1,12 @@
 import os.path
 import sys
-
+import logging
 import musicbrainzngs
 import urllib.request
 
 from mpd import MPDClient
+
+logger = logging.getLogger(__name__)
 
 class MpdLib():
     """
@@ -55,7 +57,7 @@ class MpdLib():
         try:
             self.client.connect(self.mpd_host, self.mpd_port)
         except Exception as e:
-            print("MPD Error: Cannot connect to the MPD daemon.")
+            logger.critical("MPD Error: Cannot connect to the MPD daemon.")
             sys.exit(1)
 
     def get_status(self):
@@ -170,7 +172,7 @@ class MpdLib():
         try:
             self.client.add(path)
         except Exception as e:
-            print("Unable to add path to MP: " + str(path) + " - " + str(e))
+            logger.error("Unable to add path to MPD: " + str(path) + " - " + str(e))
 
     def ls_mpd_path(self, file_path=None):
         """
@@ -193,7 +195,7 @@ class MpdLib():
                 path_contents = self.client.lsinfo() 
             return path_contents
         except Exception as e:
-            print("Unable to read contents of path: " + str(file_path) + " - " + str(e))
+            logger.error("Unable to read contents of path: " + str(file_path) + " - " + str(e))
         
     def currently_playing(self):
         """
@@ -223,10 +225,13 @@ class MpdLib():
         """
 
         if os.path.isfile(self.art_cache + str(cache_key)):
+            logging.debug(f"Found album art with cache key: {cache_key}.")
+            
             return self.art_cache + str(cache_key)
         else:
             try:
                 mb_search = musicbrainzngs.search_release_groups(search_term)
+                logging.debug(f"Trying to query music branz album art with search term: {search_term}.")
 
                 if isinstance(mb_search['release-group-list'][0]['id'], str):
                     image_list = musicbrainzngs.get_release_group_image_list(mb_search['release-group-list'][0]['id'])
@@ -236,7 +241,7 @@ class MpdLib():
 
                         return thumb_file
             except Exception as e:
-                print("Unable to get album art: " + str(e))
+                logging.debug("Unable to get album art: " + str(e))
 
         return self.art_cache + str(self.not_found)
 

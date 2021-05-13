@@ -16,6 +16,9 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap, QMovie
 
+log_format = "%(asctime)s %(levelname)s:%(name)s - %(message)s" 
+
+logging.basicConfig(filename='/tmp/nomadic.log', level=logging.DEBUG, filemode='w', format=log_format, datefmt="%Y-%m-%d %H:%M:%S")
 logger = logging.getLogger(__name__)
 
 class NomadicPi():
@@ -99,9 +102,10 @@ class NomadicPi():
         Change the visible widget to the application home view
         """
         try:
+            logger.debug("Switching view to the application home page.")
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     def get_mpd_status(self):
         """
@@ -112,7 +116,7 @@ class NomadicPi():
             
             return self.mpd_status
         except Exception as e:
-            pass   
+            logger.error(e)   
                 
     def connect_mpd(self):
         """
@@ -216,13 +220,15 @@ class NomadicPi():
                 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
             except Exception as e:
-                print(str(e))
-                print('Unable to connect to GPSD service at: ' + str(gpsd_host) + ':' + str(gpsd_port))
+                logger.error(str(e))
+                logger.warning(f"Unable to connect to GPSD service at: {gpsd_host}:{gpsd_port}")
                 self.ui.CurrentPosition.setText('Current Position: No GPS Fix')
                 self.ui.CurrentAltitude.setText('Altitude: Unknown')
         else:
+            
             try:
                 self.gps_info = gps.get_current()
+            
             except Exception as e:
                 pass            
             
@@ -233,7 +239,7 @@ class NomadicPi():
                     self.ui.CurrentSpeed.setText( str(cur_speed) )            
                     
                 except Exception as e:
-                    print(e)
+                    logger.error(e)
                     
                 try:            
                     # Get the current Altitude
@@ -249,7 +255,7 @@ class NomadicPi():
                     self.ui.CurrentAltitude.setText( heading_info )
                 except Exception as e:
                     self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )
-                    print(e)
+                    logger.error(e)
                            
                 try:                             
                     cur_pos = self.gps_info.position()
@@ -266,4 +272,5 @@ class NomadicPi():
         """
         self.update_loop.cancel()
         self.mpd.close_mpd()
+        logger.debug("Exiting application.")
         sys.exit(0)                    
