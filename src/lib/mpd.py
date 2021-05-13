@@ -52,7 +52,6 @@ class MpdLib():
         Attempt to connect to the MPD daemon
         """
         self.client = MPDClient()
-        self.client.timeout = 10
 
         try:
             self.client.connect(self.mpd_host, self.mpd_port)
