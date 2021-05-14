@@ -125,7 +125,7 @@ class UserActions():
         Update the state of any UI buttons
         """
         self.nomadic.get_mpd_status()
-         
+        
         if self.nomadic.mpd_status.get('state', '') == 'play':
             self.nomadic.ui.MusicPlay.setChecked(True)
             self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_pause.png"))
@@ -150,12 +150,15 @@ class UserActions():
         Update the playlist count shown on the left column
         """
         playlist_length = self.nomadic.mpd_status.get('playlistlength', None)
+        next_song = self.nomadic.mpd_status.get('nextsong', 0)
 
-        if isinstance(playlist_length, str):
+        if isinstance(playlist_length, str) and int(next_song) > 0:
             try:
-                self.nomadic.ui.MPDPlaylistInfo.setText('Songs Pending: ' + str(playlist_length))
-            except:
-                pass
+                self.nomadic.ui.MPDPlaylistInfo.setText(f"Songs Pending: {playlist_length}")
+            except Exception as e:
+                logger.error(e)
+        else:
+            self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
 
     def database_update_status(self, mpd_status):
         """
