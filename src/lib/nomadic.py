@@ -211,7 +211,7 @@ class NomadicPi():
             m, s = divmod(round(float(self.mpd_status.get('duration', 0))), 60) 
             song_duration = "%02d:%02d" % (m, s)               
             
-            self.ui.SongPlayTime.setText(str(song_elapsed) + ' / ' + str(song_duration))
+            self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
         
         if self.mpd_status.get('state', '') == 'stop':
             self.now_playing = 0            
@@ -220,7 +220,7 @@ class NomadicPi():
         """
         Update the album art displayed in the UI 
         """                  
-        search_term = song_data.get('album', '') + ' - ' + song_data.get('artist', '')
+        search_term = ("f{song_data.get('album', '')} - {song_data.get('artist', '')}")
         cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
         song_thumb = self.mpd.album_art(search_term, cache_key)
 
