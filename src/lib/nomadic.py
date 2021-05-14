@@ -121,7 +121,7 @@ class NomadicPi():
         """
         try:
             self.mpd_status = self.mpd.get_status() 
-            
+            logger.debug(self.mpd_status)
             return self.mpd_status
         except Exception as e:
             logger.error(e)   
@@ -150,10 +150,10 @@ class NomadicPi():
                 self.get_mpd_status()    
                 self.update_mpd()
             except Exception as e:
-                print(e)
+                logger.error(e)
 
                 # Attempt to reconnect to MPD exception is normally a client timeout
-                print("Attempting to reconnect to MPD Daemon..")
+                logger.info("Attempting to reconnect to MPD Daemon..")
                 self.connect_mpd()
                 
             # Update GPS related information 
@@ -170,30 +170,35 @@ class NomadicPi():
         Update the interface with any time sensitive MPD info i.e play time etc 
         """                    
         self.application_home.database_update_status(self.mpd_status)
-
+        
+        self.application_home.update_playlist_count()
+        self.application_home.ui_button_state()
+        
         if self.mpd_status.get('state', '') == 'play':
             song_data = self.mpd.currently_playing()
                 
             if int(self.now_playing)!=int(self.mpd_status['songid']):
                 self.now_playing = song_data.get('id', 0)  
                           
-                song_info = 'Playing: ' + song_data.get('artist', 'Unknown') + '\n ' + song_data.get('title', 'Unknown');
+                song_info = (f"Playing: {song_data.get('artist', 'Unknown')}\n {song_data.get('title', 'Unknown')}");
 
                 self.ui.MPDNowPlaying.setText(song_info)
                 
                 self.set_album_art(song_data)
                 
                 next_song = self.mpd_status.get('nextsong', None)
-                if next_song is not None:
+                if next_song is not None and int(next_song) > 0:
                     try:
                         next_up = self.mpd.playlist_info(next_song)
                         
                         if len(next_up) == 1:
                             next_song = next_up[0]
-                            song_info = 'Next: ' + next_song.get('artist', 'Unknown') + '\n ' + next_song.get('title', 'Unknown');
+                            song_info = (f"Next: {next_song.get('artist', 'Unknown')}\n {next_song.get('title', 'Unknown')}");
                             self.ui.MPDNextPlaying.setText(song_info)                            
                     except:
                         pass
+                else:
+                    self.ui.MPDNextPlaying.setText("")                     
  
                 self.application_home.update_playlist_count()
                                        
@@ -278,7 +283,7 @@ class NomadicPi():
                     cur_pos = self.gps_info.position()
                     
                     if len(cur_pos) == 2:
-                        self.ui.CurrentPosition.setText('Current Position:\n' + str(cur_pos[0]) + ', ' + str(cur_pos[1]))
+                        self.ui.CurrentPosition.setText(f"Current Position:\n{cur_pos[0]}, {cur_pos[1]}")
                 except Exception as e:
                     self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
 
