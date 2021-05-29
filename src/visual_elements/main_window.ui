@@ -466,7 +466,7 @@
       <rect>
        <x>10</x>
        <y>5</y>
-       <width>191</width>
+       <width>221</width>
        <height>92</height>
       </rect>
      </property>
@@ -571,16 +571,16 @@
     <widget class="QLabel" name="SpeedUnit">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>229</x>
        <y>5</y>
-       <width>120</width>
+       <width>101</width>
        <height>92</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Open Sans Extrabold</family>
-       <pointsize>30</pointsize>
+       <pointsize>25</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
