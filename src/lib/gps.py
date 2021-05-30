@@ -275,26 +275,25 @@ def gps_connect(host="127.0.0.1", port=2947):
 
     try:
         gpsd_socket.connect((host, port))
-    except:
+    except Exception as e:
         logger.error("Unable to connect to GPSD service")
+        logger.error(e)
         return
 
     gpsd_stream = gpsd_socket.makefile(mode="rw")
-    logger.debug("Waiting for welcome message")
     welcome_raw = gpsd_stream.readline()
     welcome = json.loads(welcome_raw)
     if welcome['class'] != "VERSION":
         raise Exception(
             "Unexpected data received as welcome. Is the server a gpsd 3 server?")
-    logger.debug("Enabling gps")
+
     gpsd_stream.write('?WATCH={"enable":true}\n')
     gpsd_stream.flush()
 
     for i in range(0, 2):
         raw = gpsd_stream.readline()
         parsed = json.loads(raw)
-        _parse_state_packet(parsed)
-
+        parse_state_packet(parsed)
 
 def get_current():
     """ Poll gpsd for a new position
@@ -307,12 +306,11 @@ def get_current():
     raw = gpsd_stream.readline()
     response = json.loads(raw)
     
-    logger.debug(response)
+    logger.info(response)
     if response['class'] != 'POLL':
         raise Exception(
             "Unexpected message received from gps: {}".format(response['class']))
     return GpsResponse.from_json(response)
-
 
 def device():
     """ Get information about current gps device

@@ -121,7 +121,6 @@ class NomadicPi():
         """
         try:
             self.mpd_status = self.mpd.get_status() 
-            logger.debug(self.mpd_status)
             return self.mpd_status
         except Exception as e:
             logger.error(e)   
@@ -214,13 +213,15 @@ class NomadicPi():
             self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
         
         if self.mpd_status.get('state', '') == 'stop':
-            self.now_playing = 0            
+            self.application_home.music_stop_press()         
     
     def set_album_art(self, song_data):
         """
         Update the album art displayed in the UI 
         """                  
-        search_term = ("f{song_data.get('album', '')} - {song_data.get('artist', '')}")
+        search_term = (f"{song_data.get('artist', '')}")
+        logger.info(f"Attempting to get album art for search term: {search_term}.")
+        
         cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
         song_thumb = self.mpd.album_art(search_term, cache_key)
 
@@ -270,9 +271,7 @@ class NomadicPi():
                     
                     track = round(heading['track'])
                     
-                    heading_info = 'Altitude: ' + str(heading['altitude']) + \
-                                'm\nHeading: ' + str(track) + \
-                                ' degrees ' + heading['direction']
+                    heading_info = (f"Altitude: {heading['altitude']}m\nHeading: {track} degrees {heading['direction']}")
                     
                     self.ui.CurrentAltitude.setText( heading_info )
                 except Exception as e:

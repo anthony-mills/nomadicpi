@@ -24,7 +24,7 @@ class PlaylistManagement():
         """
         self.nomadic.get_mpd_status()
         playlist_length = self.nomadic.mpd_status.get('playlistlength', 0)
-        self.nomadic.ui.PlaylistCount.setText(str(playlist_length) + " Items")
+        self.nomadic.ui.PlaylistCount.setText(f"{playlist_length} Items")
         self.playlist_items()
 
     def play_playlist_item(self):
@@ -33,19 +33,22 @@ class PlaylistManagement():
         """
         song_id = self.playlist_song_id()
         
-        logger.debug(f"Requesting MPD playback of playlist item #{song_id}")
+        if type(song_id) is int:
+            logger.debug(f"Requesting MPD playback of playlist item #{song_id}")
 
-        self.nomadic.mpd.play_song(song_id)
+            self.nomadic.mpd.play_song(song_id)
 
     def remove_playlist_item(self):
         """
         Remove a song from the playlist
         """
         song_id = self.playlist_song_id(True)
-        logger.debug(f"Requesting MPD removal of playlist item #{song_id}")
         
-        self.nomadic.mpd.remove_song(song_id)
-        self.update_playlist_contents()
+        if type(song_id) is int:
+            logger.debug(f"Requesting MPD removal of playlist item #{song_id}")
+        
+            self.nomadic.mpd.remove_song(song_id)
+            self.update_playlist_contents()
 
     def wipe_playlist(self):
         """
@@ -114,6 +117,6 @@ class PlaylistManagement():
 
         if len(mpd_playlist) > 0:
             for mpd_item in mpd_playlist:
-                song_name = 'Song ID: ' + str(mpd_item.get('id', 0)) + ' - ' + mpd_item.get('title', 'Unknown') + ' - ' + mpd_item.get('artist', 'Unknown')
+                song_name = (f"Song ID: {mpd_item.get('id', 0)} - {mpd_item.get('title', 'Unknown')} - {mpd_item.get('artist', 'Unknown')}")
                 self.nomadic.ui.PlaylistContents.addItem(song_name)
                 self.nomadic.ui.PlaylistContents.setCurrentRow(self.selected_playlist_item)
