@@ -69,12 +69,12 @@ class LocationStatus():
             self.nomadic.ui.LocalTime.setText("Time: Unknown")   
 
         if isinstance(self.gps_status.hspeed, float):
-            self.nomadic.ui.HorizontalSpeed.setText(f"Speed: {round(self.gps_status.hspeed)} km/h")                
+            self.nomadic.ui.HorizontalSpeed.setText(f"Speed: {round(self.gps_status.hspeed)} m/s")                
         else:
             self.nomadic.ui.HorizontalSpeed.setText("Speed: Unknown") 
 
         if isinstance(self.gps_status.climb, int):
-            self.nomadic.ui.VerticalSpeed.setText(f"Climb: {self.gps_status.climb} km/h")                
+            self.nomadic.ui.VerticalSpeed.setText(f"Climb: {self.gps_status.climb} m/s")                
         else:
             self.nomadic.ui.VerticalSpeed.setText("Climb: Unknown") 
                         
