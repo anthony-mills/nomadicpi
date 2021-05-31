@@ -45,7 +45,7 @@ class LocationStatus():
             altitude = (f"Altitude: {self.gps_status.alt}m")
             
             if 'v' in self.gps_status.error:
-                altitude += (f" (Accuracy +/- {self.gps_status.error['y']}m)")
+                altitude += (f" ( Accuracy +/- {self.gps_status.error['y']}m )")
             
             self.nomadic.ui.CurAltitude.setText(altitude) 
         else:
@@ -64,10 +64,16 @@ class LocationStatus():
 
         gps_time = self.nomadic.gps_info.get_time(True);
         if isinstance(self.gps_status.time, str):
-            self.nomadic.ui.LocalTime.setText(f"Time: {gps_time}")                
+            self.nomadic.ui.LocalTime.setText(f"Local Time: {gps_time}")                
         else:
-            self.nomadic.ui.LocalTime.setText("Time: Unknown")   
+            self.nomadic.ui.LocalTime.setText("Local Time: Unknown")   
 
+        gps_time = self.nomadic.gps_info.get_time(False);
+        if isinstance(self.gps_status.time, str):
+            self.nomadic.ui.UtcTime.setText(f"UTC Time: {gps_time}")                
+        else:
+            self.nomadic.ui.UtcTime.setText("UTC Time: Unknown") 
+            
         if isinstance(self.gps_status.hspeed, float):
             self.nomadic.ui.HorizontalSpeed.setText(f"Speed: {round(self.gps_status.hspeed)} m/s")                
         else:
@@ -76,7 +82,7 @@ class LocationStatus():
         if isinstance(self.gps_status.climb, int):
             self.nomadic.ui.VerticalSpeed.setText(f"Climb: {self.gps_status.climb} m/s")                
         else:
-            self.nomadic.ui.VerticalSpeed.setText("Climb: Unknown") 
+            self.nomadic.ui.VerticalSpeed.setText("Climb: Unknown")
                         
     def gps_fix_type(self):
         """

@@ -311,14 +311,3 @@ def get_current():
         raise Exception(
             "Unexpected message received from gps: {}".format(response['class']))
     return GpsResponse.from_json(response)
-            
-def device():
-    """ Get information about current gps device
-    :return: dict
-    """
-    global state
-    return {
-        'path': state['devices']['devices'][0]['path'],
-        'speed': state['devices']['devices'][0]['bps'],
-        'driver': state['devices']['devices'][0]['driver']
-    }
