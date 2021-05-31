@@ -56,6 +56,8 @@ class UserActions():
         Change the visible widget to the location view
         """
         logger.debug("Switching view to the location info view.")
+        
+        self.nomadic.location_status.activate_page()
         self.change_page(self.nomadic.pages['location'])
                         
     def view_file_management(self):
