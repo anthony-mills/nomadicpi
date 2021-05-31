@@ -114,13 +114,14 @@ class GpsResponse(object):
             result.sats_valid = 0
 
         result.mode = last_tpv['mode']
-
+        
         if last_tpv['mode'] >= 2:
             result.lon = last_tpv['lon'] if 'lon' in last_tpv else 0.0
             result.lat = last_tpv['lat'] if 'lat' in last_tpv else 0.0
             result.track = last_tpv['track'] if 'track' in last_tpv else 0
             result.hspeed = last_tpv['speed'] if 'speed' in last_tpv else 0
             result.time = last_tpv['time'] if 'time' in last_tpv else ''
+            
             result.error = {
                 'c': 0,
                 's': last_tpv['eps'] if 'eps' in last_tpv else 0,
@@ -176,7 +177,9 @@ class GpsResponse(object):
             "climb": self.climb, 
             "direction" : direction, 
             "altitude" : self.alt,
-            "sats" : self.sats_valid
+            "sats" : self.sats_valid,
+            "local_time" : self.get_time(True),
+            "utc_time" : self.get_time(False)
         }
 
     def deg_to_compass(self, num):
@@ -247,7 +250,7 @@ class GpsResponse(object):
             time = time.replace(tzinfo=datetime.timezone.utc).astimezone()
 
         return time
-
+        
     def __repr__(self):
         modes = {
             0: 'No mode',

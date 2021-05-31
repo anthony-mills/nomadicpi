@@ -56,21 +56,19 @@ class LocationStatus():
         else:
             self.nomadic.ui.LocationPrecision.setText(f"Location Accuracy: Unknown")
 
-        heading = self.nomadic.gps_info.movement()       
-        if 'track' in heading and 'direction' in heading:
-            self.nomadic.ui.GpsHeading.setText(f"Heading: {heading['direction']} ( {round(heading['track'])} degrees )")             
+        status = self.gps_status.movement()       
+        if 'track' in status and 'direction' in status:
+            self.nomadic.ui.GpsHeading.setText(f"Heading: {status['direction']} ( {round(status['track'])} degrees )")             
         else:
             self.nomadic.ui.GpsHeading.setText("Heading: Unknown")            
 
-        gps_time = self.nomadic.gps_info.get_time(True);
-        if isinstance(self.gps_status.time, str):
-            self.nomadic.ui.LocalTime.setText(f"Local Time: {gps_time}")                
+        if 'local_time' in status:
+            self.nomadic.ui.LocalTime.setText(f"Local Time: {status['local_time']}")                
         else:
             self.nomadic.ui.LocalTime.setText("Local Time: Unknown")   
 
-        gps_time = self.nomadic.gps_info.get_time(False);
-        if isinstance(self.gps_status.time, str):
-            self.nomadic.ui.UtcTime.setText(f"UTC Time: {gps_time}")                
+        if 'utc_time' in status:
+            self.nomadic.ui.UtcTime.setText(f"UTC Time: {status['utc_time']}")                
         else:
             self.nomadic.ui.UtcTime.setText("UTC Time: Unknown") 
             
