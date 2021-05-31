@@ -14,9 +14,9 @@ class LocationStatus():
         # Register the button actions on the location status page
         self.nomadic.ui.LocationReturnHome.clicked.connect(self.nomadic.view_home_widget)
         
-    def activate_page(self):  
+    def update_page(self):  
         """
-        Activate the location details page
+        Update the location details page
         """           
         if gps.gpsd_socket is None:
             try:
@@ -89,8 +89,7 @@ class LocationStatus():
                 fix = '2D Fix'
             elif (self.gps_status.mode == 3):
                 fix = '3D Fix'            
-            
-            print(self.gps_status.mode)
+
             self.nomadic.ui.GpsFixType.setText(f"Fix Type: {fix}")            
         else:
             self.nomadic.ui.GpsSatellites.setText("Fix Type: No GPS connection.")            

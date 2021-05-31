@@ -160,7 +160,10 @@ class NomadicPi():
 
         if (self.ui.appContent.currentIndex() == self.pages['system']):
             self.system_status.show_system_status()
-        
+
+        if (self.ui.appContent.currentIndex() == self.pages['location']):
+            self.location_status.update_page()
+                    
         self.update_loop = threading.Timer(1, self.update_content)
         self.update_loop.start()
         

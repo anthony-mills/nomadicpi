@@ -57,7 +57,7 @@ class UserActions():
         """
         logger.debug("Switching view to the location info view.")
         
-        self.nomadic.location_status.activate_page()
+        self.nomadic.location_status.update_page()
         self.change_page(self.nomadic.pages['location'])
                         
     def view_file_management(self):
