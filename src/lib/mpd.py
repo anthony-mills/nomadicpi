@@ -230,6 +230,7 @@ class MpdLib():
         else:
             try:
                 mb_search = musicbrainzngs.search_release_groups(search_term)
+                
                 logging.debug(f"Trying to query music branz album art with search term: {search_term}.")
 
                 if isinstance(mb_search['release-group-list'][0]['id'], str):
