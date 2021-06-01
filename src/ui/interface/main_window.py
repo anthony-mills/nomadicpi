@@ -544,7 +544,7 @@ class Ui_NomadicPI(object):
         self.CurCoordinates.setGeometry(QtCore.QRect(350, 60, 311, 31))
         self.CurCoordinates.setObjectName("CurCoordinates")
         self.LocationPrecision = QtWidgets.QLabel(self.car_location)
-        self.LocationPrecision.setGeometry(QtCore.QRect(30, 20, 331, 31))
+        self.LocationPrecision.setGeometry(QtCore.QRect(30, 20, 641, 31))
         self.LocationPrecision.setObjectName("LocationPrecision")
         self.HorizontalSpeed = QtWidgets.QLabel(self.car_location)
         self.HorizontalSpeed.setGeometry(QtCore.QRect(350, 180, 331, 31))
