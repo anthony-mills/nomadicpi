@@ -334,3 +334,12 @@ def get_current():
         return GpsResponse.from_json(response)
     else:
         return no_gps()
+        
+def ms_kmh_coversion(speed):
+    """
+    Convert a value from  m/s to km/h
+    
+    :param: int speed
+    :return: int 
+    """
+    return round(speed * 3.6 )
