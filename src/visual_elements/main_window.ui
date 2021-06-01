@@ -33,6 +33,11 @@
     <number>4</number>
    </property>
    <widget class="QWidget" name="home">
+    <property name="font">
+     <font>
+      <family>Open Sans</family>
+     </font>
+    </property>
     <widget class="QPushButton" name="MusicSkip">
      <property name="geometry">
       <rect>
@@ -1459,6 +1464,7 @@
     <property name="font">
      <font>
       <family>Open Sans</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <widget class="QPushButton" name="LocationReturnHome">
@@ -1494,7 +1500,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>60</y>
+       <y>100</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1507,7 +1513,7 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>60</y>
+       <y>100</y>
        <width>321</width>
        <height>31</height>
       </rect>
@@ -1520,7 +1526,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>20</y>
+       <y>60</y>
        <width>301</width>
        <height>31</height>
       </rect>
@@ -1545,8 +1551,8 @@
     <widget class="QLabel" name="CurCoordinates">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>100</y>
+       <x>350</x>
+       <y>60</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1558,8 +1564,8 @@
     <widget class="QLabel" name="LocationPrecision">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>100</y>
+       <x>30</x>
+       <y>20</y>
        <width>331</width>
        <height>31</height>
       </rect>
