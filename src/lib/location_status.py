@@ -81,7 +81,7 @@ class LocationStatus():
             self.nomadic.ui.UtcTime.setText("UTC Time: Unknown") 
                                             
         if hasattr(self.gps_status, 'hspeed') and isinstance(self.gps_status.hspeed, float):
-            self.nomadic.ui.HorizontalSpeed.setText(f"Speed: {round(self.gps_status.hspeed)} m/s")                
+            self.nomadic.ui.HorizontalSpeed.setText(f"Speed: {gps.ms_kmh_coversion(self.gps_status.hspeed)} km/h ( {round(self.gps_status.hspeed)} m/s )")                
         else:
             self.nomadic.ui.HorizontalSpeed.setText("Speed: Unknown") 
 
