@@ -1494,8 +1494,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>20</y>
-       <width>331</width>
+       <y>60</y>
+       <width>311</width>
        <height>31</height>
       </rect>
      </property>
@@ -1506,9 +1506,9 @@
     <widget class="QLabel" name="GpsSatellitesUsed">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>350</x>
        <y>60</y>
-       <width>331</width>
+       <width>321</width>
        <height>31</height>
       </rect>
      </property>
@@ -1520,8 +1520,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>100</y>
-       <width>331</width>
+       <y>20</y>
+       <width>301</width>
        <height>31</height>
       </rect>
      </property>
@@ -1532,7 +1532,7 @@
     <widget class="QLabel" name="CurAltitude">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>350</x>
        <y>140</y>
        <width>331</width>
        <height>31</height>
@@ -1546,8 +1546,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>180</y>
-       <width>331</width>
+       <y>100</y>
+       <width>311</width>
        <height>31</height>
       </rect>
      </property>
@@ -1558,8 +1558,8 @@
     <widget class="QLabel" name="LocationPrecision">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>220</y>
+       <x>350</x>
+       <y>100</y>
        <width>331</width>
        <height>31</height>
       </rect>
@@ -1571,8 +1571,8 @@
     <widget class="QLabel" name="HorizontalSpeed">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>300</y>
+       <x>350</x>
+       <y>180</y>
        <width>331</width>
        <height>31</height>
       </rect>
@@ -1585,8 +1585,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>340</y>
-       <width>331</width>
+       <y>180</y>
+       <width>311</width>
        <height>31</height>
       </rect>
      </property>
@@ -1598,7 +1598,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>380</y>
+       <y>220</y>
        <width>331</width>
        <height>31</height>
       </rect>
@@ -1611,8 +1611,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>260</y>
-       <width>331</width>
+       <y>140</y>
+       <width>311</width>
        <height>31</height>
       </rect>
      </property>
@@ -1623,8 +1623,8 @@
     <widget class="QLabel" name="UtcTime">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>420</y>
+       <x>350</x>
+       <y>220</y>
        <width>331</width>
        <height>31</height>
       </rect>

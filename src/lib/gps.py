@@ -36,6 +36,22 @@ def _parse_state_packet(json_data):
         raise Exception(
             "Unexpected message received from gps: {}".format(json_data['class']))
 
+class no_gps():
+    """
+    Blank object to pass back if no GPS device is available
+    """
+    def __init__(self):
+        blank_resp = {
+            "sats" : 0,
+            "sats_valid" : 0,
+            "mode" : None,
+        }
+        
+        for a, b in blank_resp.items():
+            if isinstance(b, (list, tuple)):
+               setattr(self, a, [obj(x) if isinstance(x, dict) else x for x in b])
+            else:
+               setattr(self, a, obj(b) if isinstance(b, dict) else b)
 
 class NoFixError(Exception):
     pass
@@ -304,13 +320,17 @@ def get_current():
     """
     global gpsd_stream, verbose_output
     
-    gpsd_stream.write("?POLL;\n")
-    gpsd_stream.flush()
-    raw = gpsd_stream.readline()
-    response = json.loads(raw)
-    
-    logger.info(response)
-    if response['class'] != 'POLL':
-        raise Exception(
-            "Unexpected message received from gps: {}".format(response['class']))
-    return GpsResponse.from_json(response)
+    if gpsd_stream is not None:
+        gpsd_stream.write("?POLL;\n")
+        gpsd_stream.flush()
+        raw = gpsd_stream.readline()
+        response = json.loads(raw)
+        
+        logger.info(response)
+        
+        if response['class'] != 'POLL':
+            raise Exception(
+                "Unexpected message received from gps: {}".format(response['class']))
+        return GpsResponse.from_json(response)
+    else:
+        return no_gps()
