@@ -38,10 +38,15 @@ class LocationStatus():
         """
         Display the current GPS location details
         """        
-        if hasattr(self.gps_status, 'lon') and hasattr(self.gps_status, 'lat'):
-            self.nomadic.ui.CurCoordinates.setText(f"Coordinates: {self.gps_status.lat}, {self.gps_status.lon}") 
+        if hasattr(self.gps_status, 'lat') and hasattr(self.gps_status, 'error') and type(self.gps_status.error) is dict and 'y' in self.gps_status.error:
+            self.nomadic.ui.CurLat.setText(f"Latitude: {self.gps_status.lat} ( Accuracy +/- {self.gps_status.error['y']}m )") 
         else:
-            self.nomadic.ui.CurCoordinates.setText(f"Coordinates: Unknown")             
+            self.nomadic.ui.CurLat.setText(f"Latitude: Unknown")             
+
+        if hasattr(self.gps_status, 'lon') and hasattr(self.gps_status, 'error') and type(self.gps_status.error) is dict and 'x' in self.gps_status.error:
+            self.nomadic.ui.CurLong.setText(f"Longitude: {self.gps_status.lon} ( Accuracy +/- {self.gps_status.error['x']}m )") 
+        else:
+            self.nomadic.ui.CurLong.setText(f"Longitude: Unknown")    
 
         if hasattr(self.gps_status, 'alt'):
             altitude = (f"Altitude: {self.gps_status.alt}m")
@@ -52,11 +57,6 @@ class LocationStatus():
             self.nomadic.ui.CurAltitude.setText(altitude) 
         else:
             self.nomadic.ui.CurAltitude.setText(f"Altitude: Unknown")
-                         
-        if hasattr(self.gps_status, 'error') and type(self.gps_status.error) is dict and 'x' in self.gps_status.error and 'y' in self.gps_status.error:
-            self.nomadic.ui.LocationPrecision.setText(f"Location Precision: Latitude {self.gps_status.error['y']}m, Longitude {self.gps_status.error['x']}m")
-        else:
-            self.nomadic.ui.LocationPrecision.setText(f"Location Precision: Unknown")
 
         if hasattr(self.gps_status, 'movement'): 
             status = self.gps_status.movement()
@@ -110,8 +110,7 @@ class LocationStatus():
         """
         Add count of currently visible GPS satellites
         """
-        if hasattr(self.gps_status, 'sats') :
-            self.nomadic.ui.GpsSatellites.setText(f"Visible Satellites: {self.gps_status.sats}")
-            
-        if hasattr(self.gps_status, 'sats_valid') :
-            self.nomadic.ui.GpsSatellitesUsed.setText(f"Used Satellites: {self.gps_status.sats_valid}")
+        if hasattr(self.gps_status, 'sats') and hasattr(self.gps_status, 'sats_valid'):
+            self.nomadic.ui.GpsSatellites.setText(f"GPS Satellites: {self.gps_status.sats} visible / {self.gps_status.sats_valid} used")
+        else:
+            self.nomadic.ui.GpsSatellites.setText(f"GPS Satellites: 0 visible / 0 used")

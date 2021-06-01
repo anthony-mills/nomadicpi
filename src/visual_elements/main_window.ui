@@ -1499,8 +1499,8 @@
     <widget class="QLabel" name="GpsSatellites">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>100</y>
+       <x>350</x>
+       <y>20</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1509,24 +1509,11 @@
       <string>Satellites</string>
      </property>
     </widget>
-    <widget class="QLabel" name="GpsSatellitesUsed">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>100</y>
-       <width>321</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Satellites Used</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="GpsFixType">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>60</y>
+       <y>20</y>
        <width>301</width>
        <height>31</height>
       </rect>
@@ -1538,9 +1525,9 @@
     <widget class="QLabel" name="CurAltitude">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>140</y>
-       <width>331</width>
+       <x>30</x>
+       <y>100</y>
+       <width>311</width>
        <height>31</height>
       </rect>
      </property>
@@ -1548,37 +1535,24 @@
       <string>Altitude</string>
      </property>
     </widget>
-    <widget class="QLabel" name="CurCoordinates">
+    <widget class="QLabel" name="CurLat">
      <property name="geometry">
       <rect>
-       <x>350</x>
+       <x>30</x>
        <y>60</y>
        <width>311</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Coordinates</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="LocationPrecision">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>641</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>LocationPrecision</string>
+      <string>Latitude</string>
      </property>
     </widget>
     <widget class="QLabel" name="HorizontalSpeed">
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>180</y>
+       <y>140</y>
        <width>331</width>
        <height>31</height>
       </rect>
@@ -1591,7 +1565,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>180</y>
+       <y>140</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1604,8 +1578,8 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>220</y>
-       <width>331</width>
+       <y>180</y>
+       <width>311</width>
        <height>31</height>
       </rect>
      </property>
@@ -1616,8 +1590,8 @@
     <widget class="QLabel" name="GpsHeading">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>140</y>
+       <x>350</x>
+       <y>100</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1630,13 +1604,26 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>220</y>
+       <y>180</y>
        <width>331</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>UtcTime</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="CurLong">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>60</y>
+       <width>311</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Longitude</string>
      </property>
     </widget>
    </widget>
