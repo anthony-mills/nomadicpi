@@ -38,51 +38,63 @@ class LocationStatus():
         """
         Display the current GPS location details
         """        
-        if isinstance(self.gps_status.lon, float) and isinstance(self.gps_status.lat, float):
+        if hasattr(self.gps_status, 'lon') and hasattr(self.gps_status, 'lat'):
             self.nomadic.ui.CurCoordinates.setText(f"Coordinates: {self.gps_status.lat}, {self.gps_status.lon}") 
+        else:
+            self.nomadic.ui.CurCoordinates.setText(f"Coordinates: Unknown")             
 
-        if isinstance(self.gps_status.alt, float):
+        if hasattr(self.gps_status, 'alt'):
             altitude = (f"Altitude: {self.gps_status.alt}m")
             
             if 'v' in self.gps_status.error:
-                altitude += (f" (Accuracy +/- {self.gps_status.error['y']}m)")
+                altitude += (f" ( Accuracy +/- {self.gps_status.error['y']}m )")
             
             self.nomadic.ui.CurAltitude.setText(altitude) 
         else:
             self.nomadic.ui.CurAltitude.setText(f"Altitude: Unknown")
                          
-        if 'x' in self.gps_status.error and 'y' in self.gps_status.error:
-            self.nomadic.ui.LocationPrecision.setText(f"Location Accuracy: Latitude {self.gps_status.error['y']}m, Longitude {self.gps_status.error['x']}m")
+        if hasattr(self.gps_status, 'error') and type(self.gps_status.error) is dict and 'x' in self.gps_status.error and 'y' in self.gps_status.error:
+            self.nomadic.ui.LocationPrecision.setText(f"Location Precision: Latitude {self.gps_status.error['y']}m, Longitude {self.gps_status.error['x']}m")
         else:
-            self.nomadic.ui.LocationPrecision.setText(f"Location Accuracy: Unknown")
+            self.nomadic.ui.LocationPrecision.setText(f"Location Precision: Unknown")
 
-        heading = self.nomadic.gps_info.movement()       
-        if 'track' in heading and 'direction' in heading:
-            self.nomadic.ui.GpsHeading.setText(f"Heading: {heading['direction']} ( {round(heading['track'])} degrees )")             
+        if hasattr(self.gps_status, 'movement'): 
+            status = self.gps_status.movement()
+                  
+            if 'track' in status and 'direction' in status:
+                self.nomadic.ui.GpsHeading.setText(f"Heading: {status['direction']} ( {round(status['track'])} degrees )")             
+            else:
+                self.nomadic.ui.GpsHeading.setText("Heading: Unknown")            
+
+            if 'local_time' in status:
+                self.nomadic.ui.LocalTime.setText(f"Local Time: {status['local_time']}")                
+            else:
+                self.nomadic.ui.LocalTime.setText("Local Time: Unknown")   
+
+            if 'utc_time' in status:
+                self.nomadic.ui.UtcTime.setText(f"UTC Time: {status['utc_time']}")                
+            else:
+                self.nomadic.ui.UtcTime.setText("UTC Time: Unknown") 
         else:
-            self.nomadic.ui.GpsHeading.setText("Heading: Unknown")            
-
-        gps_time = self.nomadic.gps_info.get_time(True);
-        if isinstance(self.gps_status.time, str):
-            self.nomadic.ui.LocalTime.setText(f"Time: {gps_time}")                
-        else:
-            self.nomadic.ui.LocalTime.setText("Time: Unknown")   
-
-        if isinstance(self.gps_status.hspeed, float):
+            self.nomadic.ui.GpsHeading.setText("Heading: Unknown")              
+            self.nomadic.ui.LocalTime.setText("Local Time: Unknown")  
+            self.nomadic.ui.UtcTime.setText("UTC Time: Unknown") 
+                                            
+        if hasattr(self.gps_status, 'hspeed') and isinstance(self.gps_status.hspeed, float):
             self.nomadic.ui.HorizontalSpeed.setText(f"Speed: {round(self.gps_status.hspeed)} m/s")                
         else:
             self.nomadic.ui.HorizontalSpeed.setText("Speed: Unknown") 
 
-        if isinstance(self.gps_status.climb, int):
+        if hasattr(self.gps_status, 'climb') and isinstance(self.gps_status.climb, int):
             self.nomadic.ui.VerticalSpeed.setText(f"Climb: {self.gps_status.climb} m/s")                
         else:
-            self.nomadic.ui.VerticalSpeed.setText("Climb: Unknown") 
+            self.nomadic.ui.VerticalSpeed.setText("Climb: Unknown")
                         
     def gps_fix_type(self):
         """
         Display the current GPS fix type
         """        
-        if isinstance(self.gps_status.mode, int):
+        if  hasattr(self.gps_status, 'mode') and isinstance(self.gps_status.mode, int):
             fix = 'No Fix'            
             
             if (self.gps_status.mode == 2):
@@ -92,14 +104,14 @@ class LocationStatus():
 
             self.nomadic.ui.GpsFixType.setText(f"Fix Type: {fix}")            
         else:
-            self.nomadic.ui.GpsSatellites.setText("Fix Type: No GPS connection.")            
+            self.nomadic.ui.GpsFixType.setText("Fix Type: No GPS connection.")            
 
     def gps_satellites(self):
         """
         Add count of currently visible GPS satellites
         """
-        if isinstance(self.gps_status.sats, int):
+        if hasattr(self.gps_status, 'sats') :
             self.nomadic.ui.GpsSatellites.setText(f"Visible Satellites: {self.gps_status.sats}")
             
-        if isinstance(self.gps_status.sats_valid, int):
+        if hasattr(self.gps_status, 'sats_valid') :
             self.nomadic.ui.GpsSatellitesUsed.setText(f"Used Satellites: {self.gps_status.sats_valid}")
