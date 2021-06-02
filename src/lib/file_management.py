@@ -1,5 +1,9 @@
 from PyQt5 import QtGui
 
+import logging
+
+LOGGER = logging.getLogger(__name__)
+
 class FileManagement():
     selected_file_item = 0
 
@@ -29,6 +33,9 @@ class FileManagement():
         self.icons['folder'] = QtGui.QIcon(QtGui.QPixmap(self.nomadic.ui.base_path + "visual_elements/icons/folder16x.png"))
 
     def reset_file_state(self):
+        """
+        Reset the directory information
+        """
         self.dir_info = {
             'contents' : [],
             'count' : 0,
@@ -74,21 +81,24 @@ class FileManagement():
         """
         Add the selected item to the playlist
         """
-        if self.nomadic.ui.FileList.item is not None and isinstance(self.selected_file_item, int):
-            item_text = self.nomadic.ui.FileList.item(self.selected_file_item).text()
+        try:
+            if self.nomadic.ui.FileList.item is not None:
+                item_text = self.nomadic.ui.FileList.item(self.selected_file_item).text()
 
-            if "File" in item_text:
-                file_path = item_text.rsplit('File: ', 1)[-1].rstrip('\n')
-                self.nomadic.mpd.add_to_playlist(file_path)
-            else:
-                self.nomadic.mpd.add_to_playlist(item_text)
+                if "File" in item_text:
+                    file_path = item_text.rsplit('File: ', 1)[-1].rstrip('\n')
+                    self.nomadic.mpd.add_to_playlist(file_path)
+                else:
+                    self.nomadic.mpd.add_to_playlist(item_text)
 
-            self.nomadic.mpd_status = self.nomadic.get_mpd_status()
-            if self.nomadic.mpd_status['state'] == 'stop':
-                self.nomadic.mpd.play_playback()
-                self.nomadic.get_mpd_status()
+                self.nomadic.mpd_status = self.nomadic.get_mpd_status()
+                if isinstance(self.nomadic.mpd_status['state'], str) and self.nomadic.mpd_status['state'] == 'stop':
+                    self.nomadic.mpd.play_playback()
+                    self.nomadic.get_mpd_status()
 
-            self.set_item_count()
+                self.set_item_count()
+        except Exception as e:
+            LOGGER.error(f"Unable to add items to the playlist: {e}")
 
     def open_parent_folder(self):
         """
@@ -103,7 +113,7 @@ class FileManagement():
                 self.filesystem_items()
 
         except Exception as e:
-            print('Unable to open selected folder: ' + str(e))
+            LOGGER.error('Unable to open selected folder: ' + str(e))
 
     def open_folder(self):
         """
@@ -113,7 +123,7 @@ class FileManagement():
             file_path = (self.nomadic.ui.FileList.item(self.nomadic.ui.FileList.currentRow())).text()
             self.filesystem_items(file_path)
         except Exception as e:
-            print('Unable to open selected folder: ' + str(e))
+            LOGGER.error('Unable to open selected folder: ' + str(e))
 
     def set_item_count(self):
         """
@@ -125,7 +135,7 @@ class FileManagement():
             item_text = 'Directory Items: ' + str(self.dir_info['count']) + ' / Playlist Items: ' + str(len(mpd_playlist))
             self.nomadic.ui.FileCount.setText(item_text)
         except Exception as e:
-            print(str(e))
+            LOGGER.error(str(e))
 
     def filesystem_items(self, file_path=None):
         """

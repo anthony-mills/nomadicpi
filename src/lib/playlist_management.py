@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 class PlaylistManagement():
     selected_playlist_item = 0
@@ -32,9 +32,9 @@ class PlaylistManagement():
         Play a playlist item
         """
         song_id = self.playlist_song_id()
-        
-        if type(song_id) is int:
-            logger.debug(f"Requesting MPD playback of playlist item #{song_id}")
+
+        if isinstance(song_id, int):
+            LOGGER.debug(f"Requesting MPD playback of playlist item #{song_id}")
 
             self.nomadic.mpd.play_song(song_id)
 
@@ -43,10 +43,10 @@ class PlaylistManagement():
         Remove a song from the playlist
         """
         song_id = self.playlist_song_id(True)
-        
-        if type(song_id) is int:
-            logger.debug(f"Requesting MPD removal of playlist item #{song_id}")
-        
+
+        if isinstance(song_id, int):
+            LOGGER.debug(f"Requesting MPD removal of playlist item #{song_id}")
+
             self.nomadic.mpd.remove_song(song_id)
             self.update_playlist_contents()
 
@@ -54,12 +54,12 @@ class PlaylistManagement():
         """
         Clear the contents of the current playlist
         """
-        logger.debug("Clearing the contents of the current playlist.")
+        LOGGER.debug("Clearing the contents of the current playlist.")
         self.nomadic.ui.PlaylistContents.clear()
         self.nomadic.application_home.music_stop_press()
         self.nomadic.mpd.wipe_playlist()
         self.update_playlist_contents()
-        
+
     def playlist_song_id(self, take=None):
         """
         Return the song ID for the currently selected playlist item
@@ -88,7 +88,6 @@ class PlaylistManagement():
         Execute method when a select playlist item
         """
         self.selected_playlist_item = self.nomadic.ui.PlaylistContents.currentRow()
-
 
     def playlist_scroll_up(self):
         """
