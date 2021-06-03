@@ -6,7 +6,7 @@ import urllib.request
 
 from mpd import MPDClient
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 class MpdLib():
     """
@@ -56,7 +56,7 @@ class MpdLib():
         try:
             self.client.connect(self.mpd_host, self.mpd_port)
         except Exception as e:
-            logger.critical("MPD Error: Cannot connect to the MPD daemon.")
+            LOGGER.critical("MPD Error: Cannot connect to the MPD daemon.")
             sys.exit(1)
 
     def get_status(self):
@@ -162,40 +162,40 @@ class MpdLib():
     def add_to_playlist(self, path):
         """
         Add file or directory to the current playlist
-        
+
         Params
         -------
         string
-            Directory or File Path to add      
+            Directory or File Path to add
         """
         try:
             self.client.add(path)
         except Exception as e:
-            logger.error("Unable to add path to MPD: " + str(path) + " - " + str(e))
+            LOGGER.error("Unable to add path to MPD: " + str(path) + " - " + str(e))
 
     def ls_mpd_path(self, file_path=None):
         """
         List the contents of an MPD path
-        
+
         Params
         -------
         string
-            File System Path on the MPD filesystem   
-            
+            File System Path on the MPD filesystem
+
         Returns
         -------
         dict
-            Dictionary of items / folders located under the requested path                 
+            Dictionary of items / folders located under the requested path
         """
         try:
-            if type(file_path) is str:
-                path_contents = self.client.lsinfo(file_path)       
+            if isinstance(file_path, str):
+                path_contents = self.client.lsinfo(file_path)
             else:
-                path_contents = self.client.lsinfo() 
+                path_contents = self.client.lsinfo()
             return path_contents
         except Exception as e:
-            logger.error("Unable to read contents of path: " + str(file_path) + " - " + str(e))
-        
+            LOGGER.error("Unable to read contents of path: " + str(file_path) + " - " + str(e))
+
     def currently_playing(self):
         """
         Return information about the current song playing
@@ -225,12 +225,12 @@ class MpdLib():
 
         if os.path.isfile(self.art_cache + str(cache_key)):
             logging.debug(f"Found album art with cache key: {cache_key}.")
-            
+
             return self.art_cache + str(cache_key)
         else:
             try:
                 mb_search = musicbrainzngs.search_release_groups(search_term)
-                
+
                 logging.debug(f"Trying to query music branz album art with search term: {search_term}.")
 
                 if isinstance(mb_search['release-group-list'][0]['id'], str):

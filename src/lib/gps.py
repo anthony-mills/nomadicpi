@@ -46,12 +46,12 @@ class no_gps():
             "sats_valid" : 0,
             "mode" : None,
         }
-        
+
         for a, b in blank_resp.items():
             if isinstance(b, (list, tuple)):
-               setattr(self, a, [obj(x) if isinstance(x, dict) else x for x in b])
+                setattr(self, a, [obj(x) if isinstance(x, dict) else x for x in b])
             else:
-               setattr(self, a, obj(b) if isinstance(b, dict) else b)
+                setattr(self, a, obj(b) if isinstance(b, dict) else b)
 
 class NoFixError(Exception):
     pass
@@ -130,14 +130,14 @@ class GpsResponse(object):
             result.sats_valid = 0
 
         result.mode = last_tpv['mode']
-        
+
         if last_tpv['mode'] >= 2:
             result.lon = last_tpv['lon'] if 'lon' in last_tpv else 0.0
             result.lat = last_tpv['lat'] if 'lat' in last_tpv else 0.0
             result.track = last_tpv['track'] if 'track' in last_tpv else 0
             result.hspeed = last_tpv['speed'] if 'speed' in last_tpv else 0
             result.time = last_tpv['time'] if 'time' in last_tpv else ''
-            
+
             result.error = {
                 'c': 0,
                 's': last_tpv['eps'] if 'eps' in last_tpv else 0,
@@ -174,7 +174,7 @@ class GpsResponse(object):
         return self.alt
 
     def movement(self):
-        """ 
+        """
         Get the speed and direction of the current movement as dict
         The speed is the horizontal speed.
         The climb is the vertical speed
@@ -184,14 +184,14 @@ class GpsResponse(object):
         """
         if self.mode < 3:
             raise NoFixError("Needs at least 3D fix")
-            
-        direction = self.deg_to_compass( self.track )
-        
+
+        direction = self.deg_to_compass(self.track)
+
         return {
-            "speed": self.hspeed, 
-            "track": self.track, 
-            "climb": self.climb, 
-            "direction" : direction, 
+            "speed": self.hspeed,
+            "track": self.track,
+            "climb": self.climb,
+            "direction" : direction,
             "altitude" : self.alt,
             "sats" : self.sats_valid,
             "local_time" : self.get_time(True),
@@ -199,16 +199,16 @@ class GpsResponse(object):
         }
 
     def deg_to_compass(self, num):
-        """ 
-        Translate a heading in degrees to a human readable compass direction 
-        :param int 
+        """
+        Translate a heading in degrees to a human readable compass direction
+        :param int
         :return: string
         """
-                
-        val=int((num/22.5)+.5)
-        arr=["North","NNE","NE","ENE","East","ESE", "SE", "SSE","South","SSW","SW","WSW","West","WNW","NW","NNW"]
+
+        val = int((num/22.5)+.5)
+        arr = ["North", "NNE", "NE", "ENE", "East", "ESE", "SE", "SSE", "South", "SSW", "SW", "WSW", "West", "WNW", "NW", "NNW"]
         return arr[(val % 16)]
-        
+
     def speed_vertical(self):
         """ Get the vertical speed with the small movements filtered out.
         Needs at least 2D fix
@@ -218,8 +218,7 @@ class GpsResponse(object):
             raise NoFixError("Needs at least 2D fix")
         if abs(self.climb) < self.error['c']:
             return 0
-        else:
-            return self.climb
+        return self.climb
 
     def speed(self):
         """ Get the horizontal speed with the small movements filtered out.
@@ -230,8 +229,7 @@ class GpsResponse(object):
             raise NoFixError("Needs at least 2D fix")
         if self.hspeed < self.error['s']:
             return 0
-        else:
-            return self.hspeed
+        return self.hspeed
 
     def position_precision(self):
         """ Get the error margin in meters for the current fix.
@@ -266,7 +264,7 @@ class GpsResponse(object):
             time = time.replace(tzinfo=datetime.timezone.utc).astimezone()
 
         return time
-        
+
     def __repr__(self):
         modes = {
             0: 'No mode',
@@ -319,27 +317,27 @@ def get_current():
     :return: GpsResponse
     """
     global gpsd_stream, verbose_output
-    
+
     if gpsd_stream is not None:
         gpsd_stream.write("?POLL;\n")
         gpsd_stream.flush()
         raw = gpsd_stream.readline()
         response = json.loads(raw)
-        
+
         logger.info(response)
-        
+
         if response['class'] != 'POLL':
             raise Exception(
                 "Unexpected message received from gps: {}".format(response['class']))
         return GpsResponse.from_json(response)
-    else:
-        return no_gps()
-        
+
+    return no_gps()
+
 def ms_kmh_coversion(speed):
     """
     Convert a value from  m/s to km/h
-    
+
     :param: int speed
-    :return: int 
+    :return: int
     """
-    return round(speed * 3.6 )
+    return round(speed * 3.6)

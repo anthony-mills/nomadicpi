@@ -1,8 +1,7 @@
 import logging
-import sys
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtGui
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 class UserActions():
     selected_playlist_item = 0
@@ -25,7 +24,7 @@ class UserActions():
         self.nomadic.ui.PlaylistDetailsButton.clicked.connect(self.view_playlist_widget)
         self.nomadic.ui.CollectionButton.clicked.connect(self.view_file_management)
         self.nomadic.ui.SystemButton.clicked.connect(self.view_system_widget)
-        self.nomadic.ui.LocationButton.clicked.connect(self.view_location_widget)                
+        self.nomadic.ui.LocationButton.clicked.connect(self.view_location_widget)
         self.nomadic.ui.QuitButton.clicked.connect(self.nomadic.exit_application)
 
     def change_page(self, widget_id):
@@ -41,37 +40,37 @@ class UserActions():
         """
         Change the visible widget to the current playlist view
         """
-        logger.debug("Switching view to the current view.")
+        LOGGER.debug("Switching view to the current view.")
         self.change_page(self.nomadic.pages['playlist'])
 
     def view_system_widget(self):
         """
         Change the visible widget to the system status / settings view
         """
-        logger.debug("Switching view to the system status view.")
+        LOGGER.debug("Switching view to the system status view.")
         self.change_page(self.nomadic.pages['system'])
 
     def view_location_widget(self):
         """
         Change the visible widget to the location view
         """
-        logger.debug("Switching view to the location info view.")
-        
+        LOGGER.debug("Switching view to the location info view.")
+
         self.nomadic.location_status.update_page()
         self.change_page(self.nomadic.pages['location'])
-                        
+
     def view_file_management(self):
         """
         Change the visible widget to the filesystem view
         """
-        logger.debug("Switching view to the file management view.")
-        self.change_page(self.nomadic.pages['files'])     
+        LOGGER.debug("Switching view to the file management view.")
+        self.change_page(self.nomadic.pages['files'])
 
     def music_play_press(self):
         """
         Start playback of music
         """
-        logger.debug("Music play button pressed.")
+        LOGGER.debug("Music play button pressed.")
         self.nomadic.mpd.play_playback()
         self.ui_button_state()
 
@@ -79,7 +78,7 @@ class UserActions():
         """
         Stop the playback of music
         """
-        logger.debug("Music stop button pressed.")
+        LOGGER.debug("Music stop button pressed.")
         self.nomadic.mpd.stop_playback()
         self.nomadic.ui.MusicPlay.setChecked(False)
         self.ui_button_state()
@@ -93,7 +92,7 @@ class UserActions():
         Skip playback to the next song
         """
         if self.nomadic.mpd_status.get('state', '') == 'play':
-            logger.debug("Music skip button pressed.")
+            LOGGER.debug("Music skip button pressed.")
             self.nomadic.mpd.next_song()
             self.ui_button_state()
             self.nomadic.ui.MPDAlbumArt.clear()
@@ -102,7 +101,7 @@ class UserActions():
         """
         Enable / Disable random playback of music
         """
-        logger.debug("Changing the MPD random playback status.")
+        LOGGER.debug("Changing the MPD random playback status.")
         self.nomadic.mpd.random_playback()
         self.ui_button_state()
 
@@ -110,7 +109,7 @@ class UserActions():
         """
         Enable / Disable consumption playback of music
         """
-        logger.debug("Changing the MPD track consumption status.")        
+        LOGGER.debug("Changing the MPD track consumption status.")
         self.nomadic.mpd.consumption_playback()
         self.ui_button_state()
 
@@ -118,7 +117,7 @@ class UserActions():
         """
         Trigger manual update of the music library
         """
-        logger.debug("Manual update of the MPD library contents triggered.") 
+        LOGGER.debug("Manual update of the MPD library contents triggered.")
         self.nomadic.mpd.update_library()
         self.ui_button_state()
 
@@ -127,7 +126,7 @@ class UserActions():
         Update the state of any UI buttons
         """
         self.nomadic.get_mpd_status()
-        
+
         if self.nomadic.mpd_status.get('state', '') == 'play':
             self.nomadic.ui.MusicPlay.setChecked(True)
             self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_pause.png"))
@@ -158,7 +157,7 @@ class UserActions():
             try:
                 self.nomadic.ui.MPDPlaylistInfo.setText(f"Songs Pending: {playlist_length}")
             except Exception as e:
-                logger.error(e)
+                LOGGER.error(e)
         else:
             self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
 
