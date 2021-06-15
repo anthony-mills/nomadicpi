@@ -75,7 +75,7 @@ class NomadicPi():
         self.location_text = QtGui.QFont()
         self.location_text.setFamily("Open Sans")
         self.location_text.setPointSize(10)
-                               
+
         self.ui.appContent.setCurrentIndex(self.pages['home'])      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
 
@@ -255,7 +255,8 @@ class NomadicPi():
             
                 if self.gps_info is not None:    
                     if hasattr(self.gps_info, 'hspeed') and isinstance(self.gps_info.hspeed, float):
-                        gps.ms_kmh_coversion(self.gps_info.hspeed) 
+                        cur_speed = int(gps.ms_kmh_coversion(self.gps_info.hspeed) * self.speed_modifier )
+                        self.ui.CurrentSpeed.setText( str(cur_speed) ) 
                     
                     if hasattr(self.gps_info, 'lon') and hasattr(self.gps_info, 'lat'):
                         self.ui.CurrentPosition.setText(f"Coordinates: {self.gps_info.lat}, {self.gps_info.lon}") 
