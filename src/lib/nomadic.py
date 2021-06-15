@@ -255,9 +255,8 @@ class NomadicPi():
             
                 if self.gps_info is not None:    
                     if hasattr(self.gps_info, 'hspeed') and isinstance(self.gps_info.hspeed, float):
-                        cur_speed = int(gps.ms_kmh_coversion(self.gps_info.hspeed) * self.speed_modifier )
-                        self.ui.CurrentSpeed.setText( str(cur_speed) ) 
-                    
+                        self.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.gps_info.hspeed) * self.speed_modifier}")
+                        
                     if hasattr(self.gps_info, 'lon') and hasattr(self.gps_info, 'lat'):
                         self.ui.CurrentPosition.setText(f"Coordinates: {self.gps_info.lat}, {self.gps_info.lon}") 
                     else:
