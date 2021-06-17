@@ -72,6 +72,10 @@ class NomadicPi():
         # Setup the handlers for user actions on the location page
         self.location_status = location_status.LocationStatus(self)  
                        
+        self.location_text = QtGui.QFont()
+        self.location_text.setFamily("Open Sans")
+        self.location_text.setPointSize(10)
+
         self.ui.appContent.setCurrentIndex(self.pages['home'])      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
 
@@ -235,6 +239,9 @@ class NomadicPi():
         """                
         if gps.gpsd_socket is None:
             try:
+                self.ui.CurrentPosition.setFont(self.location_text)    
+                self.ui.CurrentAltitude.setFont(self.location_text)
+
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
                 
@@ -248,8 +255,8 @@ class NomadicPi():
             
                 if self.gps_info is not None:    
                     if hasattr(self.gps_info, 'hspeed') and isinstance(self.gps_info.hspeed, float):
-                        gps.ms_kmh_coversion(self.gps_info.hspeed) 
-                    
+                        self.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.gps_info.hspeed) * self.speed_modifier}")
+                        
                     if hasattr(self.gps_info, 'lon') and hasattr(self.gps_info, 'lat'):
                         self.ui.CurrentPosition.setText(f"Coordinates: {self.gps_info.lat}, {self.gps_info.lon}") 
                     else:
