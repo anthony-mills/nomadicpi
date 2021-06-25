@@ -238,10 +238,10 @@ class NomadicPi():
         Get the current GPS information and update the UI
         """                
         if gps.gpsd_socket is None:
+            self.ui.CurrentPosition.setFont(self.location_text)    
+            self.ui.CurrentAltitude.setFont(self.location_text)            
+            
             try:
-                self.ui.CurrentPosition.setFont(self.location_text)    
-                self.ui.CurrentAltitude.setFont(self.location_text)
-
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
                 
@@ -252,29 +252,11 @@ class NomadicPi():
         else:
             try:
                 self.gps_info = gps.get_current()
-            
-                if self.gps_info is not None:    
-                    if hasattr(self.gps_info, 'hspeed') and isinstance(self.gps_info.hspeed, float):
-                        self.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.gps_info.hspeed) * self.speed_modifier}")
-                        
-                    if hasattr(self.gps_info, 'lon') and hasattr(self.gps_info, 'lat'):
-                        self.ui.CurrentPosition.setText(f"Coordinates: {self.gps_info.lat}, {self.gps_info.lon}") 
-                    else:
-                        self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
-                        
-                    # Get the current Altitude
-                    if hasattr(self.gps_info, 'movement'):
-                        heading = self.gps_info.movement()
-                            
-                        if 'track' in heading and 'altitude' in heading: 
-                            self.ui.CurrentAltitude.setText(f"Altitude: {heading['altitude']}m\nHeading: {round(heading['track'])} degrees {heading['direction']}") 
-                        
-                        else:
-                            self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )                                                  
-                            cur_pos = self.gps_info.position()
                         
             except Exception as e:
-                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")    
+                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
+
+        self.application_home.update_gps_info()
                     
     def exit_application(self):
         """

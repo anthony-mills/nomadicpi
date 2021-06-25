@@ -1,4 +1,6 @@
 import logging
+import lib.gps as gps
+
 from PyQt5 import QtGui
 
 LOGGER = logging.getLogger(__name__)
@@ -79,6 +81,7 @@ class UserActions():
         Stop the playback of music
         """
         if self.nomadic.mpd_status.get('state', '') != 'stop':
+            LOGGER.debug("Music stop button pressed.")
             self.nomadic.mpd.stop_playback()
             self.nomadic.ui.MusicPlay.setChecked(False)
             self.ui_button_state()
@@ -174,3 +177,31 @@ class UserActions():
             self.nomadic.ui.UpdateDatabase.setChecked(False)
         else:
             self.nomadic.ui.UpdateDatabase.setChecked(True)
+
+    def update_gps_info(self):
+        """
+        Update the state of database update button
+
+        Parameters
+        ----------
+        gps_info : dict
+            Dictionary of the GPS current state
+        """
+        if self.nomadic.gps_info is not None:    
+            if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):
+                self.nomadic.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")
+                
+            if hasattr(self.nomadic.gps_info, 'lon') and hasattr(self.nomadic.gps_info, 'lat'):
+                self.nomadic.ui.CurrentPosition.setText(f"Coordinates: {round(self.nomadic.gps_info.lat,6)}, {round(self.nomadic.gps_info.lon,6)}") 
+            else:
+                self.nomadic.ui.CurrentPosition.setText('Current Position: No GPS fix.')
+                
+            # Get the current Altitude
+            if hasattr(self.nomadic.gps_info, 'movement'):
+                heading = self.nomadic.gps_info.movement()
+                    
+                if 'track' in heading and 'altitude' in heading: 
+                    self.nomadic.ui.CurrentAltitude.setText(f"Altitude: {heading['altitude']}m\nHeading: {round(heading['track'])} degrees {heading['direction']}") 
+                
+                else:
+                    self.nomadic.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )                                                           
