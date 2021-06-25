@@ -183,7 +183,7 @@ class GpsResponse(object):
         :return: dict[str, float]
         """
         if self.mode < 3:
-            raise NoFixError("Needs at least 3D fix")
+            return {}
 
         direction = self.deg_to_compass(self.track)
 
