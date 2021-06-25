@@ -78,14 +78,14 @@ class UserActions():
         """
         Stop the playback of music
         """
-        LOGGER.debug("Music stop button pressed.")
-        self.nomadic.mpd.stop_playback()
-        self.nomadic.ui.MusicPlay.setChecked(False)
-        self.ui_button_state()
-        self.nomadic.ui.SongPlayTime.clear()
-        self.nomadic.ui.MPDNextPlaying.clear()
-        self.nomadic.ui.MPDNowPlaying.clear()
-        self.nomadic.ui.MPDAlbumArt.clear()
+        if self.nomadic.mpd_status.get('state', '') != 'stop':
+            self.nomadic.mpd.stop_playback()
+            self.nomadic.ui.MusicPlay.setChecked(False)
+            self.ui_button_state()
+            self.nomadic.ui.SongPlayTime.clear()
+            self.nomadic.ui.MPDNextPlaying.clear()
+            self.nomadic.ui.MPDNowPlaying.clear()
+            self.nomadic.ui.MPDAlbumArt.clear()
 
     def music_skip_press(self):
         """

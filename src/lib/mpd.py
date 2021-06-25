@@ -46,7 +46,6 @@ class MpdLib():
         """
         self.art_cache = art_cache
 
-
     def connect_mpd(self):
         """
         Attempt to connect to the MPD daemon
@@ -59,6 +58,19 @@ class MpdLib():
             LOGGER.critical("MPD Error: Cannot connect to the MPD daemon.")
             sys.exit(1)
 
+    def update_status(self):
+        """
+        Update the status of the mpd daemon
+
+        Returns
+        -------
+        dict
+            Dictionary of values concerning the current state of the MPD daemon
+        """
+        self.mpd_status = self.client.status()
+        
+        return self.mpd_status
+
     def get_status(self):
         """
         Return the status of the mpd daemon
@@ -68,13 +80,13 @@ class MpdLib():
         dict
             Dictionary of values concerning the current state of the MPD daemon
         """
-        return self.client.status()
+        return self.mpd_status
 
     def play_playback(self):
         """
         Change the play state
         """
-        status = self.client.status()
+        status = self.get_status()
 
         if status.get('state') == 'play':
             self.client.pause()
@@ -85,7 +97,7 @@ class MpdLib():
         """
         Update the MPD library
         """
-        status = self.client.status()
+        status = self.get_status()
 
         if status.get('updating_db') is None:
             self.client.update()
@@ -94,7 +106,7 @@ class MpdLib():
         """
         Change the random playback state
         """
-        status = self.client.status()
+        status = self.get_status()
 
         if int(status['random']) == 0:
             self.client.random(1)
@@ -205,7 +217,7 @@ class MpdLib():
         dict
             Dictionary of values concerning the current state of the MPD daemon
         """
-        status = self.client.status()
+        status = self.get_status()
 
         if status['state'] == 'play':
             return self.client.currentsong()
@@ -250,7 +262,7 @@ class MpdLib():
         """
         Change the consume playback state
         """
-        status = self.client.status()
+        status = self.get_status()
 
         if int(status['consume']) == 0:
             self.client.consume(1)

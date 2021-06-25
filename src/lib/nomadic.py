@@ -120,7 +120,8 @@ class NomadicPi():
         Get and store the state of the MPD daemon
         """
         try:
-            self.mpd_status = self.mpd.get_status() 
+            self.mpd_status = self.mpd.get_status()
+
             return self.mpd_status
         except Exception as e:
             logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
@@ -135,26 +136,25 @@ class NomadicPi():
         self.mpd.set_mpd_port(self.app_config['mpd'].get('Port', '6000'))         
         self.mpd.set_art_cache(self.art_cache)   
 
-        self.mpd.connect_mpd()        
+        self.mpd.connect_mpd() 
+        self.mpd_status = self.mpd.update_status()         
     
     def update_content(self):
         """
         Create a timer and periodically update the UI information
         """ 
-        
+        try:
+            self.mpd_status = self.mpd.update_status()  
+            self.update_mpd()
+        except Exception as e:
+            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+
+            # Attempt to reconnect to MPD exception is normally a client timeout
+            logger.info("Attempting to reconnect to MPD Daemon..")
+            self.connect_mpd()
+
         # Only update the home page if the widget is visible
         if (self.ui.appContent.currentIndex() == self.pages['home']):
-            
-            try:
-                self.get_mpd_status()    
-                self.update_mpd()
-            except Exception as e:
-                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
-
-                # Attempt to reconnect to MPD exception is normally a client timeout
-                logger.info("Attempting to reconnect to MPD Daemon..")
-                self.connect_mpd()
-                
             # Update GPS related information 
             self.update_gps()
 
