@@ -1,5 +1,5 @@
 import logging
-
+import sys
 import lib.gps as gps
 
 LOGGER = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class LocationStatus():
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
 
             except Exception as e:
-                LOGGER.error(str(e))
+                LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
         self.gps_status = gps.get_current()
 

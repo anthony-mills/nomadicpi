@@ -113,7 +113,7 @@ class NomadicPi():
             logger.debug("Switching view to the application home page.")
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
-            logger.error(e)
+            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
     def get_mpd_status(self):
         """
@@ -123,7 +123,7 @@ class NomadicPi():
             self.mpd_status = self.mpd.get_status() 
             return self.mpd_status
         except Exception as e:
-            logger.error(e)   
+            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
                 
     def connect_mpd(self):
         """
@@ -149,7 +149,7 @@ class NomadicPi():
                 self.get_mpd_status()    
                 self.update_mpd()
             except Exception as e:
-                logger.error(e)
+                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
                 # Attempt to reconnect to MPD exception is normally a client timeout
                 logger.info("Attempting to reconnect to MPD Daemon..")
@@ -247,7 +247,7 @@ class NomadicPi():
                 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
             except Exception as e:
-                logger.error(str(e))
+                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
                 logger.warning(f"Unable to connect to GPSD service at: {gpsd_host}:{gpsd_port}")
         else:
             try:
@@ -263,16 +263,18 @@ class NomadicPi():
                         self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
                         
                     # Get the current Altitude
-                    heading = self.gps_info.movement()
+                    if hasattr(self.gps_info, 'movement'):
+                        heading = self.gps_info.movement()
+                            
+                        if 'track' in heading and 'altitude' in heading: 
+                            self.ui.CurrentAltitude.setText(f"Altitude: {heading['altitude']}m\nHeading: {round(heading['track'])} degrees {heading['direction']}") 
                         
-                    if 'track' in heading and 'altitude' in heading: 
-                        self.ui.CurrentAltitude.setText(f"Altitude: {heading['altitude']}m\nHeading: {round(heading['track'])} degrees {heading['direction']}") 
-                    else:
-                        self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )                                                  
-                        cur_pos = self.gps_info.position()
+                        else:
+                            self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )                                                  
+                            cur_pos = self.gps_info.position()
                         
             except Exception as e:
-                logger.error(str(e)) 
+                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")    
                     
     def exit_application(self):
         """
