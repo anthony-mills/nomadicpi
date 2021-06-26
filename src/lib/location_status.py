@@ -1,5 +1,5 @@
 import logging
-
+import sys
 import lib.gps as gps
 
 LOGGER = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class LocationStatus():
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
 
             except Exception as e:
-                LOGGER.error(str(e))
+                LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
         self.gps_status = gps.get_current()
 
@@ -38,12 +38,12 @@ class LocationStatus():
         Display the current GPS location details
         """
         if hasattr(self.gps_status, 'lat') and hasattr(self.gps_status, 'error') and isinstance(self.gps_status.error, dict) and 'y' in self.gps_status.error:
-            self.nomadic.ui.CurLat.setText(f"Latitude: {self.gps_status.lat} ( Accuracy +/- {self.gps_status.error['y']}m )")
+            self.nomadic.ui.CurLat.setText(f"Latitude: {round(self.gps_status.lat, 6)} ( Accuracy +/- {self.gps_status.error['y']}m )")
         else:
             self.nomadic.ui.CurLat.setText(f"Latitude: Unknown")
 
         if hasattr(self.gps_status, 'lon') and hasattr(self.gps_status, 'error') and isinstance(self.gps_status.error, dict) and 'x' in self.gps_status.error:
-            self.nomadic.ui.CurLong.setText(f"Longitude: {self.gps_status.lon} ( Accuracy +/- {self.gps_status.error['x']}m )")
+            self.nomadic.ui.CurLong.setText(f"Longitude: {round(self.gps_status.lon, 6)} ( Accuracy +/- {self.gps_status.error['x']}m )")
         else:
             self.nomadic.ui.CurLong.setText(f"Longitude: Unknown")
 

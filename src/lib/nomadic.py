@@ -113,17 +113,18 @@ class NomadicPi():
             logger.debug("Switching view to the application home page.")
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
-            logger.error(e)
+            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
     def get_mpd_status(self):
         """
         Get and store the state of the MPD daemon
         """
         try:
-            self.mpd_status = self.mpd.get_status() 
+            self.mpd_status = self.mpd.get_status()
+
             return self.mpd_status
         except Exception as e:
-            logger.error(e)   
+            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
                 
     def connect_mpd(self):
         """
@@ -135,26 +136,25 @@ class NomadicPi():
         self.mpd.set_mpd_port(self.app_config['mpd'].get('Port', '6000'))         
         self.mpd.set_art_cache(self.art_cache)   
 
-        self.mpd.connect_mpd()        
+        self.mpd.connect_mpd() 
+        self.mpd_status = self.mpd.update_status()         
     
     def update_content(self):
         """
         Create a timer and periodically update the UI information
         """ 
-        
+        try:
+            self.mpd_status = self.mpd.update_status()  
+            self.update_mpd()
+        except Exception as e:
+            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+
+            # Attempt to reconnect to MPD exception is normally a client timeout
+            logger.info("Attempting to reconnect to MPD Daemon..")
+            self.connect_mpd()
+
         # Only update the home page if the widget is visible
         if (self.ui.appContent.currentIndex() == self.pages['home']):
-            
-            try:
-                self.get_mpd_status()    
-                self.update_mpd()
-            except Exception as e:
-                logger.error(e)
-
-                # Attempt to reconnect to MPD exception is normally a client timeout
-                logger.info("Attempting to reconnect to MPD Daemon..")
-                self.connect_mpd()
-                
             # Update GPS related information 
             self.update_gps()
 
@@ -238,41 +238,25 @@ class NomadicPi():
         Get the current GPS information and update the UI
         """                
         if gps.gpsd_socket is None:
+            self.ui.CurrentPosition.setFont(self.location_text)    
+            self.ui.CurrentAltitude.setFont(self.location_text)            
+            
             try:
-                self.ui.CurrentPosition.setFont(self.location_text)    
-                self.ui.CurrentAltitude.setFont(self.location_text)
-
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
                 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
             except Exception as e:
-                logger.error(str(e))
+                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
                 logger.warning(f"Unable to connect to GPSD service at: {gpsd_host}:{gpsd_port}")
         else:
             try:
                 self.gps_info = gps.get_current()
-            
-                if self.gps_info is not None:    
-                    if hasattr(self.gps_info, 'hspeed') and isinstance(self.gps_info.hspeed, float):
-                        self.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.gps_info.hspeed) * self.speed_modifier}")
-                        
-                    if hasattr(self.gps_info, 'lon') and hasattr(self.gps_info, 'lat'):
-                        self.ui.CurrentPosition.setText(f"Coordinates: {self.gps_info.lat}, {self.gps_info.lon}") 
-                    else:
-                        self.ui.CurrentPosition.setText('Current Position: No GPS fix.')
-                        
-                    # Get the current Altitude
-                    heading = self.gps_info.movement()
-                        
-                    if 'track' in heading and 'altitude' in heading: 
-                        self.ui.CurrentAltitude.setText(f"Altitude: {heading['altitude']}m\nHeading: {round(heading['track'])} degrees {heading['direction']}") 
-                    else:
-                        self.ui.CurrentAltitude.setText( 'Altitude: 3D GPS fix needed.' )                                                  
-                        cur_pos = self.gps_info.position()
                         
             except Exception as e:
-                logger.error(str(e)) 
+                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
+
+        self.application_home.update_gps_info()
                     
     def exit_application(self):
         """

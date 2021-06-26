@@ -183,7 +183,7 @@ class GpsResponse(object):
         :return: dict[str, float]
         """
         if self.mode < 3:
-            raise NoFixError("Needs at least 3D fix")
+            return {}
 
         direction = self.deg_to_compass(self.track)
 
@@ -319,17 +319,18 @@ def get_current():
     global gpsd_stream, verbose_output
 
     if gpsd_stream is not None:
-        gpsd_stream.write("?POLL;\n")
-        gpsd_stream.flush()
-        raw = gpsd_stream.readline()
-        response = json.loads(raw)
+        try:
+            gpsd_stream.write("?POLL;\n")
+            gpsd_stream.flush()
+            raw = gpsd_stream.readline()
+            response = json.loads(raw)
 
-        logger.info(response)
-
-        if response['class'] != 'POLL':
-            raise Exception(
-                "Unexpected message received from gps: {}".format(response['class']))
-        return GpsResponse.from_json(response)
+            if response['class'] != 'POLL':
+                raise Exception(
+                    "Unexpected message received from gps: {}".format(response['class']))
+            return GpsResponse.from_json(response)
+        except Exception as e:
+            logger.error(f"GPS connection error encountered: {e}")      
 
     return no_gps()
 
