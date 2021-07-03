@@ -2,9 +2,10 @@ import sys
 import configparser
 import logging
 import threading
+import time
 
-import lib.gps as gps
-import lib.mpd as mpd
+import lib.db 
+import lib.gps as gps, lib.mpd as mpd
 import lib.application_home as application_home
 import lib.playlist_management as playlist_management
 import lib.location_status as location_status
@@ -18,7 +19,7 @@ from PyQt5.QtGui import QPixmap
 log_format = "%(asctime)s %(levelname)s:%(name)s - %(message)s" 
 
 logging.basicConfig(filename='/tmp/nomadic.log', level=logging.DEBUG, filemode='w', format=log_format, datefmt="%Y-%m-%d %H:%M:%S")
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 class NomadicPi():
     pages = {
@@ -37,10 +38,11 @@ class NomadicPi():
     
     # Track the GPS state with this variable
     gps_info = None
-    
+    gps_save_interval = 120
+        
     speed_unit = 'kmh'
     speed_modifier = 1
-    
+
     base_path = ''
     
     location_text = None;
@@ -52,6 +54,9 @@ class NomadicPi():
         self.app_config.read(ui.base_path + 'config.ini')
         self.now_playing = 0;
         
+        # Connect to the SQLite database
+        self.db = lib.db.NomadicDb(ui.base_path)
+
         # Connect to the MPD daemon
         self.connect_mpd()
         self.get_mpd_status()
@@ -79,8 +84,9 @@ class NomadicPi():
         self.ui.appContent.setCurrentIndex(self.pages['home'])      
         self.ui.appContent.currentChanged.connect(self.application_page_changed) 
 
-        self.speed_units()                
-        self.update_content() 
+        self.speed_units() 
+        self.update_cycle_count = 0               
+        self.update_content()     
         
     def speed_units(self):
         """
@@ -110,10 +116,10 @@ class NomadicPi():
         Change the visible widget to the application home view
         """
         try:
-            logger.debug("Switching view to the application home page.")
+            LOGGER.debug("Switching view to the application home page.")
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
-            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+            LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
     def get_mpd_status(self):
         """
@@ -124,7 +130,7 @@ class NomadicPi():
 
             return self.mpd_status
         except Exception as e:
-            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+            LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
                 
     def connect_mpd(self):
         """
@@ -147,25 +153,24 @@ class NomadicPi():
             self.mpd_status = self.mpd.update_status()  
             self.update_mpd()
         except Exception as e:
-            logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+            LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
 
             # Attempt to reconnect to MPD exception is normally a client timeout
-            logger.info("Attempting to reconnect to MPD Daemon..")
+            LOGGER.info("Attempting to reconnect to MPD Daemon..")
             self.connect_mpd()
+
+        self.update_gps()
 
         # Only update the home page if the widget is visible
         if (self.ui.appContent.currentIndex() == self.pages['home']):
             # Update GPS related information 
-            self.update_gps()
+            self.application_home.update_gps_info()
 
         if (self.ui.appContent.currentIndex() == self.pages['system']):
             self.system_status.show_system_status()
 
         if (self.ui.appContent.currentIndex() == self.pages['location']):
             self.location_status.update_page()
-                    
-        self.update_loop = threading.Timer(1, self.update_content)
-        self.update_loop.start()
         
     def update_mpd(self):
         """
@@ -223,7 +228,7 @@ class NomadicPi():
         Update the album art displayed in the UI 
         """                  
         search_term = (f"{song_data.get('artist', '')}")
-        logger.info(f"Attempting to get album art for search term: {search_term}.")
+        LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
         
         cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
         song_thumb = self.mpd.album_art(search_term, cache_key)
@@ -247,16 +252,23 @@ class NomadicPi():
                 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
             except Exception as e:
-                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
-                logger.warning(f"Unable to connect to GPSD service at: {gpsd_host}:{gpsd_port}")
+                LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+                LOGGER.warning(f"Unable to connect to GPSD service at: {gpsd_host}:{gpsd_port}")
         else:
             try:
                 self.gps_info = gps.get_current()
+            
+                if self.update_cycle_count == self.gps_save_interval:
+                    self.db.save_location(self.gps_info)
+                    self.update_cycle_count = 0
+                
+                self.update_cycle_count +=1
                         
             except Exception as e:
-                logger.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
+                LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 
-        self.application_home.update_gps_info()
+        self.update_loop = threading.Timer(1, self.update_content)
+        self.update_loop.start()    
                     
     def exit_application(self):
         """
@@ -264,5 +276,5 @@ class NomadicPi():
         """
         self.update_loop.cancel()
         self.mpd.close_mpd()
-        logger.debug("Exiting application.")
+        LOGGER.debug("Exiting application.")
         sys.exit(0)                    

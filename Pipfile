@@ -8,6 +8,7 @@ PyQt5 = "*"
 musicbrainzngs = "*"
 psutil = "*"
 humanize = "*"
+python-dateutil = "*"
 
 [dev-packages]
 
