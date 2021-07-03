@@ -4,3 +4,5 @@
 *.pyc
 src/album_art/*
 **/*.pyc
+**/**/*.pyc
+*.db
