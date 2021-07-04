@@ -3,7 +3,7 @@ import os.path
 
 from PyQt5 import QtWidgets
 
-import lib.nomadic as nomadic_pi
+import lib.nomadic
 
 from ui.interface.main_window import Ui_NomadicPI
 
@@ -18,12 +18,10 @@ class mainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_NomadicPI()
         self.ui.base_path = os.path.dirname(os.path.abspath(__file__)) + '/'
 
-        print(self.ui.base_path)
-
         self.ui.setupUi(self)
         self.showFullScreen()
 
-        self.nomadic = nomadic_pi.NomadicPi(self.ui)
+        self.nomadic = lib.nomadic.NomadicPi(self.ui)
         #self.showMaximized()
         app.aboutToQuit.connect(self.nomadic.exit_application)
 
