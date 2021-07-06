@@ -54,7 +54,7 @@ class NomadicDb():
 
                 timestamp = calendar.timegm(dp.parse(gps_info.time).timetuple())
 
-                if hasattr(gps_info, 'hspeed') and isinstance(gps_info.hspeed, int):
+                if hasattr(gps_info, 'hspeed') and isinstance(gps_info.hspeed, float):
                     speed = gps.ms_kmh_coversion(gps_info.hspeed)
                 else:
                     speed = 0

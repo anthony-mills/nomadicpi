@@ -38,7 +38,7 @@ class NomadicPi():
     
     # Track the GPS state with this variable
     gps_info = None
-    gps_save_interval = 120
+    gps_save_interval = 60
         
     speed_unit = 'kmh'
     speed_modifier = 1
