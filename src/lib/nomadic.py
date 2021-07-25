@@ -1,8 +1,8 @@
 import sys
 import configparser
 import logging
-import threading
 import time
+import threading
 
 import lib.db
 import lib.gps as gps, lib.mpd as mpd
@@ -40,14 +40,14 @@ class NomadicPi():
     gps_info, gps_save_interval = None, 60
     speed_unit, speed_modifier = 'kmh', 1
 
-    base_path, location_text = '', None
+    base_path, location_text, update_loop = '', None, None
 
     def __init__(self, ui):
         self.ui = ui
         self.app_config = configparser.ConfigParser()
 
         self.app_config.read(ui.base_path + 'config.ini')
-        self.now_playing = 0;
+        self.now_playing = {'id' : 0};
 
         # Connect to the SQLite database
         self.db = lib.db.NomadicDb(ui.base_path)
@@ -144,17 +144,8 @@ class NomadicPi():
         """
         Create a timer and periodically update the UI information
         """
-        try:
-            self.mpd_status = self.mpd.update_status()
-            self.update_mpd()
-        except Exception as e:
-            LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
-
-            # Attempt to reconnect to MPD exception is normally a client timeout
-            LOGGER.info("Attempting to reconnect to MPD Daemon..")
-            self.connect_mpd()
-
-        self.update_gps()
+        (threading.Thread(target=self.update_gps)).start()
+        (threading.Thread(target=self.update_mpd)).start()
 
         # Only update the home page if the widget is visible
         if self.ui.appContent.currentIndex() == self.pages['home']:
@@ -171,52 +162,55 @@ class NomadicPi():
         """
         Update the interface with any time sensitive MPD info i.e play time etc
         """
-        self.application_home.database_update_status(self.mpd_status)
+        try:
+            self.mpd_status = self.mpd.update_status()
 
-        self.application_home.update_playlist_count()
-        self.application_home.ui_button_state()
+            self.application_home.database_update_status(self.mpd_status)
 
-        if self.mpd_status.get('state', '') == 'play':
-            song_data = self.mpd.currently_playing()
+            self.application_home.update_playlist_count()
+            self.application_home.ui_button_state()
 
-            if int(self.now_playing) != int(self.mpd_status['songid']):
-                self.now_playing = song_data.get('id', 0)
+            if self.mpd_status.get('state', '') == 'play':
+                m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60)
+                song_elapsed = "%02d:%02d" % (m, s)
 
-                song_info = f"Playing: {song_data.get('artist', 'Unknown')}\n {song_data.get('title', 'Unknown')}"
+                m, s = divmod(round(float(self.mpd_status.get('duration', 0))), 60)
+                song_duration = "%02d:%02d" % (m, s)
 
-                self.ui.MPDNowPlaying.setText(song_info)
+                self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
 
-                self.set_album_art(song_data)
+                if  self.now_playing['id'] != self.mpd_status['songid']:
+                    self.now_playing = self.mpd.currently_playing()
 
-                next_song = self.mpd_status.get('nextsong', None)
-                if next_song is not None and int(next_song) > 0:
-                    try:
-                        next_up = self.mpd.playlist_info(next_song)
+                    song_info = f"Playing: {self.now_playing.get('artist', 'Unknown')}\n {self.now_playing.get('title', 'Unknown')}"
+                    self.ui.MPDNowPlaying.setText(song_info)
 
-                        if len(next_up) == 1:
-                            next_song = next_up[0]
-                            song_info = f"Next: {next_song.get('artist', 'Unknown')}\n {next_song.get('title', 'Unknown')}"
-                            self.ui.MPDNextPlaying.setText(song_info)
-                    except:
-                        pass
-                else:
-                    self.ui.MPDNextPlaying.setText("")
+                    next_song = self.mpd_status.get('nextsong', None)
 
-                self.application_home.update_playlist_count()
+                    if next_song is not None and int(next_song) > 0:
+                        try:
+                            next_up = self.mpd.playlist_info(next_song)
 
-            if self.ui.MPDAlbumArt.pixmap() is None:
-                self.set_album_art(song_data)
+                            if len(next_up) == 1:
+                                next_song = next_up[0]
+                                song_info = f"Next: {next_song.get('artist', 'Unknown')}\n {next_song.get('title', 'Unknown')}"
+                                self.ui.MPDNextPlaying.setText(song_info)
+                        except:
+                            pass
+                    else:
+                        self.ui.MPDNextPlaying.setText("")
 
-            m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60)
-            song_elapsed = "%02d:%02d" % (m, s)
+                    self.application_home.update_playlist_count()
+                    self.set_album_art(self.now_playing)
 
-            m, s = divmod(round(float(self.mpd_status.get('duration', 0))), 60)
-            song_duration = "%02d:%02d" % (m, s)
+            if self.mpd_status.get('state', '') == 'stop':
+                self.application_home.music_stop_press()
+        except Exception as e:
+            LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 
-            self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
-
-        if self.mpd_status.get('state', '') == 'stop':
-            self.application_home.music_stop_press()
+            # Attempt to reconnect to MPD exception is normally a client timeout
+            LOGGER.info("Attempting to reconnect to MPD Daemon..")
+            self.connect_mpd()
 
     def set_album_art(self, song_data):
         """
@@ -262,14 +256,10 @@ class NomadicPi():
             except Exception as e:
                 LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 
-        self.update_loop = threading.Timer(1, self.update_content)
-        self.update_loop.start()
-
     def exit_application(self):
         """
         Close the MPD connection and close the application
         """
-        self.update_loop.cancel()
         self.mpd.close_mpd()
         LOGGER.debug("Exiting application.")
         sys.exit(0)
