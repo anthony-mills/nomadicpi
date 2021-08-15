@@ -1,7 +1,6 @@
 import datetime as dt
 import logging
-import humanize
-import psutil
+import lib.gps as gps
 
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
@@ -24,6 +23,7 @@ class NightMode():
         Update the interface while in night mode
         """
         self.ui_button_state()
+        self.update_gps_speed()
 
         if 'songid' in self.nomadic.mpd_status and self.nomadic.now_playing != self.nomadic.mpd_status['songid']:
             self.update_mpd_info()
@@ -86,3 +86,11 @@ class NightMode():
             self.clear_now_playing()
             self.nomadic.mpd.stop_playback()
             self.ui_button_state()
+
+    def update_gps_speed(self):
+        """
+        Update the current GPS speed
+        """
+        if self.nomadic.gps_info is not None:
+            if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):
+                self.nomadic.ui.NightSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")            
