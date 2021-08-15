@@ -722,8 +722,6 @@ class Ui_NomadicPI(object):
         self.CurLong.setText(_translate("NomadicPI", "Longitude"))
         self.NightSpeed.setText(_translate("NomadicPI", "0"))
         self.NightSpeedUnit.setText(_translate("NomadicPI", "KM/H"))
-        self.NightNowPlaying.setText(_translate("NomadicPI", "NowPlaying"))
-        self.NightNextPlaying.setText(_translate("NomadicPI", "NextPlaying"))
         self.NightPlayButton.setToolTip(_translate("NomadicPI", "Play / Pause Music"))
         self.NightTrackSkipButton.setToolTip(_translate("NomadicPI", "Skip Song"))
         self.NightStopButton.setToolTip(_translate("NomadicPI", "Stop Music Playback"))

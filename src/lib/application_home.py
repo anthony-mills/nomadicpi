@@ -12,6 +12,7 @@ class UserActions():
 
     def __init__(self, nomadic):
         self.nomadic = nomadic
+        self.nomadic.clear_now_playing()
 
         # Set the initial button state from the MPD state
         self.ui_button_state()
@@ -92,12 +93,11 @@ class UserActions():
         """
         if self.nomadic.mpd_status.get('state', '') != 'stop':
             LOGGER.debug("Music stop button pressed.")
+            self.nomadic.clear_now_playing()
             self.nomadic.mpd.stop_playback()
             self.nomadic.ui.MusicPlay.setChecked(False)
             self.ui_button_state()
             self.nomadic.ui.SongPlayTime.clear()
-            self.nomadic.ui.MPDNextPlaying.clear()
-            self.nomadic.ui.MPDNowPlaying.clear()
             self.nomadic.ui.MPDAlbumArt.clear()
 
     def music_skip_press(self):
@@ -106,6 +106,7 @@ class UserActions():
         """
         if self.nomadic.mpd_status.get('state', '') == 'play':
             LOGGER.debug("Music skip button pressed.")
+            self.nomadic.clear_now_playing()
             self.nomadic.mpd.next_song()
             self.ui_button_state()
             self.nomadic.ui.MPDAlbumArt.clear()
@@ -149,28 +150,10 @@ class UserActions():
         else:
             self.nomadic.ui.ConsumptionPlayback.setChecked(False)
 
-    def update_playlist_count(self):
+    def update_music_playtime(self):
         """
-        Update the playlist count shown on the left column
-        """
-        playlist_length = self.nomadic.mpd_status.get('playlistlength', None)
-        next_song = self.nomadic.mpd_status.get('nextsong', 0)
-
-        if isinstance(playlist_length, str) and int(next_song) > 0:
-            try:
-                self.nomadic.ui.MPDPlaylistInfo.setText(f"Songs Pending: {playlist_length}")
-            except Exception as e:
-                LOGGER.error(e)
-        else:
-            self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
-
-    def update_ui_state(self):
-        """
-        Update the state of app UI
-        """
-        self.database_update_status(self.nomadic.mpd_status)
-        self.ui_button_state()
-
+        Update the track playtime
+        """        
         if self.nomadic.mpd_status.get('state', '') == 'play':
             m, s = divmod(round(float(self.nomadic.mpd_status.get('elapsed', 0))), 60)
             song_elapsed = "%02d:%02d" % (m, s)
@@ -178,47 +161,21 @@ class UserActions():
             m, s = divmod(round(float(self.nomadic.mpd_status.get('duration', 0))), 60)
             song_duration = "%02d:%02d" % (m, s)
 
-            self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
-
-            if  self.now_playing['id'] != self.nomadic.mpd_status['songid']:
-                self.now_playing = self.nomadic.mpd.currently_playing()
-
-                song_info = f"Playing: {self.now_playing.get('artist', 'Unknown')}\n {self.now_playing.get('title', 'Unknown')}"
-                self.nomadic.ui.MPDNowPlaying.setText(song_info)
-
-                next_song = self.nomadic.mpd_status.get('nextsong', None)
-
-                if next_song is not None and int(next_song) > 0:
-                    try:
-                        next_up = self.mpd.playlist_info(next_song)
-
-                        if len(next_up) == 1:
-                            next_song = next_up[0]
-                            song_info = f"Next: {next_song.get('artist', 'Unknown')}\n {next_song.get('title', 'Unknown')}"
-                            self.nomadic.ui.MPDNextPlaying.setText(song_info)
-                    except:
-                        pass
-                else:
-                    self.nomadic.ui.MPDNextPlaying.setText("")
-
-                self.update_playlist_count()
-                self.set_album_art(self.now_playing)
-
-        if self.nomadic.mpd_status.get('state', '') == 'stop':
-            self.music_stop_press()
-
-    def set_album_art(self, song_data):
+            self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")  
+              
+    def update_playlist_count(self):
         """
-        Update the album art displayed in the UI
+        Update the playlist count shown on the left column
         """
-        search_term = (f"{song_data.get('artist', '')}")
-        LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
+        playlist_length = self.nomadic.mpd_status.get('playlistlength', None)
 
-        cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
-        song_thumb = self.nomadic.mpd.album_art(search_term, cache_key)
-
-        if isinstance(song_thumb, str):
-            self.nomadic.ui.MPDAlbumArt.setPixmap(QPixmap(song_thumb))
+        if isinstance(playlist_length, str):
+            try:
+                self.nomadic.ui.MPDPlaylistInfo.setText(f"Songs Pending: {playlist_length}")
+            except Exception as e:
+                LOGGER.error(e)
+        else:
+            self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
 
     def update_gps_info(self):
         """

@@ -1721,7 +1721,7 @@ color: rgb(186, 189, 182);</string>
       </rect>
      </property>
      <property name="text">
-      <string>NowPlaying</string>
+      <string></string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1737,7 +1737,7 @@ color: rgb(186, 189, 182);</string>
       </rect>
      </property>
      <property name="text">
-      <string>NextPlaying</string>
+      <string></string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

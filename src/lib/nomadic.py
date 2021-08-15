@@ -49,7 +49,7 @@ class NomadicPi():
         self.app_config = configparser.ConfigParser()
 
         self.app_config.read(ui.base_path + 'config.ini')
-        self.now_playing = {'id' : 0};
+        self.now_playing = None;
 
         # Connect to the SQLite database
         self.db = lib.db.NomadicDb(ui.base_path)
@@ -117,6 +117,7 @@ class NomadicPi():
         """
         try:
             LOGGER.debug("Switching view to the application home page.")
+            
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
             LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
@@ -145,6 +146,11 @@ class NomadicPi():
         self.mpd.connect_mpd()
         self.mpd_status = self.mpd.update_status()
 
+    def clear_now_playing(self):
+        self.ui.MPDNextPlaying.clear(), self.ui.MPDNowPlaying.clear()
+        self.ui.NightNowPlaying.clear(), self.ui.NightNextPlaying.clear()        
+        self.now_playing = None
+
     def update_content(self):
         """
         Create a timer and periodically update the UI information
@@ -172,26 +178,21 @@ class NomadicPi():
         """
         try:
             self.mpd_status = self.mpd.update_status()
-
             self.application_home.update_playlist_count()
             self.application_home.ui_button_state()
+            self.application_home.update_music_playtime()
 
             if self.mpd_status.get('state', '') == 'play':
-                m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60)
-                song_elapsed = "%02d:%02d" % (m, s)
-
-                m, s = divmod(round(float(self.mpd_status.get('duration', 0))), 60)
-                song_duration = "%02d:%02d" % (m, s)
-
-                self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
-
-                if  self.now_playing != self.mpd_status['songid']:
-                    self.now_playing = self.mpd_status['songid']
+                if self.now_playing is None or self.now_playing != self.mpd_status['songid']:
+                    self.now_playing = self.mpd_status['songid']  
 
                     self.ui.MPDNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
                     self.ui.MPDNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))
                     self.application_home.update_playlist_count()
                     self.set_album_art()
+
+                    self.ui.NightNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
+                    self.ui.NightNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))                    
 
             if self.mpd_status.get('state', '') == 'stop':
                 self.application_home.music_stop_press()
