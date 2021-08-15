@@ -185,12 +185,13 @@ class NomadicPi():
 
                 self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
 
-                if  self.now_playing['id'] != self.mpd_status['songid']:
+                if  self.now_playing != self.mpd_status['songid']:
+                    self.now_playing = self.mpd_status['songid']
+
                     self.ui.MPDNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
                     self.ui.MPDNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))
-
                     self.application_home.update_playlist_count()
-                    self.set_album_art(self.now_playing)
+                    self.set_album_art()
 
             if self.mpd_status.get('state', '') == 'stop':
                 self.application_home.music_stop_press()
@@ -201,22 +202,26 @@ class NomadicPi():
             LOGGER.info("Attempting to reconnect to MPD Daemon..")
             self.connect_mpd()
 
-    def set_album_art(self, song_data):
+    def set_album_art(self):
         """
         Update the album art displayed in the UI
         """
-        search_term = (f"{song_data.get('artist', '')}")
+        song = self.mpd_status.get('song', None)
 
-        if len(search_term) > 2:
-            LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
+        if isinstance(song, str):
+            song_dets = self.mpd.playlist_info(self.mpd_status.get('song'))
 
-            cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
-            song_thumb = self.mpd.album_art(search_term, cache_key)
+            if isinstance(song_dets[0]['artist'], str) and len(song_dets[0]['artist']) > 2:
+                search_term = (f"{song_dets[0]['artist']}")
+                LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
 
-            if isinstance(song_thumb, str):
+                cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
+                song_thumb = self.mpd.album_art(search_term, cache_key)
 
-                song_img = QPixmap(song_thumb)
-                self.ui.MPDAlbumArt.setPixmap(song_img)
+                if isinstance(song_thumb, str):
+
+                    song_img = QPixmap(song_thumb)
+                    self.ui.MPDAlbumArt.setPixmap(song_img)
 
     def update_gps(self):
         """
