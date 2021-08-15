@@ -2,11 +2,13 @@ import logging
 import lib.gps as gps
 
 from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap
 
 LOGGER = logging.getLogger(__name__)
 
 class UserActions():
     selected_playlist_item = 0
+    now_playing = {'id' : 0};
 
     def __init__(self, nomadic):
         self.nomadic = nomadic
@@ -18,7 +20,6 @@ class UserActions():
         self.nomadic.ui.MusicPlay.clicked.connect(self.music_play_press)
         self.nomadic.ui.RandomPlayback.clicked.connect(self.music_random_press)
         self.nomadic.ui.ConsumptionPlayback.clicked.connect(self.music_consume_press)
-        self.nomadic.ui.UpdateDatabase.clicked.connect(self.music_update_press)
 
         self.nomadic.ui.MusicSkip.clicked.connect(self.music_skip_press)
         self.nomadic.ui.MusicStop.clicked.connect(self.music_stop_press)
@@ -27,6 +28,7 @@ class UserActions():
         self.nomadic.ui.CollectionButton.clicked.connect(self.view_file_management)
         self.nomadic.ui.SystemButton.clicked.connect(self.view_system_widget)
         self.nomadic.ui.LocationButton.clicked.connect(self.view_location_widget)
+        self.nomadic.ui.NightMode.clicked.connect(self.view_night_mode)
         self.nomadic.ui.QuitButton.clicked.connect(self.nomadic.exit_application)
 
     def change_page(self, widget_id):
@@ -35,8 +37,8 @@ class UserActions():
         """
         try:
             self.nomadic.ui.appContent.setCurrentIndex(widget_id)
-        except:
-            pass
+        except Exception as e:
+            LOGGER.error(e)
 
     def view_playlist_widget(self):
         """
@@ -57,6 +59,7 @@ class UserActions():
         Change the visible widget to the location view
         """
         LOGGER.debug("Switching view to the location info view.")
+        LOGGER.info(self.nomadic.pages['location'])
 
         self.nomadic.location_status.update_page()
         self.change_page(self.nomadic.pages['location'])
@@ -67,6 +70,13 @@ class UserActions():
         """
         LOGGER.debug("Switching view to the file management view.")
         self.change_page(self.nomadic.pages['files'])
+
+    def view_night_mode(self):
+        """
+        Change the interface to "night mode"
+        """
+        LOGGER.debug("Switching view to night mode.")
+        self.change_page(self.nomadic.pages['night'])
 
     def music_play_press(self):
         """
@@ -116,14 +126,6 @@ class UserActions():
         self.nomadic.mpd.consumption_playback()
         self.ui_button_state()
 
-    def music_update_press(self):
-        """
-        Trigger manual update of the music library
-        """
-        LOGGER.debug("Manual update of the MPD library contents triggered.")
-        self.nomadic.mpd.update_library()
-        self.ui_button_state()
-
     def ui_button_state(self):
         """
         Update the state of any UI buttons
@@ -147,8 +149,6 @@ class UserActions():
         else:
             self.nomadic.ui.ConsumptionPlayback.setChecked(False)
 
-        self.database_update_status(self.nomadic.mpd_status)
-
     def update_playlist_count(self):
         """
         Update the playlist count shown on the left column
@@ -164,28 +164,65 @@ class UserActions():
         else:
             self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
 
-    def database_update_status(self, mpd_status):
+    def update_ui_state(self):
         """
-        Update the state of database update button
+        Update the state of app UI
+        """
+        self.database_update_status(self.nomadic.mpd_status)
+        self.ui_button_state()
 
-        Parameters
-        ----------
-        mpd_status : dict
-            Dictionary of the MPD daemons current state
+        if self.nomadic.mpd_status.get('state', '') == 'play':
+            m, s = divmod(round(float(self.nomadic.mpd_status.get('elapsed', 0))), 60)
+            song_elapsed = "%02d:%02d" % (m, s)
+
+            m, s = divmod(round(float(self.nomadic.mpd_status.get('duration', 0))), 60)
+            song_duration = "%02d:%02d" % (m, s)
+
+            self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
+
+            if  self.now_playing['id'] != self.nomadic.mpd_status['songid']:
+                self.now_playing = self.nomadic.mpd.currently_playing()
+
+                song_info = f"Playing: {self.now_playing.get('artist', 'Unknown')}\n {self.now_playing.get('title', 'Unknown')}"
+                self.nomadic.ui.MPDNowPlaying.setText(song_info)
+
+                next_song = self.nomadic.mpd_status.get('nextsong', None)
+
+                if next_song is not None and int(next_song) > 0:
+                    try:
+                        next_up = self.mpd.playlist_info(next_song)
+
+                        if len(next_up) == 1:
+                            next_song = next_up[0]
+                            song_info = f"Next: {next_song.get('artist', 'Unknown')}\n {next_song.get('title', 'Unknown')}"
+                            self.nomadic.ui.MPDNextPlaying.setText(song_info)
+                    except:
+                        pass
+                else:
+                    self.nomadic.ui.MPDNextPlaying.setText("")
+
+                self.update_playlist_count()
+                self.set_album_art(self.now_playing)
+
+        if self.nomadic.mpd_status.get('state', '') == 'stop':
+            self.music_stop_press()
+
+    def set_album_art(self, song_data):
         """
-        if self.nomadic.mpd_status.get('updating_db') is None:
-            self.nomadic.ui.UpdateDatabase.setChecked(False)
-        else:
-            self.nomadic.ui.UpdateDatabase.setChecked(True)
+        Update the album art displayed in the UI
+        """
+        search_term = (f"{song_data.get('artist', '')}")
+        LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
+
+        cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
+        song_thumb = self.nomadic.mpd.album_art(search_term, cache_key)
+
+        if isinstance(song_thumb, str):
+            self.nomadic.ui.MPDAlbumArt.setPixmap(QPixmap(song_thumb))
 
     def update_gps_info(self):
         """
         Update the state of database update button
-
-        Parameters
-        ----------
-        gps_info : dict
-            Dictionary of the GPS current state
         """
         if self.nomadic.gps_info is not None:
             if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):

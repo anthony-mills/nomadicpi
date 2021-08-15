@@ -68,7 +68,7 @@ class MpdLib():
             Dictionary of values concerning the current state of the MPD daemon
         """
         self.mpd_status = self.client.status()
-        
+
         return self.mpd_status
 
     def get_status(self):
@@ -257,6 +257,31 @@ class MpdLib():
 
         return self.art_cache + str(self.not_found)
 
+    def current_song_title(self, status):
+        """
+        Return the current song being played
+        """
+        cur_song = status.get('song', None)
+
+        if isinstance(status['song'], str):
+            song_dets = self.playlist_info(status['song'])
+
+            if len(song_dets) == 1:
+                return f"Playing: {song_dets[0].get('artist', 'Unknown')}\n {song_dets[0].get('title', 'Unknown')}"
+
+        return ""
+
+    def next_song_title(self, status):
+        """
+        Return the next song to be played
+        """
+        if isinstance(status['nextsong'], str):
+            next_up = self.playlist_info(status['nextsong'])
+
+            if len(next_up) == 1:
+                return f"Next: {next_up[0].get('artist', 'Unknown')}\n {next_up[0].get('title', 'Unknown')}"
+
+        return ""
 
     def consumption_playback(self):
         """
