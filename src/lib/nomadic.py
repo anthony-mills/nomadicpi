@@ -11,6 +11,7 @@ import lib.playlist_management as playlist_management
 import lib.location_status as location_status
 import lib.system_status as system_status
 import lib.file_management as file_management
+import lib.night_mode as night_mode
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
@@ -27,7 +28,8 @@ class NomadicPi():
         'playlist' : 1,
         'system' : 2,
         'files' : 3,
-        'location' : 4
+        'location' : 4,
+        'night' : 5
     }
 
     # Folder for album art
@@ -47,7 +49,7 @@ class NomadicPi():
         self.app_config = configparser.ConfigParser()
 
         self.app_config.read(ui.base_path + 'config.ini')
-        self.now_playing = {'id' : 0};
+        self.now_playing = None;
 
         # Connect to the SQLite database
         self.db = lib.db.NomadicDb(ui.base_path)
@@ -68,6 +70,9 @@ class NomadicPi():
 
         # Setup the handlers for user actions on the system status page
         self.system_status = system_status.SystemStatus(self)
+
+        # Setup the handlers for user actions on the night mode view
+        self.night_mode = night_mode.NightMode(self)
 
         # Setup the handlers for user actions on the location page
         self.location_status = location_status.LocationStatus(self)
@@ -112,6 +117,7 @@ class NomadicPi():
         """
         try:
             LOGGER.debug("Switching view to the application home page.")
+            
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
             LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
@@ -140,12 +146,17 @@ class NomadicPi():
         self.mpd.connect_mpd()
         self.mpd_status = self.mpd.update_status()
 
+    def clear_now_playing(self):
+        self.ui.MPDNextPlaying.clear(), self.ui.MPDNowPlaying.clear()
+        self.ui.NightNowPlaying.clear(), self.ui.NightNextPlaying.clear()        
+        self.now_playing = None
+
     def update_content(self):
         """
         Create a timer and periodically update the UI information
         """
-        (threading.Thread(target=self.update_gps)).start()
-        (threading.Thread(target=self.update_mpd)).start()
+        self.update_gps()
+        self.update_mpd()
 
         # Only update the home page if the widget is visible
         if self.ui.appContent.currentIndex() == self.pages['home']:
@@ -158,50 +169,30 @@ class NomadicPi():
         if self.ui.appContent.currentIndex() == self.pages['location']:
             self.location_status.update_page()
 
+        if self.ui.appContent.currentIndex() == self.pages['night']:
+            self.night_mode.update_view()
+
     def update_mpd(self):
         """
         Update the interface with any time sensitive MPD info i.e play time etc
         """
         try:
             self.mpd_status = self.mpd.update_status()
-
-            self.application_home.database_update_status(self.mpd_status)
-
             self.application_home.update_playlist_count()
             self.application_home.ui_button_state()
+            self.application_home.update_music_playtime()
 
             if self.mpd_status.get('state', '') == 'play':
-                m, s = divmod(round(float(self.mpd_status.get('elapsed', 0))), 60)
-                song_elapsed = "%02d:%02d" % (m, s)
+                if self.now_playing is None or self.now_playing != self.mpd_status['songid']:
+                    self.now_playing = self.mpd_status['songid']  
 
-                m, s = divmod(round(float(self.mpd_status.get('duration', 0))), 60)
-                song_duration = "%02d:%02d" % (m, s)
-
-                self.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")
-
-                if  self.now_playing['id'] != self.mpd_status['songid']:
-                    self.now_playing = self.mpd.currently_playing()
-
-                    song_info = f"Playing: {self.now_playing.get('artist', 'Unknown')}\n {self.now_playing.get('title', 'Unknown')}"
-                    self.ui.MPDNowPlaying.setText(song_info)
-
-                    next_song = self.mpd_status.get('nextsong', None)
-
-                    if next_song is not None and int(next_song) > 0:
-                        try:
-                            next_up = self.mpd.playlist_info(next_song)
-
-                            if len(next_up) == 1:
-                                next_song = next_up[0]
-                                song_info = f"Next: {next_song.get('artist', 'Unknown')}\n {next_song.get('title', 'Unknown')}"
-                                self.ui.MPDNextPlaying.setText(song_info)
-                        except:
-                            pass
-                    else:
-                        self.ui.MPDNextPlaying.setText("")
-
+                    self.ui.MPDNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
+                    self.ui.MPDNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))
                     self.application_home.update_playlist_count()
-                    self.set_album_art(self.now_playing)
+                    self.set_album_art()
+
+                    self.ui.NightNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
+                    self.ui.NightNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))                    
 
             if self.mpd_status.get('state', '') == 'stop':
                 self.application_home.music_stop_press()
@@ -212,20 +203,26 @@ class NomadicPi():
             LOGGER.info("Attempting to reconnect to MPD Daemon..")
             self.connect_mpd()
 
-    def set_album_art(self, song_data):
+    def set_album_art(self):
         """
         Update the album art displayed in the UI
         """
-        search_term = (f"{song_data.get('artist', '')}")
-        LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
+        song = self.mpd_status.get('song', None)
 
-        cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
-        song_thumb = self.mpd.album_art(search_term, cache_key)
+        if isinstance(song, str):
+            song_dets = self.mpd.playlist_info(self.mpd_status.get('song'))
 
-        if isinstance(song_thumb, str):
+            if isinstance(song_dets[0]['artist'], str) and len(song_dets[0]['artist']) > 2:
+                search_term = (f"{song_dets[0]['artist']}")
+                LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
 
-            song_img = QPixmap(song_thumb)
-            self.ui.MPDAlbumArt.setPixmap(song_img)
+                cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
+                song_thumb = self.mpd.album_art(search_term, cache_key)
+
+                if isinstance(song_thumb, str):
+
+                    song_img = QPixmap(song_thumb)
+                    self.ui.MPDAlbumArt.setPixmap(song_img)
 
     def update_gps(self):
         """

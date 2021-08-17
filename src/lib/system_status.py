@@ -14,6 +14,7 @@ class SystemStatus():
 
         # Register the button actions on the network status page
         self.nomadic.ui.SystemReturnHome.clicked.connect(self.nomadic.view_home_widget)
+        self.nomadic.ui.UpdateDatabase.clicked.connect(self.music_update_press)
 
         self.show_system_status()
 
@@ -27,6 +28,8 @@ class SystemStatus():
         self.update_system_memory()
         self.mpd_daemon()
         self.network_info()
+
+        self.database_update_status(self.nomadic.mpd_status)
 
     def disk_info(self):
         """
@@ -150,3 +153,25 @@ class SystemStatus():
 
         mem_percent = f"Memory Utilisation: {mem_usage[2]}%"
         self.nomadic.ui.SystemMemoryUtilisation.setText(mem_percent)
+
+    def music_update_press(self):
+        """
+        Trigger manual update of the music library
+        """
+        LOGGER.debug("Manual update of the MPD library contents triggered.")
+        self.nomadic.mpd.update_library()
+        self.database_update_status(self.nomadic.mpd_status)
+
+    def database_update_status(self, mpd_status):
+        """
+        Update the state of database update button
+
+        Parameters
+        ----------
+        mpd_status : dict
+            Dictionary of the MPD daemons current state
+        """
+        if self.nomadic.mpd_status.get('updating_db') is None:
+            self.nomadic.ui.UpdateDatabase.setChecked(False)
+        else:
+            self.nomadic.ui.UpdateDatabase.setChecked(True)
