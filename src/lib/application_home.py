@@ -112,7 +112,7 @@ class UserActions():
         """
         if self.nomadic.mpd_status.get('state', '') == 'play':
             LOGGER.debug("Music skip button pressed.")
-            self.nomadic.clear_now_playing()
+            self.clear_now_playing()
             self.nomadic.mpd.next_song()
             self.ui_button_state()
             self.nomadic.ui.MPDAlbumArt.clear()

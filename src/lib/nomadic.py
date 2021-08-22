@@ -40,7 +40,6 @@ class NomadicPi():
 
     # Track the GPS state with this variable
     gps_info, gps_save_interval = None, 60
-    speed_unit, speed_modifier = 'kmh', 1
 
     base_path, update_loop = '', None
 
@@ -80,20 +79,8 @@ class NomadicPi():
         self.ui.appContent.setCurrentIndex(self.pages['home'])
         self.ui.appContent.currentChanged.connect(self.application_page_changed)
 
-        self.speed_units()
         self.update_cycle_count = 0
         self.update_content()
-
-    def speed_units(self):
-        """
-        Control the unit used for speed of travel km/h of mp/h
-        """
-        speed_units = self.app_config['app'].get('SpeedUnit', '')
-
-        if speed_units == 'mph':
-            self.speed_unit = 'mph'
-            self.speed_modifier = 0.62137119
-            self.ui.SpeedUnit.setText('MP/H')
 
     def application_page_changed(self):
         """
