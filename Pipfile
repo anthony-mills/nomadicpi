@@ -9,6 +9,7 @@ musicbrainzngs = "*"
 psutil = "*"
 humanize = "*"
 python-dateutil = "*"
+dbus-python = "*"
 
 [dev-packages]
 
