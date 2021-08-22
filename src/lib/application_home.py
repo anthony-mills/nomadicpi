@@ -8,11 +8,17 @@ LOGGER = logging.getLogger(__name__)
 
 class UserActions():
     selected_playlist_item = 0
-    now_playing = {'id' : 0};
+    now_playing = {'id' : 0}
+    location_text = None
 
     def __init__(self, nomadic):
         self.nomadic = nomadic
-        self.nomadic.clear_now_playing()
+        self.clear_now_playing()
+
+        # Define font and style for the altitude and heading
+        self.location_text = QtGui.QFont()
+        self.location_text.setFamily("Open Sans")
+        self.location_text.setPointSize(10)
 
         # Set the initial button state from the MPD state
         self.ui_button_state()
@@ -182,6 +188,9 @@ class UserActions():
         Update the state of database update button
         """
         if self.nomadic.gps_info is not None:
+            self.nomadic.ui.CurrentPosition.setFont(self.location_text)
+            self.nomadic.ui.CurrentAltitude.setFont(self.location_text)
+
             if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):
                 self.nomadic.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")
 
@@ -199,3 +208,7 @@ class UserActions():
 
                 else:
                     self.nomadic.ui.CurrentAltitude.setText("Altitude: 3D GPS fix needed.")
+
+    def clear_now_playing(self):
+        self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()
+        self.nomadic.ui.NightNowPlaying.clear(), self.nomadic.ui.NightNextPlaying.clear()                        

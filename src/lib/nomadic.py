@@ -42,7 +42,7 @@ class NomadicPi():
     gps_info, gps_save_interval = None, 60
     speed_unit, speed_modifier = 'kmh', 1
 
-    base_path, location_text, update_loop = '', None, None
+    base_path, update_loop = '', None
 
     def __init__(self, ui):
         self.ui = ui
@@ -76,10 +76,6 @@ class NomadicPi():
 
         # Setup the handlers for user actions on the location page
         self.location_status = location_status.LocationStatus(self)
-
-        self.location_text = QtGui.QFont()
-        self.location_text.setFamily("Open Sans")
-        self.location_text.setPointSize(10)
 
         self.ui.appContent.setCurrentIndex(self.pages['home'])
         self.ui.appContent.currentChanged.connect(self.application_page_changed)
@@ -145,11 +141,6 @@ class NomadicPi():
 
         self.mpd.connect_mpd()
         self.mpd_status = self.mpd.update_status()
-
-    def clear_now_playing(self):
-        self.ui.MPDNextPlaying.clear(), self.ui.MPDNowPlaying.clear()
-        self.ui.NightNowPlaying.clear(), self.ui.NightNextPlaying.clear()        
-        self.now_playing = None
 
     def update_content(self):
         """
@@ -229,9 +220,6 @@ class NomadicPi():
         Get the current GPS information and update the UI
         """
         if gps.gpsd_socket is None:
-            self.ui.CurrentPosition.setFont(self.location_text)
-            self.ui.CurrentAltitude.setFont(self.location_text)
-
             try:
                 gpsd_host = self.app_config['gpsd'].get('Host', 'localhost')
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
@@ -247,7 +235,6 @@ class NomadicPi():
                 if self.update_cycle_count == self.gps_save_interval:
                     self.db.save_location(self.gps_info)
                     self.update_cycle_count = 0
-
                 self.update_cycle_count += 1
 
             except Exception as e:
