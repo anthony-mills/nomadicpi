@@ -275,7 +275,7 @@ class MpdLib():
         """
         Return the next song to be played
         """
-        if 'song' in status and isinstance(status['nextsong'], str):
+        if 'nextsong' in status and isinstance(status['nextsong'], str):
             next_up = self.playlist_info(status['nextsong'])
 
             if len(next_up) == 1:
