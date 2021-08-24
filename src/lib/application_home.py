@@ -83,6 +83,7 @@ class UserActions():
         Change the interface to "night mode"
         """
         LOGGER.debug("Switching view to night mode.")
+        self.nomadic.ui.NightMode.setChecked(False)
         self.change_page(self.nomadic.pages['night'])
 
     def music_play_press(self):
