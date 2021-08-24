@@ -183,6 +183,70 @@ class UserActions():
         else:
             self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
 
+    def update_mpd_playing_info(self):
+        """
+        Update the playing and next playing areas of the home view
+        """
+        self.update_playlist_count()
+        self.ui_button_state()
+        self.update_music_playtime()
+
+        if self.nomadic.mpd_status.get('state', '') == 'play':
+            if self.nomadic.now_playing is None or self.nomadic.now_playing != self.nomadic.mpd_status['songid']:
+                self.nomadic.now_playing = self.nomadic.mpd_status['songid']  
+
+                self.nomadic.ui.MPDNowPlaying.setText(
+                    self.nomadic.mpd.current_song_title(self.nomadic.mpd_status)
+                )
+
+                self.nomadic.ui.MPDNextPlaying.setText(
+                    self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
+                )
+                
+                self.update_playlist_count()
+                self.set_album_art()
+
+                self.nomadic.ui.NightNowPlaying.setText(
+                    self.nomadic.mpd.current_song_title(
+                        self.nomadic.mpd_status
+                    )
+                )
+
+                self.nomadic.ui.NightNextPlaying.setText(
+                    self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
+                )                    
+
+            if self.nomadic.mpd_status.get('state', '') == 'stop':
+                self.music_stop_press()        
+
+    def set_album_art(self):
+        """
+        Update the album art displayed in the UI
+        """
+        song = self.nomadic.mpd_status.get('song', None)
+
+        if isinstance(song, str):
+            song_dets = self.nomadic.mpd.playlist_info(
+                self.nomadic.mpd_status.get('song')
+            )
+
+            if isinstance(song_dets[0]['artist'], str) and len(song_dets[0]['artist']) > 2:
+                search_term = (f"{song_dets[0]['artist']}")
+                LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
+
+                cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
+                song_thumb = self.nomadic.mpd.album_art(search_term, cache_key)
+
+                if isinstance(song_thumb, str):
+
+                    song_img = QPixmap(song_thumb)
+                    self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
+
+    def clear_now_playing(self):
+        self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()
+        self.nomadic.ui.NightNowPlaying.clear(), self.nomadic.ui.NightNextPlaying.clear()                        
+
+
     def update_gps_info(self):
         """
         Update the state of database update button
@@ -208,7 +272,3 @@ class UserActions():
 
                 else:
                     self.nomadic.ui.CurrentAltitude.setText("Altitude: 3D GPS fix needed.")
-
-    def clear_now_playing(self):
-        self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()
-        self.nomadic.ui.NightNowPlaying.clear(), self.nomadic.ui.NightNextPlaying.clear()                        

@@ -15,7 +15,6 @@ import lib.night_mode as night_mode
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QPixmap
 
 log_format = "%(asctime)s %(levelname)s:%(name)s - %(message)s"
 
@@ -141,6 +140,9 @@ class NomadicPi():
             # Update GPS related information
             self.application_home.update_gps_info()
 
+            # Update MPD now playing information
+            self.application_home.update_mpd_playing_info()
+
         if self.ui.appContent.currentIndex() == self.pages['system']:
             self.system_status.show_system_status()
 
@@ -156,51 +158,13 @@ class NomadicPi():
         """
         try:
             self.mpd_status = self.mpd.update_status()
-            self.application_home.update_playlist_count()
-            self.application_home.ui_button_state()
-            self.application_home.update_music_playtime()
 
-            if self.mpd_status.get('state', '') == 'play':
-                if self.now_playing is None or self.now_playing != self.mpd_status['songid']:
-                    self.now_playing = self.mpd_status['songid']  
-
-                    self.ui.MPDNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
-                    self.ui.MPDNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))
-                    self.application_home.update_playlist_count()
-                    self.set_album_art()
-
-                    self.ui.NightNowPlaying.setText(self.mpd.current_song_title(self.mpd_status))
-                    self.ui.NightNextPlaying.setText(self.mpd.next_song_title(self.mpd_status))                    
-
-            if self.mpd_status.get('state', '') == 'stop':
-                self.application_home.music_stop_press()
         except Exception as e:
             LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 
             # Attempt to reconnect to MPD exception is normally a client timeout
             LOGGER.info("Attempting to reconnect to MPD Daemon..")
             self.connect_mpd()
-
-    def set_album_art(self):
-        """
-        Update the album art displayed in the UI
-        """
-        song = self.mpd_status.get('song', None)
-
-        if isinstance(song, str):
-            song_dets = self.mpd.playlist_info(self.mpd_status.get('song'))
-
-            if isinstance(song_dets[0]['artist'], str) and len(song_dets[0]['artist']) > 2:
-                search_term = (f"{song_dets[0]['artist']}")
-                LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
-
-                cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
-                song_thumb = self.mpd.album_art(search_term, cache_key)
-
-                if isinstance(song_thumb, str):
-
-                    song_img = QPixmap(song_thumb)
-                    self.ui.MPDAlbumArt.setPixmap(song_img)
 
     def update_gps(self):
         """
