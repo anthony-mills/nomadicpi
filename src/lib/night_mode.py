@@ -1,9 +1,8 @@
-import datetime as dt
 import logging
-import lib.gps as gps
 
 from PyQt5 import QtGui
-from PyQt5.QtGui import QPixmap
+
+import lib.gps as gps
 
 LOGGER = logging.getLogger(__name__)
 
@@ -32,7 +31,7 @@ class NightMode():
         """
         Clear the contents of the now / next playing areas
         """
-        self.nomadic.clear_now_playing()
+        self.nomadic.application_home.clear_now_playing()
 
     def ui_button_state(self):
         """
@@ -46,7 +45,7 @@ class NightMode():
             self.nomadic.ui.NightPlayButton.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_play.png"))
 
 
-    def update_mpd_info(self,force_update = 0):
+    def update_mpd_info(self, force_update=0):
         """
         Update UI with information related to music playback
         """
@@ -93,4 +92,4 @@ class NightMode():
         """
         if self.nomadic.gps_info is not None:
             if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):
-                self.nomadic.ui.NightSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")            
+                self.nomadic.ui.NightSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")

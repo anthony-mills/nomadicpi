@@ -100,7 +100,7 @@ class UserActions():
         """
         if self.nomadic.mpd_status.get('state', '') != 'stop':
             LOGGER.debug("Music stop button pressed.")
-            self.nomadic.clear_now_playing()
+            self.clear_now_playing()
             self.nomadic.mpd.stop_playback()
             self.nomadic.ui.MusicPlay.setChecked(False)
             self.ui_button_state()
