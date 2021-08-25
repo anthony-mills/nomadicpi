@@ -231,7 +231,7 @@ class UserActions():
                 self.nomadic.mpd_status.get('song')
             )
 
-            if isinstance(song_dets[0]['artist'], str) and len(song_dets[0]['artist']) > 2:
+            if 'artist' in song_dets[0] and len(song_dets[0]['artist']) > 2:
                 search_term = (f"{song_dets[0]['artist']}")
                 LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
 
