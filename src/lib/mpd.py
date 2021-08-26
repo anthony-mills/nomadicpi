@@ -255,7 +255,7 @@ class MpdLib():
             except Exception as e:
                 logging.debug("Unable to get album art: " + str(e))
 
-        return default_art()
+        return self.default_art()
 
     def default_art(self) -> str:
         """
