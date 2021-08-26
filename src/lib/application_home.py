@@ -98,14 +98,14 @@ class UserActions():
         """
         Stop the playback of music
         """
-        if self.nomadic.mpd_status.get('state', '') != 'stop':
-            LOGGER.debug("Music stop button pressed.")
-            self.clear_now_playing()
-            self.nomadic.mpd.stop_playback()
-            self.nomadic.ui.MusicPlay.setChecked(False)
-            self.ui_button_state()
-            self.nomadic.ui.SongPlayTime.clear()
-            self.nomadic.ui.MPDAlbumArt.clear()
+        LOGGER.debug("Music stop button pressed.")
+        
+        self.clear_now_playing()
+        self.nomadic.mpd.stop_playback()
+        self.nomadic.ui.MusicPlay.setChecked(False)
+        self.ui_button_state()
+        self.nomadic.ui.SongPlayTime.clear()
+        self.nomadic.ui.MPDAlbumArt.clear()
 
     def music_skip_press(self):
         """
@@ -217,14 +217,14 @@ class UserActions():
                     self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
                 )                    
 
-            if self.nomadic.mpd_status.get('state', '') == 'stop':
-                self.music_stop_press()        
+        if self.nomadic.mpd_status.get('state', '') == 'stop':
+            self.music_stop_press()        
 
     def set_album_art(self):
         """
         Update the album art displayed in the UI
         """
-        song = self.nomadic.mpd_status.get('song', None)
+        song_img, song = None, self.nomadic.mpd_status.get('song', None)
 
         if isinstance(song, str):
             song_dets = self.nomadic.mpd.playlist_info(
@@ -240,9 +240,10 @@ class UserActions():
 
                 if isinstance(song_thumb, str):
                     song_img = QPixmap(song_thumb)
-                    self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
-            else:
-                self.nomadic.ui.MPDAlbumArt.setPixmap(self.nomadic.mpd.art_cache + str(self.nomadic.mpd.not_found))
+        if song_img is None:
+            song_img = QPixmap(self.nomadic.mpd.default_art())
+        
+        self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
 
     def clear_now_playing(self):
         self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()

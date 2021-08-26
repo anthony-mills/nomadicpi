@@ -255,9 +255,17 @@ class MpdLib():
             except Exception as e:
                 logging.debug("Unable to get album art: " + str(e))
 
+        return default_art()
+
+    def default_art(self) -> str:
+        """
+        Return image to display when no album art available
+
+        return :str:
+        """
         return self.art_cache + str(self.not_found)
 
-    def current_song_title(self, status):
+    def current_song_title(self, status) -> str:
         """
         Return the current song being played
         """
@@ -271,7 +279,7 @@ class MpdLib():
 
         return ""
 
-    def next_song_title(self, status):
+    def next_song_title(self, status) -> str:
         """
         Return the next song to be played
         """
