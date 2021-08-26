@@ -468,7 +468,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>360</y>
+       <y>270</y>
        <width>321</width>
        <height>31</height>
       </rect>
@@ -600,6 +600,56 @@
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QLabel" name="AudioSrc">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>320</y>
+       <width>211</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Audio Source: MPD</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="AudioSrcIcon">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>320</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Open Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
     <zorder>CollectionButton</zorder>
     <zorder>QuitButton</zorder>
     <zorder>MPDNowPlaying</zorder>
@@ -620,6 +670,8 @@
     <zorder>PlaylistDetailsButton</zorder>
     <zorder>SpeedUnit</zorder>
     <zorder>NightMode</zorder>
+    <zorder>AudioSrc</zorder>
+    <zorder>AudioSrcIcon</zorder>
    </widget>
    <widget class="QWidget" name="current_playlist">
     <property name="font">
@@ -1721,7 +1773,7 @@ color: rgb(186, 189, 182);</string>
       </rect>
      </property>
      <property name="text">
-      <string></string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1737,7 +1789,7 @@ color: rgb(186, 189, 182);</string>
       </rect>
      </property>
      <property name="text">
-      <string></string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

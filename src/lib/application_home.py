@@ -220,6 +220,23 @@ class UserActions():
         if self.nomadic.mpd_status.get('state', '') == 'stop':
             self.music_stop_press()        
 
+    def show_audio_source(self, bluetooth):
+        """
+        Show the currently connected audio source in the UI
+
+        :param: dict bluetooth 
+        """ 
+
+        if 'audio' in bluetooth and bluetooth['audio'] is True:
+            srcMsg = f"Source: Bluetooth\nDevice: {bluetooth.get('name', '')}\nAddress: {bluetooth.get('mac', '')}"
+            self.nomadic.ui.AudioSrc.setText(srcMsg)
+            src_icon = QPixmap(self.nomadic.ui.base_path + "visual_elements/icons/bluetooth_icon.png")
+        else:
+            self.nomadic.ui.AudioSrc.setText("Source: MPD")
+            src_icon = QPixmap(self.nomadic.ui.base_path + "visual_elements/icons/mpd_icon.png")
+
+        self.nomadic.ui.AudioSrcIcon.setPixmap(src_icon)
+
     def set_album_art(self):
         """
         Update the album art displayed in the UI
@@ -243,7 +260,7 @@ class UserActions():
         if song_img is None:
             song_img = QPixmap(self.nomadic.mpd.default_art())
         
-        self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
+        
 
     def clear_now_playing(self):
         self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()

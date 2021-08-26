@@ -40,7 +40,7 @@ class Bluetooth():
             if 'org.bluez.MediaPlayer1' in ifaces:
                 bt_device['audio'] = True
 
-        print(bt_device)
+        return bt_device
 
 if __name__ == '__main__':
     print("This module cannot be run directly.")

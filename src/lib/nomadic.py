@@ -49,7 +49,7 @@ class NomadicPi():
         self.app_config = configparser.ConfigParser()
 
         self.app_config.read(ui.base_path + 'config.ini')
-        self.now_playing = None;
+        self.now_playing = None
 
         # Connect to the SQLite database
         self.db = lib.db.NomadicDb(ui.base_path)
@@ -59,8 +59,7 @@ class NomadicPi():
         self.get_mpd_status()
 
         # Check the bluetooth status
-        self.bluetooth = bluetooth.Bluetooth()
-        self.bluetooth.check_connection()     
+        self.bluetooth = bluetooth.Bluetooth()    
 
         # Setup the handlers for user actions on the application home
         self.application_home = application_home.UserActions(self)
@@ -140,11 +139,16 @@ class NomadicPi():
         """
         self.update_gps()
         self.update_mpd()
+        
+        bt_status = self.bluetooth.check_connection() 
 
         # Only update the home page if the widget is visible
         if self.ui.appContent.currentIndex() == self.pages['home']:
             # Update GPS related information
             self.application_home.update_gps_info()
+
+            # Display the currently active audio source
+            self.application_home.show_audio_source(bt_status)
 
             # Update MPD now playing information
             self.application_home.update_mpd_playing_info()
