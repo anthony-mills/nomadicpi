@@ -239,9 +239,10 @@ class UserActions():
                 song_thumb = self.nomadic.mpd.album_art(search_term, cache_key)
 
                 if isinstance(song_thumb, str):
-
                     song_img = QPixmap(song_thumb)
                     self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
+            else:
+                self.nomadic.ui.MPDAlbumArt.setPixmap(self.nomadic.mpd.art_cache + str(self.nomadic.mpd.not_found))
 
     def clear_now_playing(self):
         self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()
