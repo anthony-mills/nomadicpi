@@ -4,17 +4,19 @@ import logging
 import time
 import threading
 
-import lib.db
-import lib.gps as gps, lib.mpd as mpd
-import lib.application_home as application_home
-import lib.playlist_management as playlist_management
-import lib.location_status as location_status
-import lib.system_status as system_status
-import lib.file_management as file_management
-import lib.night_mode as night_mode
-
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import pyqtSlot
+
+import lib.application_home as application_home
+import lib.bluetooth as bluetooth
+import lib.db
+import lib.file_management as file_management
+import lib.gps as gps
+import lib.location_status as location_status
+import lib.mpd as mpd
+import lib.night_mode as night_mode
+import lib.playlist_management as playlist_management
+import lib.system_status as system_status
 
 log_format = "%(asctime)s %(levelname)s:%(name)s - %(message)s"
 
@@ -55,6 +57,10 @@ class NomadicPi():
         # Connect to the MPD daemon
         self.connect_mpd()
         self.get_mpd_status()
+
+        # Check the bluetooth status
+        self.bluetooth = bluetooth.Bluetooth()
+        self.bluetooth.check_connection()     
 
         # Setup the handlers for user actions on the application home
         self.application_home = application_home.UserActions(self)
