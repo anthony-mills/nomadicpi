@@ -220,7 +220,7 @@ class UserActions():
         if self.nomadic.mpd_status.get('state', '') == 'stop':
             self.music_stop_press()        
 
-    def show_audio_source(self, bluetooth):
+    def show_audio_source(self, bluetooth: dict):
         """
         Show the currently connected audio source in the UI
 
@@ -259,10 +259,13 @@ class UserActions():
                     song_img = QPixmap(song_thumb)
         if song_img is None:
             song_img = QPixmap(self.nomadic.mpd.default_art())
-        
-        
 
+        self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
+        
     def clear_now_playing(self):
+        """
+        Clear the areas showing the name of the current and next up track
+        """
         self.nomadic.ui.MPDNextPlaying.clear(), self.nomadic.ui.MPDNowPlaying.clear()
         self.nomadic.ui.NightNowPlaying.clear(), self.nomadic.ui.NightNextPlaying.clear()                        
 
