@@ -149,7 +149,7 @@ class MpdLib():
         """
         self.client.next()
 
-    def play_song(self, song_id):
+    def play_song(self, song_id: int):
         """
         Play a song via its MPD id
 
@@ -157,7 +157,7 @@ class MpdLib():
         """
         self.client.playid(song_id)
 
-    def remove_song(self, song_id):
+    def remove_song(self, song_id: int):
         """
         Remove a song from the current playlist via its MPD id
 
@@ -171,7 +171,7 @@ class MpdLib():
         """
         self.client.clear()
 
-    def add_to_playlist(self, path):
+    def add_to_playlist(self, path: str):
         """
         Add file or directory to the current playlist
 
@@ -223,7 +223,7 @@ class MpdLib():
             return self.client.currentsong()
         return {}
 
-    def album_art(self, search_term, cache_key):
+    def album_art(self, search_term: str, cache_key: str):
         """
         Change the consume playback state
 
@@ -265,9 +265,11 @@ class MpdLib():
         """
         return self.art_cache + str(self.not_found)
 
-    def current_song_title(self, status) -> str:
+    def current_song_title(self, status: dict) -> str:
         """
         Return the current song being played
+
+        :param: dict status
         """
         cur_song = status.get('song', None)
 
@@ -279,9 +281,11 @@ class MpdLib():
 
         return ""
 
-    def next_song_title(self, status) -> str:
+    def next_song_title(self, status: dict) -> str:
         """
         Return the next song to be played
+
+        :param: dict status        
         """
         if 'nextsong' in status and isinstance(status['nextsong'], str):
             next_up = self.playlist_info(status['nextsong'])
