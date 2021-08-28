@@ -54,7 +54,7 @@ class Bluetooth():
         #GLib.io_add_watch(sys.stdin, GLib.IO_IN, self.on_playback_control)
         #GLib.MainLoop().run()
 
-        self.bt_device['audio'] = True
+        self.bt_device['audio'] = True if self.bt_device is True else False
 
     def on_property_changed(self, interface, changed, invalidated):
         """
