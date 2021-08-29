@@ -179,22 +179,21 @@ class UserActions():
         format_time = lambda time: divmod(round(float(time)), 60)
 
         if 'status' in self.nomadic.bt_status and self.nomadic.bt_status.get('status', '') == 'playing':
-                m, s = format_time(self.nomadic.bt_status.get('position', 0) / 1000)
-                song_elapsed = "%02d:%02d" % (m, s)
+            m, s = format_time(self.nomadic.bt_status.get('position', 0) / 1000)
+            song_elapsed = "%02d:%02d" % (m, s)
 
-                m, s = format_time(self.nomadic.bt_status.get('duration', 0))
-                song_duration = "%02d:%02d" % (m, s)
+            if self.nomadic.bt_status.get('duration', 0) > 0:
+                m, s = format_time(self.nomadic.bt_status.get('duration'))
+                song_elapsed = f"{song_elapsed} / {('%02d:%02d' % (m, s))}"
 
-                self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}") 
+            self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed}")                 
         else:
             if self.nomadic.mpd_status.get('state', '') == 'play':
                 m, s = format_time(self.nomadic.mpd_status.get('elapsed', 0))
                 song_elapsed = "%02d:%02d" % (m, s)
 
                 m, s = format_time(self.nomadic.mpd_status.get('duration', 0))
-                song_duration = "%02d:%02d" % (m, s)
-
-                self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")  
+                self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {('%02d:%02d' % (m, s))}")  
               
     def update_playlist_count(self):
         """
