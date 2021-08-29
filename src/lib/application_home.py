@@ -10,6 +10,7 @@ class UserActions():
     selected_playlist_item = 0
     now_playing = {'id' : 0}
     location_text = None
+    art_cache_key = ""
 
     def __init__(self, nomadic):
         self.nomadic = nomadic
@@ -115,6 +116,7 @@ class UserActions():
         self.nomadic.ui.MusicPlay.setChecked(False)
         self.ui_button_state()
         self.nomadic.ui.SongPlayTime.clear()
+        self.art_cache_key = None
         self.nomadic.ui.MPDAlbumArt.clear()
 
     def music_skip_press(self):
@@ -122,7 +124,6 @@ class UserActions():
         Skip playback to the next song
         """
         LOGGER.debug("Music skip button pressed.")
-        
         if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
             self.nomadic.bluetooth.next_playback()
         else:        
@@ -131,6 +132,7 @@ class UserActions():
 
         self.clear_now_playing()
         self.ui_button_state()
+        self.art_cache_key = None
         self.nomadic.ui.MPDAlbumArt.clear()
 
     def music_random_press(self):
@@ -220,36 +222,36 @@ class UserActions():
         """
         self.update_playlist_count()
         self.ui_button_state()
-        self.update_music_playtime()
+        self.update_music_playtime()              
 
-        if self.nomadic.mpd_status.get('state', '') == 'play':
-            if self.nomadic.now_playing is None or self.nomadic.now_playing != self.nomadic.mpd_status['songid']:
-                self.nomadic.now_playing = self.nomadic.mpd_status['songid']  
+        if 'status' in self.nomadic.bt_status and self.nomadic.bt_status.get('status', '') == 'playing':
+            artist = self.nomadic.bt_status.get('artist', '')
+            now_playing = f"Playing: {artist}\n{self.nomadic.bt_status.get('title', '')}"
+            self.nomadic.ui.MPDNowPlaying.setText(now_playing)
+            self.nomadic.ui.NightNextPlaying.setText(now_playing)
 
-                self.nomadic.ui.MPDNowPlaying.setText(
-                    self.nomadic.mpd.current_song_title(self.nomadic.mpd_status)
-                )
-
-                self.nomadic.ui.MPDNextPlaying.setText(
-                    self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
-                )
-                
-                self.update_playlist_count()
-                self.set_album_art()
-
-                self.nomadic.ui.NightNowPlaying.setText(
-                    self.nomadic.mpd.current_song_title(
-                        self.nomadic.mpd_status
-                    )
-                )
-
-                self.nomadic.ui.NightNextPlaying.setText(
-                    self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
-                )                    
-
-        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
-            pass
+            if len(artist) > 2:
+                self.set_album_art(artist)
         else:
+            if self.nomadic.mpd_status.get('state', '') == 'play':
+                if self.nomadic.now_playing is None or self.nomadic.now_playing != self.nomadic.mpd_status['songid']:
+                    self.nomadic.now_playing = self.nomadic.mpd_status['songid']  
+
+                    self.nomadic.ui.MPDNowPlaying.setText(
+                        self.nomadic.mpd.current_song_title(self.nomadic.mpd_status)
+                    )
+
+                    self.nomadic.ui.MPDNextPlaying.setText(
+                        self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
+                    )
+
+                    self.nomadic.ui.NightNowPlaying.setText(
+                        self.nomadic.mpd.current_song_title(self.nomadic.mpd_status)
+                    )
+
+                    self.nomadic.ui.NightNextPlaying.setText(self.nomadic.mpd.next_song_title(self.nomadic.mpd_status))
+                    self.mpd_album_art()
+
             if self.nomadic.mpd_status.get('state', '') == 'stop':
                 self.music_stop_press()        
 
@@ -259,7 +261,6 @@ class UserActions():
 
         :param: dict bluetooth 
         """ 
-
         if 'connection' in bluetooth and bluetooth['connection']:
             srcMsg = f"Source: Bluetooth\nDevice: {bluetooth.get('name', '')}\nAddress: {bluetooth.get('mac', '')}"
             self.nomadic.ui.AudioSrc.setText(srcMsg)
@@ -270,31 +271,39 @@ class UserActions():
 
         self.nomadic.ui.AudioSrcIcon.setPixmap(src_icon)
 
-    def set_album_art(self):
+    def mpd_album_art(self):
         """
-        Update the album art displayed in the UI
+        Get the artist of the playing track via MPD and get album art
         """
-        song_img, song = None, self.nomadic.mpd_status.get('song', None)
+        song_img, song, search_term = None, self.nomadic.mpd_status.get('song', None), ""
 
         if isinstance(song, str):
-            song_dets = self.nomadic.mpd.playlist_info(
-                self.nomadic.mpd_status.get('song')
-            )
+            song_dets = self.nomadic.mpd.playlist_info(self.nomadic.mpd_status.get('song'))
 
             if 'artist' in song_dets[0] and len(song_dets[0]['artist']) > 2:
                 search_term = (f"{song_dets[0]['artist']}")
                 LOGGER.info(f"Attempting to get album art for search term: {search_term}.")
 
-                cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
-                song_thumb = self.nomadic.mpd.album_art(search_term, cache_key)
+        self.set_album_art(search_term)
 
-                if isinstance(song_thumb, str):
-                    song_img = QPixmap(song_thumb)
-        if song_img is None:
-            song_img = QPixmap(self.nomadic.mpd.default_art())
+    def set_album_art(self, search_term: str):
+        """
+        Attempt to retrieve album art for the UI
 
-        self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
-        
+        :param: str search_term
+        """        
+        cache_key = (''.join(ch for ch in search_term if ch.isalnum())).lower()
+        if self.art_cache_key != cache_key:
+            song_thumb = self.nomadic.mpd.album_art(search_term, cache_key)
+
+            if isinstance(song_thumb, str):
+                song_img = QPixmap(song_thumb)
+            else:
+                song_img = QPixmap(self.nomadic.mpd.default_art()) if song_img is None else QPixmap(self.nomadic.mpd.default_art())
+
+            self.nomadic.ui.MPDAlbumArt.setPixmap(song_img)
+            self.art_cache_key = cache_key
+
     def clear_now_playing(self):
         """
         Clear the areas showing the name of the current and next up track

@@ -115,8 +115,6 @@ class Bluetooth():
         """
         self.get_device_details()
 
-        print(self.bt_device)
-
         return self.bt_device
 
     def play_audio(self):

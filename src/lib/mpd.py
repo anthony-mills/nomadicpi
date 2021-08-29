@@ -236,14 +236,14 @@ class MpdLib():
         """
 
         if os.path.isfile(self.art_cache + str(cache_key)):
-            logging.debug(f"Found album art with cache key: {cache_key}.")
+            LOGGER.debug(f"Found album art with cache key: {cache_key}.")
 
             return self.art_cache + str(cache_key)
         else:
             try:
                 mb_search = musicbrainzngs.search_release_groups(search_term)
 
-                logging.debug(f"Trying to query music branz album art with search term: {search_term}.")
+                LOGGER.debug(f"Trying to query music branz album art with search term: {search_term}.")
 
                 if isinstance(mb_search['release-group-list'][0]['id'], str):
                     image_list = musicbrainzngs.get_release_group_image_list(mb_search['release-group-list'][0]['id'])
@@ -253,7 +253,7 @@ class MpdLib():
 
                         return thumb_file
             except Exception as e:
-                logging.debug("Unable to get album art: " + str(e))
+                LOGGER.debug("Unable to get album art: " + str(e))
 
         return self.default_art()
 
