@@ -210,11 +210,11 @@ class UserActions():
 
             if isinstance(playlist_length, str):
                 try:
-                    self.nomadic.ui.MPDPlaylistInfo.setText(f"Playlist Lenth: {playlist_length}")
+                    self.nomadic.ui.MPDPlaylistInfo.setText(f"Playlist Length: {playlist_length}")
                 except Exception as e:
                     LOGGER.error(e)
             else:
-                self.nomadic.ui.MPDPlaylistInfo.setText("Playlist Lenth: 0")
+                self.nomadic.ui.MPDPlaylistInfo.setText("Playlist Length: 0")
 
     def update_mpd_playing_info(self):
         """

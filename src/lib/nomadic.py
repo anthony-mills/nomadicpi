@@ -20,8 +20,19 @@ import lib.system_status as system_status
 
 log_format = "%(asctime)s %(levelname)s:%(name)s - %(message)s"
 
-logging.basicConfig(filename='/tmp/nomadic.log', level=logging.DEBUG, filemode='w', format=log_format, datefmt="%Y-%m-%d %H:%M:%S")
+py_ver = float(f"{sys.version_info.major}.{sys.version_info.minor}")
+
+if py_ver < 3.6:
+    sys.exit("Need Python version 3.6 or greater.")
+elif py_ver >= 3.8:
+    force_log = True
+else:
+    force_log = False
+
+logging.basicConfig(filename='/tmp/nomadic.log', level=logging.INFO, filemode='a', force=force_log, format=log_format, datefmt="%Y-%m-%d %H:%M:%S")
 LOGGER = logging.getLogger(__name__)
+
+logging.info(f"Running under Python version {py_ver}")
 
 class NomadicPi():
     pages = {
