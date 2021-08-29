@@ -91,7 +91,12 @@ class UserActions():
         Start playback of music
         """
         LOGGER.debug("Music play button pressed.")
-        self.nomadic.mpd.play_playback()
+
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            self.nomadic.bluetooth.play_audio()
+        else:
+            self.nomadic.mpd.play_playback()
+
         self.ui_button_state()
 
     def music_stop_press(self):
@@ -100,8 +105,13 @@ class UserActions():
         """
         LOGGER.debug("Music stop button pressed.")
         
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            if 'status' in self.nomadic.bt_status and self.nomadic.bt_status['status'] == 'playing':
+                self.nomadic.bluetooth.stop_playback()
+        else:
+            self.nomadic.mpd.stop_playback()
+
         self.clear_now_playing()
-        self.nomadic.mpd.stop_playback()
         self.nomadic.ui.MusicPlay.setChecked(False)
         self.ui_button_state()
         self.nomadic.ui.SongPlayTime.clear()
@@ -111,12 +121,17 @@ class UserActions():
         """
         Skip playback to the next song
         """
-        if self.nomadic.mpd_status.get('state', '') == 'play':
-            LOGGER.debug("Music skip button pressed.")
-            self.clear_now_playing()
-            self.nomadic.mpd.next_song()
-            self.ui_button_state()
-            self.nomadic.ui.MPDAlbumArt.clear()
+        LOGGER.debug("Music skip button pressed.")
+        
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            self.nomadic.bluetooth.next_playback()
+        else:        
+            if self.nomadic.mpd_status.get('state', '') == 'play':
+                self.nomadic.mpd.next_song()
+
+        self.clear_now_playing()
+        self.ui_button_state()
+        self.nomadic.ui.MPDAlbumArt.clear()
 
     def music_random_press(self):
         """
@@ -140,7 +155,7 @@ class UserActions():
         """
         self.nomadic.get_mpd_status()
 
-        if self.nomadic.mpd_status.get('state', '') == 'play':
+        if self.nomadic.mpd_status.get('state', '') == 'play' or self.nomadic.bt_status.get('status', '') == 'playing':
             self.nomadic.ui.MusicPlay.setChecked(True)
             self.nomadic.ui.MusicPlay.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_pause.png"))
         else:
@@ -160,29 +175,45 @@ class UserActions():
     def update_music_playtime(self):
         """
         Update the track playtime
-        """        
-        if self.nomadic.mpd_status.get('state', '') == 'play':
-            m, s = divmod(round(float(self.nomadic.mpd_status.get('elapsed', 0))), 60)
-            song_elapsed = "%02d:%02d" % (m, s)
+        """     
+        format_time = lambda time: divmod(round(float(time)), 60)
 
-            m, s = divmod(round(float(self.nomadic.mpd_status.get('duration', 0))), 60)
-            song_duration = "%02d:%02d" % (m, s)
+        if 'status' in self.nomadic.bt_status and self.nomadic.bt_status.get('status', '') == 'playing':
+                m, s = format_time(self.nomadic.bt_status.get('position', 0) / 1000)
+                song_elapsed = "%02d:%02d" % (m, s)
 
-            self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")  
+                m, s = format_time(self.nomadic.bt_status.get('duration', 0))
+                song_duration = "%02d:%02d" % (m, s)
+
+                self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}") 
+        else:
+            if self.nomadic.mpd_status.get('state', '') == 'play':
+                m, s = format_time(self.nomadic.mpd_status.get('elapsed', 0))
+                song_elapsed = "%02d:%02d" % (m, s)
+
+                m, s = format_time(self.nomadic.mpd_status.get('duration', 0))
+                song_duration = "%02d:%02d" % (m, s)
+
+                self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed} / {song_duration}")  
               
     def update_playlist_count(self):
         """
         Update the playlist count shown on the left column
         """
-        playlist_length = self.nomadic.mpd_status.get('playlistlength', None)
 
-        if isinstance(playlist_length, str):
-            try:
-                self.nomadic.ui.MPDPlaylistInfo.setText(f"Songs Pending: {playlist_length}")
-            except Exception as e:
-                LOGGER.error(e)
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            if 'numberoftracks' in self.nomadic.bt_status:
+                self.nomadic.ui.MPDPlaylistInfo.setText(f"Playlist Length: {self.nomadic.bt_status['numberoftracks']}")
         else:
-            self.nomadic.ui.MPDPlaylistInfo.setText("Songs Pending: 0")
+            playlist_length = self.nomadic.mpd_status.get('playlistlength', None)
+
+            if isinstance(playlist_length, str):
+                try:
+                    self.nomadic.ui.MPDPlaylistInfo.setText(f"Playlist Lenth: {playlist_length}")
+                except Exception as e:
+                    LOGGER.error(e)
+            else:
+                self.nomadic.ui.MPDPlaylistInfo.setText("Playlist Lenth: 0")
 
     def update_mpd_playing_info(self):
         """
@@ -217,8 +248,11 @@ class UserActions():
                     self.nomadic.mpd.next_song_title(self.nomadic.mpd_status)
                 )                    
 
-        if self.nomadic.mpd_status.get('state', '') == 'stop':
-            self.music_stop_press()        
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            pass
+        else:
+            if self.nomadic.mpd_status.get('state', '') == 'stop':
+                self.music_stop_press()        
 
     def show_audio_source(self, bluetooth: dict):
         """
@@ -227,7 +261,7 @@ class UserActions():
         :param: dict bluetooth 
         """ 
 
-        if 'audio' in bluetooth and bluetooth['audio'] is True:
+        if 'connection' in bluetooth and bluetooth['connection']:
             srcMsg = f"Source: Bluetooth\nDevice: {bluetooth.get('name', '')}\nAddress: {bluetooth.get('mac', '')}"
             self.nomadic.ui.AudioSrc.setText(srcMsg)
             src_icon = QPixmap(self.nomadic.ui.base_path + "visual_elements/icons/bluetooth_icon.png")

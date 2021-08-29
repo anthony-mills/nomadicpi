@@ -42,7 +42,7 @@ class NomadicPi():
     # Track the GPS state with this variable
     gps_info, gps_save_interval = None, 60
 
-    base_path, update_loop = '', None
+    base_path, update_loop, bt_status = '', None, {}
 
     def __init__(self, ui):
         self.ui = ui
@@ -140,7 +140,7 @@ class NomadicPi():
         self.update_gps()
         self.update_mpd()
         
-        bt_status = self.bluetooth.check_connection() 
+        self.bt_status = self.bluetooth.check_connection() 
 
         # Only update the home page if the widget is visible
         if self.ui.appContent.currentIndex() == self.pages['home']:
@@ -148,7 +148,7 @@ class NomadicPi():
             self.application_home.update_gps_info()
 
             # Display the currently active audio source
-            self.application_home.show_audio_source(bt_status)
+            self.application_home.show_audio_source(self.bt_status)
 
             # Update MPD now playing information
             self.application_home.update_mpd_playing_info()

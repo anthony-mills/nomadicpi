@@ -10,24 +10,30 @@ LOGGER = logging.getLogger(__name__)
 class Bluetooth():
     dbus_mgr, sys_bus = None, None
 
-    bt_device = {
-        'name' : None,
-        'mac' : None,
-        'connection' : False,
-        'audio' : False,
-        'status' : None,
-        'artist' : None,
-        'track' : None,
-    }
-
     player_iface, transport_iface = None, None
 
     def __init__(self):
+        self.reset_device_state()
+
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         
         self.sys_bus = dbus.SystemBus()     
         self.dbus_mgr = dbus.Interface(self.sys_bus.get_object('org.bluez', "/"), 'org.freedesktop.DBus.ObjectManager')
-        self.setup_audio() 
+        self.setup_audio()
+
+    def reset_device_state(self):
+        """
+        Set inital device flags
+        """        
+        self.bt_device = {
+            'name' : None,
+            'mac' : None,
+            'connection' : False,
+            'audio' : False,
+            'status' : None,
+            'artist' : None,
+            'track' : None,
+        }
 
     def setup_audio(self):
         dbus_objs = self.dbus_mgr.GetManagedObjects().items()
@@ -51,23 +57,46 @@ class Bluetooth():
                 bus_name='org.bluez',
                 dbus_interface='org.freedesktop.DBus.Properties')
 
-        #GLib.io_add_watch(sys.stdin, GLib.IO_IN, self.on_playback_control)
-        #GLib.MainLoop().run()
-
         self.bt_device['audio'] = True if self.bt_device is True else False
+
+        self.get_device_details()
 
     def on_property_changed(self, interface, changed, invalidated):
         """
         Update the status of the bt device when a status change is detected
         """
+        if interface == 'org.bluez.Device1':
+            for prop, value in changed.items():
+                if prop == 'Connected' and value == 1:
+                    self.get_device_details()
+                else:
+                    self.reset_device_state()
+                    
         if interface != 'org.bluez.MediaPlayer1':
             return
 
-        for prop, value in changed.items():
-            if prop == 'Status':
-                self.bt_device['status'] = str(value)
-            if prop == 'Track':
-                self.track_details(value)
+        self.get_device_details()
+    
+    def get_device_details(self):
+        """
+        Get the details of the device
+        """
+        dbus_objs = self.dbus_mgr.GetManagedObjects().items()
+        
+        for path, ifaces in dbus_objs:
+            if 'org.bluez.Device1' in ifaces and 'Connected' in ifaces['org.bluez.Device1']:
+                if ifaces['org.bluez.Device1']['Connected'] == 1:
+                    self.bt_device['name'] = str(ifaces['org.bluez.Device1']['Name'])
+                    self.bt_device['mac'] = str(ifaces['org.bluez.Device1']['Address'])
+                    self.bt_device['connection'] = True                
+
+            if 'org.bluez.MediaPlayer1' in ifaces:
+                if 'Track' in ifaces['org.bluez.MediaPlayer1']:
+                    self.track_details(ifaces['org.bluez.MediaPlayer1']['Track'])
+                if 'Status' in ifaces['org.bluez.MediaPlayer1']:
+                    self.bt_device['status'] = str(ifaces['org.bluez.MediaPlayer1']['Status'])
+                if 'Position' in ifaces['org.bluez.MediaPlayer1']:
+                    self.bt_device['position'] = int(ifaces['org.bluez.MediaPlayer1']['Position'])
 
     def track_details(self, track: dict):
         """
@@ -84,23 +113,40 @@ class Bluetooth():
 
         :return: dict
         """
-        dbus_objs = self.dbus_mgr.GetManagedObjects().items()
-        for path, ifaces in dbus_objs:
-            if 'org.bluez.Device1' in ifaces and 'Connected' in ifaces['org.bluez.Device1']:
-                if ifaces['org.bluez.Device1']['Connected'] == 1:
-                    self.bt_device['name'] = str(ifaces['org.bluez.Device1']['Name'])
-                    self.bt_device['mac'] = str(ifaces['org.bluez.Device1']['Address'])
-                    self.bt_device['connection'] = True
+        self.get_device_details()
 
-            if 'org.bluez.MediaPlayer1' in ifaces:
-                if 'Track' in ifaces['org.bluez.MediaPlayer1']:
-                    self.track_details(ifaces['org.bluez.MediaPlayer1']['Track'])
-                if 'Status' in ifaces['org.bluez.MediaPlayer1']:
-                    self.bt_device['status'] = str(ifaces['org.bluez.MediaPlayer1']['Status'])
-                if 'Position' in ifaces['org.bluez.MediaPlayer1']:
-                    self.bt_device['position'] = int(ifaces['org.bluez.MediaPlayer1']['Position'])
         print(self.bt_device)
+
         return self.bt_device
+
+    def play_audio(self):
+        """
+        Start audio playback on the bluetooth device
+        """
+        if self.player_iface:
+            if self.bt_device.get('status', '') == 'playing':
+                LOGGER.info('Pausing bluetooth audio playback.')
+                self.player_iface.Pause()
+            else:
+                LOGGER.info('Starting bluetooth audio playback.')
+                self.player_iface.Play()
+
+    def stop_playback(self):
+        """
+        Stop audio playback on the Bluetooth device
+        """
+        if self.player_iface:
+            LOGGER.info('Stopping bluetooth audio playback.')
+            self.player_iface.Stop()
+
+    def next_playback(self):
+        """
+        Pause audio playback on the Bluetooth device
+        """
+        if self.player_iface:
+            LOGGER.info('Requesting next bluetooth audio track.')
+            self.player_iface.Next()
+       
 
 if __name__ == '__main__':
     print("This module cannot be run directly.")
