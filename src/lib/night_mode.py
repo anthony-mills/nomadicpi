@@ -24,8 +24,11 @@ class NightMode():
         self.ui_button_state()
         self.update_gps_speed()
 
-        if 'songid' in self.nomadic.mpd_status and self.nomadic.now_playing != self.nomadic.mpd_status['songid']:
-            self.update_mpd_info()
+        if self.nomadic.mpd_status.get('state', '') == 'play':
+            if 'songid' in self.nomadic.mpd_status and self.nomadic.now_playing != self.nomadic.mpd_status['songid']:
+                self.update_playing_info()
+        if self.nomadic.bt_status.get('status', '') == 'playing':
+            self.update_playing_info()
 
     def clear_now_playing(self):
         """
@@ -37,7 +40,7 @@ class NightMode():
         """
         Update the state of any UI buttons
         """
-        if self.nomadic.mpd_status.get('state', '') == 'play':
+        if self.nomadic.mpd_status.get('state', '') == 'play' or self.nomadic.bt_status.get('status', '') == 'playing':
             self.nomadic.ui.NightPlayButton.setChecked(True)
             self.nomadic.ui.NightPlayButton.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_pause.png"))
         else:
@@ -45,46 +48,68 @@ class NightMode():
             self.nomadic.ui.NightPlayButton.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_play.png"))
 
 
-    def update_mpd_info(self, force_update=0):
+    def update_playing_info(self):
         """
         Update UI with information related to music playback
         """
         LOGGER.info('Updating UI playing state')
-
-        if 'state' in self.nomadic.mpd_status and self.nomadic.mpd_status.get('state', '') == 'play' or force_update == 1:
+        
+        if self.nomadic.mpd_status.get('state', '') == 'play':
             self.nomadic.ui.NightNowPlaying.setText(self.nomadic.mpd.current_song_title(self.nomadic.mpd_status))
             self.nomadic.ui.NightNextPlaying.setText(self.nomadic.mpd.next_song_title(self.nomadic.mpd_status))
+
+        if self.nomadic.bt_status.get('status', '') == 'playing':
+            artist = self.nomadic.bt_status.get('artist', '')
+            now_playing = f"Playing: {artist}\n{self.nomadic.bt_status.get('title', '')}"
+            self.nomadic.ui.MPDNowPlaying.setText(now_playing)
+            self.nomadic.ui.NightNextPlaying.setText(now_playing)
+
+        if self.nomadic.bt_status.get('status', '') == 'paused':
+            self.clear_now_playing()
 
     def music_play_press(self):
         """
         Start playback of music
         """
         LOGGER.debug("Music play button pressed.")
-        self.nomadic.mpd.play_playback()
-        self.nomadic.mpd_status['state'] = 'play'
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            self.nomadic.bluetooth.play_audio()
+        else:
+            self.nomadic.mpd.play_playback()
+            self.nomadic.mpd_status['state'] = 'play'
         self.ui_button_state()
-        self.update_mpd_info(1)
+        self.update_playing_info()
 
     def music_skip_press(self):
         """
         Skip playback to the next song
         """
-        if 'state' in self.nomadic.mpd_status and self.nomadic.mpd_status.get('state', '') == 'play':
-            LOGGER.debug("Music skip button pressed.")
-            self.nomadic.mpd.next_song()
-            self.ui_button_state()
-            self.clear_now_playing()
-            self.update_mpd_info(1)
+        LOGGER.debug("Music skip button pressed.")
+
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            self.nomadic.bluetooth.next_playback()
+        else:        
+            if self.nomadic.mpd_status.get('state', '') == 'play':
+                self.nomadic.mpd.next_song()        
+
+        self.ui_button_state()
+        self.clear_now_playing()
+        self.update_playing_info()
 
     def music_stop_press(self):
         """
         Stop the playback of music
         """
-        if 'state' in self.nomadic.mpd_status and self.nomadic.mpd_status.get('state', '') != 'stop':
-            LOGGER.debug("Music stop button pressed.")
-            self.clear_now_playing()
-            self.nomadic.mpd.stop_playback()
-            self.ui_button_state()
+        if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
+            if 'status' in self.nomadic.bt_status and self.nomadic.bt_status['status'] == 'playing':
+                self.nomadic.bluetooth.stop_playback()
+        else:
+            if 'state' in self.nomadic.mpd_status and self.nomadic.mpd_status.get('state', '') != 'stop':
+                self.nomadic.mpd.stop_playback()
+
+        LOGGER.debug("Music stop button pressed.")
+        self.clear_now_playing()
+        self.ui_button_state()
 
     def update_gps_speed(self):
         """
