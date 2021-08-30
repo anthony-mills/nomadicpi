@@ -1,4 +1,5 @@
 import os.path
+import random
 import sys
 import logging
 import musicbrainzngs
@@ -234,26 +235,26 @@ class MpdLib():
         cache_name : string
             Name to store any cache item under
         """
-
         if os.path.isfile(self.art_cache + str(cache_key)):
             LOGGER.debug(f"Found album art with cache key: {cache_key}.")
 
             return self.art_cache + str(cache_key)
         else:
             try:
-                mb_search = musicbrainzngs.search_release_groups(search_term)
+                mb_search = musicbrainzngs.search_releases(search_term)
 
-                LOGGER.debug(f"Trying to query music branz album art with search term: {search_term}.")
+                LOGGER.info(f"Trying to query music branz album art with search term: {search_term}.")
 
-                if isinstance(mb_search['release-group-list'][0]['id'], str):
-                    image_list = musicbrainzngs.get_release_group_image_list(mb_search['release-group-list'][0]['id'])
+                if isinstance(mb_search['release-list'][0]['release-group']['id'], str):
+                    image_list = musicbrainzngs.get_release_group_image_list(mb_search['release-list'][0]['release-group']['id'])
+
                     if isinstance(image_list['images'][0]['thumbnails']['small'], str):
                         thumb_file = self.art_cache + str(cache_key)
                         urllib.request.urlretrieve(image_list['images'][0]['thumbnails']['small'], thumb_file)
 
                         return thumb_file
             except Exception as e:
-                LOGGER.debug("Unable to get album art: " + str(e))
+                LOGGER.error("Unable to get album art: " + str(e))
 
         return self.default_art()
 
