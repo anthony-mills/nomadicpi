@@ -16,6 +16,10 @@ So the first aim with this rewrite will be extensibility so it can be modified t
 
 ![Nomadic System Stats](/screenshots/4.png?raw=true "Stats related to the system")
 
+![Playing music from MPD](/screenshots/mpd_playing.png?raw=true "Playing music in the MPD library")
+
+![Playing via BlueTooth](/screenshots/4.png?raw=true "Playing music from an external device via BlueTooth")
+
 ### Licence
 
 Copyright (C) 2021 [Anthony Mills](http://www.anthony-mills.com)
