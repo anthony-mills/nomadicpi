@@ -18,7 +18,7 @@ So the first aim with this rewrite will be extensibility so it can be modified t
 
 ![Playing music from MPD](/screenshots/mpd_playing.png?raw=true "Playing music in the MPD library")
 
-![Playing via BlueTooth](/screenshots/4.png?raw=true "Playing music from an external device via BlueTooth")
+![Playing via BlueTooth](/screenshots/bt_playing.png?raw=true "Playing music from an external device via BlueTooth")
 
 ### Licence
 
