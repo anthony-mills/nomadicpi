@@ -97,6 +97,7 @@ class Bluetooth():
                     self.bt_device['status'] = str(ifaces['org.bluez.MediaPlayer1']['Status'])
                 if 'Position' in ifaces['org.bluez.MediaPlayer1']:
                     self.bt_device['position'] = int(ifaces['org.bluez.MediaPlayer1']['Position'])
+                self.bt_device['audio'] = True  
 
     def track_details(self, track: dict):
         """
