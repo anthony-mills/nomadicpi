@@ -151,7 +151,11 @@ class NomadicPi():
         self.update_gps()
         self.update_mpd()
         
-        self.bt_status = self.bluetooth.check_connection() 
+        self.bt_status = self.bluetooth.check_connection()
+
+        # Stop playing music from MPD when a Bluetooth audio player is connected
+        if self.mpd_status.get('state', '') == 'play' and self.bt_status.get('connection', False) is True:
+            self.mpd.stop_playback()
 
         # Only update the home page if the widget is visible
         if self.ui.appContent.currentIndex() == self.pages['home']:
