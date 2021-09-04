@@ -162,7 +162,7 @@ class SystemStatus():
         self.nomadic.mpd.update_library()
         self.database_update_status(self.nomadic.mpd_status)
 
-    def database_update_status(self, mpd_status):
+    def database_update_status(self, mpd_status: dict):
         """
         Update the state of database update button
 
