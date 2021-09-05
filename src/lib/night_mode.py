@@ -77,7 +77,7 @@ class NightMode():
             self.nomadic.bluetooth.play_audio()
         else:
             self.nomadic.mpd.play_playback()
-            self.nomadic.mpd_status['state'] = 'play'
+        self.nomadic.mpd_status['state'] = 'playing' if self.nomadic.bt_status.get('connection', False) is True else 'play'
         self.ui_button_state()
         self.update_playing_info()
 

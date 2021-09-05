@@ -98,6 +98,7 @@ class UserActions():
         else:
             self.nomadic.mpd.play_playback()
 
+        self.nomadic.mpd_status['state'] = 'playing' if self.nomadic.bt_status.get('connection', False) is True else 'play'
         self.ui_button_state()
 
     def music_stop_press(self):
