@@ -321,7 +321,7 @@ class UserActions():
             self.nomadic.ui.CurrentAltitude.setFont(self.location_text)
 
             if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):
-                self.nomadic.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")
+                self.nomadic.ui.CurrentSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed)}")
 
             if hasattr(self.nomadic.gps_info, 'lon') and hasattr(self.nomadic.gps_info, 'lat'):
                 self.nomadic.ui.CurrentPosition.setText(f"Coordinates: {round(self.nomadic.gps_info.lat,6)}, {round(self.nomadic.gps_info.lon,6)}")
