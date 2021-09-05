@@ -4,7 +4,7 @@ import sqlite3
 import datetime
 import dateutil.parser as dp
 
-import lib.gps
+import lib.gps as gps
 
 LOGGER = logging.getLogger(__name__)
 
@@ -28,9 +28,9 @@ class NomadicDb():
 
         :param: str base_path
 
-        :return: 
-        """      
-        try:    
+        :return:
+        """
+        try:
             db_conn = sqlite3.connect(self.base_path + 'nomadicpi.db')
 
             cursor = db_conn.cursor()
@@ -62,11 +62,10 @@ class NomadicDb():
                 if hasattr(gps_info, 'alt'):
                     alt = round(gps_info.alt)
                 else:
-                    alt = 0 
+                    alt = 0
 
                 cursor.execute('''INSERT INTO gps_points VALUES (?, ?, ?, ?, ?);''', (timestamp,round(gps_info.lat, 6), round(gps_info.lon, 6), alt, speed))
 
                 LOGGER.info(f"Storing GPS point {timestamp},{round(gps_info.lat, 6)},{round(gps_info.lon, 6)} as {cursor.lastrowid}")
                 db_conn.commit()
                 db_conn.close()
-    

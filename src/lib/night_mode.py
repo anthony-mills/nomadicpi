@@ -53,7 +53,7 @@ class NightMode():
         Update UI with information related to music playback
         """
         LOGGER.info('Updating UI playing state')
-        
+
         if self.nomadic.mpd_status.get('state', '') == 'play':
             self.nomadic.ui.NightNowPlaying.setText(self.nomadic.mpd.current_song_title(self.nomadic.mpd_status))
             self.nomadic.ui.NightNextPlaying.setText(self.nomadic.mpd.next_song_title(self.nomadic.mpd_status))
@@ -88,9 +88,9 @@ class NightMode():
 
         if 'connection' in self.nomadic.bt_status and self.nomadic.bt_status['connection']:
             self.nomadic.bluetooth.next_playback()
-        else:        
+        else:
             if self.nomadic.mpd_status.get('state', '') == 'play':
-                self.nomadic.mpd.next_song()        
+                self.nomadic.mpd.next_song()
 
         self.ui_button_state()
         self.clear_now_playing()
@@ -117,4 +117,4 @@ class NightMode():
         """
         if self.nomadic.gps_info is not None:
             if hasattr(self.nomadic.gps_info, 'hspeed') and isinstance(self.nomadic.gps_info.hspeed, float):
-                self.nomadic.ui.NightSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed) * self.nomadic.speed_modifier}")
+                self.nomadic.ui.NightSpeed.setText(f"{gps.ms_kmh_coversion(self.nomadic.gps_info.hspeed)}")

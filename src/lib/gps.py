@@ -330,7 +330,7 @@ def get_current():
                     "Unexpected message received from gps: {}".format(response['class']))
             return GpsResponse.from_json(response)
         except Exception as e:
-            logger.error(f"GPS connection error encountered: {e}")      
+            logger.error(f"GPS connection error encountered: {e}")
 
     return no_gps()
 
@@ -341,4 +341,6 @@ def ms_kmh_coversion(speed):
     :param: int speed
     :return: int
     """
-    return round(speed * 3.6)
+    speed = 0 if round(speed * 3.6) < 5 else round(speed * 3.6)
+
+    return speed

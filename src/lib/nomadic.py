@@ -69,7 +69,7 @@ class NomadicPi():
         self.get_mpd_status()
 
         # Check the bluetooth status
-        self.bluetooth = bluetooth.Bluetooth()    
+        self.bluetooth = bluetooth.Bluetooth()
 
         # Setup the handlers for user actions on the application home
         self.application_home = application_home.UserActions(self)
@@ -114,7 +114,7 @@ class NomadicPi():
         """
         try:
             LOGGER.debug("Switching view to the application home page.")
-            
+
             self.ui.appContent.setCurrentIndex(self.pages['home'])
         except Exception as e:
             LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
@@ -149,7 +149,7 @@ class NomadicPi():
         """
         self.update_gps()
         self.update_mpd()
-        
+
         self.bt_status = self.bluetooth.check_connection()
 
         # Stop playing music from MPD when a Bluetooth audio player is connected
@@ -200,13 +200,14 @@ class NomadicPi():
                 gpsd_port = int(self.app_config['gpsd'].get('Port', '2947'))
 
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
+                LOGGER.info(f"Established connection to GPSD service.")
             except Exception as e:
                 LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
                 LOGGER.warning(f"Unable to connect to GPSD service at: {gpsd_host}:{gpsd_port}")
         else:
-            try:
-                self.gps_info = gps.get_current()
+            self.gps_info = gps.get_current()
 
+            try:
                 if self.update_cycle_count == self.gps_save_interval:
                     self.db.save_location(self.gps_info)
                     self.update_cycle_count = 0
