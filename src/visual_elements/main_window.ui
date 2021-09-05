@@ -35,7 +35,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="home">
     <property name="font">
@@ -1812,6 +1812,11 @@ color: rgb(186, 189, 182);</string>
      <property name="toolTip">
       <string>Play / Pause Music</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -1846,6 +1851,14 @@ color: rgb(186, 189, 182);</string>
      <property name="toolTip">
       <string>Skip Song</string>
      </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -1877,6 +1890,11 @@ color: rgb(186, 189, 182);</string>
      <property name="toolTip">
       <string>Stop Music Playback</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -1907,6 +1925,11 @@ color: rgb(186, 189, 182);</string>
      </property>
      <property name="toolTip">
       <string>Stop Music Playback</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
      </property>
      <property name="text">
       <string/>

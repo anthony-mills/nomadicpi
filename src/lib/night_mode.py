@@ -46,6 +46,7 @@ class NightMode():
         else:
             self.nomadic.ui.NightPlayButton.setChecked(False)
             self.nomadic.ui.NightPlayButton.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_play.png"))
+            self.clear_now_playing()
 
 
     def update_playing_info(self):
