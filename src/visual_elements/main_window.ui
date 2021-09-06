@@ -35,7 +35,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="home">
     <property name="font">
@@ -1586,7 +1586,7 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>20</y>
+       <y>40</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1599,7 +1599,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>20</y>
+       <y>40</y>
        <width>301</width>
        <height>31</height>
       </rect>
@@ -1612,7 +1612,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>100</y>
+       <y>120</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1625,7 +1625,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>60</y>
+       <y>80</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1638,7 +1638,7 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>140</y>
+       <y>160</y>
        <width>331</width>
        <height>31</height>
       </rect>
@@ -1651,7 +1651,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>140</y>
+       <y>160</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1664,7 +1664,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>180</y>
+       <y>200</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1677,7 +1677,7 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>100</y>
+       <y>120</y>
        <width>311</width>
        <height>31</height>
       </rect>
@@ -1690,7 +1690,7 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>180</y>
+       <y>200</y>
        <width>331</width>
        <height>31</height>
       </rect>
@@ -1703,13 +1703,142 @@
      <property name="geometry">
       <rect>
        <x>350</x>
-       <y>60</y>
+       <y>80</y>
        <width>311</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Longitude</string>
+     </property>
+    </widget>
+    <widget class="Line" name="line">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>240</y>
+       <width>631</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GpsStatusHeading">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>10</y>
+       <width>201</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>GPS Status</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GpsLogHeading">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>270</y>
+       <width>201</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>GPS Log</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GPSLogPoints">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>300</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Data Points</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GPSLogDateRange">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>300</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Date Range</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GPSLogDistance">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>340</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Distance</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GPSLogAvgSpeed">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>340</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Average Speed</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GPSLogAvgAltitude">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>380</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Average Altitude</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="GPSLogMaxAltitude">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>380</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Max Altitude</string>
      </property>
     </widget>
    </widget>
@@ -1812,6 +1941,11 @@ color: rgb(186, 189, 182);</string>
      <property name="toolTip">
       <string>Play / Pause Music</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -1846,6 +1980,14 @@ color: rgb(186, 189, 182);</string>
      <property name="toolTip">
       <string>Skip Song</string>
      </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -1877,6 +2019,11 @@ color: rgb(186, 189, 182);</string>
      <property name="toolTip">
       <string>Stop Music Playback</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -1907,6 +2054,11 @@ color: rgb(186, 189, 182);</string>
      </property>
      <property name="toolTip">
       <string>Stop Music Playback</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 0.4); 
+border: 1px solid #404040;
+border-radius: 5px;</string>
      </property>
      <property name="text">
       <string/>

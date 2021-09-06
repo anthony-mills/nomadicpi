@@ -46,6 +46,7 @@ class NightMode():
         else:
             self.nomadic.ui.NightPlayButton.setChecked(False)
             self.nomadic.ui.NightPlayButton.setIcon(QtGui.QIcon(self.nomadic.ui.base_path + "visual_elements/icons/media_play.png"))
+            self.clear_now_playing()
 
 
     def update_playing_info(self):
@@ -76,7 +77,7 @@ class NightMode():
             self.nomadic.bluetooth.play_audio()
         else:
             self.nomadic.mpd.play_playback()
-            self.nomadic.mpd_status['state'] = 'play'
+        self.nomadic.mpd_status['state'] = 'playing' if self.nomadic.bt_status.get('connection', False) is True else 'play'
         self.ui_button_state()
         self.update_playing_info()
 

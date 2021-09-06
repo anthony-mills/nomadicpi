@@ -1,6 +1,7 @@
 import socket
 import json
 import logging
+import math
 import datetime
 import threading
 
@@ -334,7 +335,23 @@ def get_current():
 
     return no_gps()
 
-def ms_kmh_coversion(speed):
+def get_distance(lat_1, lng_1, lat_2, lng_2) -> int:
+    """
+    Calculate the distance between two GPS points in km
+    """ 
+    d_lat = lat_2 - lat_1
+    d_lng = lng_2 - lng_1 
+
+    temp = (  
+         math.sin(d_lat / 2) ** 2 
+       + math.cos(lat_1) 
+       * math.cos(lat_2) 
+       * math.sin(d_lng / 2) ** 2
+    )
+
+    return round(6373.0 * (2 * math.atan2(math.sqrt(temp), math.sqrt(1 - temp))))
+
+def ms_kmh_coversion(speed) -> int:
     """
     Convert a value from  m/s to km/h
 

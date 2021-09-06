@@ -1,7 +1,8 @@
 import calendar
 import logging
 import sqlite3
-import datetime
+
+from datetime import datetime
 import dateutil.parser as dp
 
 import lib.gps as gps
@@ -32,6 +33,7 @@ class NomadicDb():
         """
         try:
             db_conn = sqlite3.connect(self.base_path + 'nomadicpi.db')
+            db_conn.row_factory = sqlite3.Row
 
             cursor = db_conn.cursor()
             cursor.execute('''CREATE TABLE IF NOT EXISTS gps_points (date int, latitude real, longitude real, altitude int, speed int)''')
@@ -41,7 +43,7 @@ class NomadicDb():
 
         return db_conn
 
-    def save_location(self, gps_info):
+    def save_location(self, gps_info: dict):
         """
         Save the current location details to the database
 
@@ -69,3 +71,38 @@ class NomadicDb():
                 LOGGER.info(f"Storing GPS point {timestamp},{round(gps_info.lat, 6)},{round(gps_info.lon, 6)} as {cursor.lastrowid}")
                 db_conn.commit()
                 db_conn.close()
+
+    def get_gps_log_summary(self) -> dict:
+        """
+        Get summary points of the GPS log
+
+        :return: dict gps_log
+        """
+        db_conn = self.open_conn()
+        cursor = db_conn.cursor()        
+        db_sql = cursor.execute("SELECT * FROM gps_points")
+        db_rows = [dict(row) for row in db_sql.fetchall()]
+        alt_points, speed_points, distance, cur_lat, cur_lon = [], [], 0, None, None
+
+        for row in db_rows:
+            if cur_lat is not None and cur_lon is not None:
+                distance += gps.get_distance(cur_lat, cur_lon, row['latitude'], row['longitude'])
+
+            cur_lat, cur_lon = row['latitude'], row['longitude']
+
+            if row.get('altitude', 0) > 0:
+                alt_points.append(row['altitude'])
+            if row.get('speed', 0) > 0:
+                speed_points.append(row['speed'])
+
+        gps_log = {
+            'data_points' : len(alt_points),
+            'max_alt' : max(alt_points),
+            'avg_alt' : round(sum(alt_points) / len(alt_points)),
+            'avg_speed' : round(sum(speed_points) / len(speed_points) if sum(speed_points) > 0 else 0),
+            'distance' : distance,
+            'start_date' : datetime.fromtimestamp(db_rows[0].get('date')).strftime('%d/%m/%Y %H:%M'),
+            'end_date' : datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M')        
+        }
+
+        return gps_log

@@ -32,6 +32,19 @@ class LocationStatus():
         self.gps_satellites()
         self.gps_fix_type()
         self.gps_location()
+        self.gps_log()
+
+    def gps_log(self):
+        """
+        Display information from the computer GPS log
+        """
+        gps_log = self.nomadic.db.get_gps_log_summary()
+        self.nomadic.ui.GPSLogPoints.setText(f"Data Points: {gps_log.get('data_points', 0)}")
+        self.nomadic.ui.GPSLogDistance.setText(f"Distance: {gps_log.get('distance', 0)} km")
+        self.nomadic.ui.GPSLogMaxAltitude.setText(f"Max Altitude: {gps_log.get('max_alt', 0)} m")  
+        self.nomadic.ui.GPSLogAvgAltitude.setText(f"Avg Altitude: {gps_log.get('avg_alt', 0)} m")   
+        self.nomadic.ui.GPSLogAvgSpeed.setText(f"Avg Speed: {gps_log.get('avg_speed', 0)} km/h")   
+        self.nomadic.ui.GPSLogDateRange.setText(f"Period: {gps_log.get('start_date')} - {gps_log.get('end_date')}")                        
 
     def gps_location(self):
         """
