@@ -1,8 +1,16 @@
+"""
+Handle actions related to the location status page.
+"""
 import logging
 import sys
+from datetime import datetime
+from os.path import expanduser
+import gpxpy
+import gpxpy.gpx
+
 import lib.gps as gps
 
-from datetime import datetime
+from PyQt5.QtWidgets import QFileDialog
 
 LOGGER = logging.getLogger(__name__)
 
@@ -15,6 +23,7 @@ class LocationStatus():
         # Register the button actions on the location status page
         self.nomadic.ui.LocationReturnHome.clicked.connect(self.nomadic.view_home_widget)
         self.nomadic.ui.ResetTripLogButton.clicked.connect(self.reset_trip_log)
+        self.nomadic.ui.ExportGPSLogButton.clicked.connect(self.export_gps_log)
 
     def update_page(self):
         """
@@ -27,7 +36,7 @@ class LocationStatus():
                 gps.gps_connect(host=gpsd_host, port=gpsd_port)
 
             except Exception as e:
-                LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")   
+                LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 
         self.gps_status = gps.get_current()
 
@@ -45,16 +54,16 @@ class LocationStatus():
 
         self.nomadic.ui.GPSLogPoints.clear()
         self.nomadic.ui.GPSLogDistance.clear()
-        self.nomadic.ui.GPSLogMaxAltitude.clear()  
-        self.nomadic.ui.GPSLogAvgAltitude.clear()   
-        self.nomadic.ui.GPSLogAvgSpeed.clear()   
-        self.nomadic.ui.GPSLogDateRange.clear()  
+        self.nomadic.ui.GPSLogMaxAltitude.clear()
+        self.nomadic.ui.GPSLogAvgAltitude.clear()
+        self.nomadic.ui.GPSLogAvgSpeed.clear()
+        self.nomadic.ui.GPSLogDateRange.clear()
 
     def gps_log(self):
         """
         Display information from the computer GPS log
         """
-        db_rows = self.nomadic.db.get_gps_log_summary()
+        db_rows = self.nomadic.db.get_gps_points()
 
         alt_points, speed_points, distance, cur_lat, cur_lon = [], [], 0, None, None
 
@@ -70,14 +79,43 @@ class LocationStatus():
                 speed_points.append(row['speed'])
 
         start_date = datetime.fromtimestamp(db_rows[0].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""
-        end_date = datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""    
+        end_date = datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""
 
         self.nomadic.ui.GPSLogPoints.setText(f"Data Points: {len(alt_points) if len(alt_points) > 0 else 0}")
         self.nomadic.ui.GPSLogDistance.setText(f"Distance: {round(distance, 2) if len(alt_points) > 0 else 0} km")
-        self.nomadic.ui.GPSLogMaxAltitude.setText(f"Max Altitude: {max(alt_points) if len(alt_points) > 0 else 0} m")  
-        self.nomadic.ui.GPSLogAvgAltitude.setText(f"Avg Altitude: {round(sum(alt_points) / len(alt_points)) if len(alt_points) > 0 else 0} m")   
-        self.nomadic.ui.GPSLogAvgSpeed.setText(f"Avg Speed: {round(sum(speed_points) / len(speed_points)) if sum(speed_points) > 0 else 0} km/h")   
-        self.nomadic.ui.GPSLogDateRange.setText(f"Period: {start_date} - {end_date}")                        
+        self.nomadic.ui.GPSLogMaxAltitude.setText(f"Max Altitude: {max(alt_points) if len(alt_points) > 0 else 0} m")
+        self.nomadic.ui.GPSLogAvgAltitude.setText(f"Avg Altitude: {round(sum(alt_points) / len(alt_points)) if len(alt_points) > 0 else 0} m")
+        self.nomadic.ui.GPSLogAvgSpeed.setText(f"Avg Speed: {round(sum(speed_points) / len(speed_points)) if sum(speed_points) > 0 else 0} km/h")
+        self.nomadic.ui.GPSLogDateRange.setText(f"Period: {start_date} - {end_date}")
+
+    def export_gps_log(self):
+        """
+        Write the stored GPS points to a GPX file
+        """
+        gpx = gpxpy.gpx.GPX()
+
+        # Create first track in our GPX:
+        gpx_track = gpxpy.gpx.GPXTrack()
+        gpx.tracks.append(gpx_track)
+
+        # Create first segment in our GPX track:
+        gpx_segment = gpxpy.gpx.GPXTrackSegment()
+        gpx_track.segments.append(gpx_segment)
+
+        db_rows = self.nomadic.db.get_gps_points()
+
+        for row in db_rows:
+            gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(row['latitude'], row['longitude'], elevation=row['altitude'], speed=row['speed']))
+
+        dir_path= QFileDialog.getExistingDirectory(None,"Select folder", expanduser("~"), QFileDialog.ShowDirsOnly)
+
+        filename = f"{dir_path}/gps_log_export_{(datetime.today().date()).isoformat()}.gpx"
+
+        gpx_file = open(filename, "w+")
+        gpx_file.write(gpx.to_xml())
+        gpx_file.close()
+
+        LOGGER.info(f"Exported stored GPS data to: {filename}")
 
     def gps_location(self):
         """

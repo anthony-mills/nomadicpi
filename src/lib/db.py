@@ -78,16 +78,16 @@ class NomadicDb():
 
         LOGGER.info(f"Deleted contents of database tabe: {table}")
         db_conn.commit()
-        db_conn.close()        
+        db_conn.close()
 
-    def get_gps_log_summary(self) -> dict:
+    def get_gps_points(self) -> dict:
         """
         Get summary points of the GPS log
 
         :return: dict gps_log
         """
         db_conn = self.open_conn()
-        cursor = db_conn.cursor()        
+        cursor = db_conn.cursor()
         db_sql = cursor.execute("SELECT * FROM gps_points")
         db_rows = [dict(row) for row in db_sql.fetchall()]
 
