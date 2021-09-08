@@ -2,6 +2,8 @@ import logging
 import sys
 import lib.gps as gps
 
+from datetime import datetime
+
 LOGGER = logging.getLogger(__name__)
 
 class LocationStatus():
@@ -52,13 +54,30 @@ class LocationStatus():
         """
         Display information from the computer GPS log
         """
-        gps_log = self.nomadic.db.get_gps_log_summary()
-        self.nomadic.ui.GPSLogPoints.setText(f"Data Points: {gps_log.get('data_points', 0)}")
-        self.nomadic.ui.GPSLogDistance.setText(f"Distance: {gps_log.get('distance', 0)} km")
-        self.nomadic.ui.GPSLogMaxAltitude.setText(f"Max Altitude: {gps_log.get('max_alt', 0)} m")  
-        self.nomadic.ui.GPSLogAvgAltitude.setText(f"Avg Altitude: {gps_log.get('avg_alt', 0)} m")   
-        self.nomadic.ui.GPSLogAvgSpeed.setText(f"Avg Speed: {gps_log.get('avg_speed', 0)} km/h")   
-        self.nomadic.ui.GPSLogDateRange.setText(f"Period: {gps_log.get('start_date')} - {gps_log.get('end_date')}")                        
+        db_rows = self.nomadic.db.get_gps_log_summary()
+
+        alt_points, speed_points, distance, cur_lat, cur_lon = [], [], 0, None, None
+
+        for row in db_rows:
+            if cur_lat is not None and cur_lon is not None:
+                distance += gps.get_distance(cur_lat, cur_lon, row['latitude'], row['longitude'])
+
+            cur_lat, cur_lon = row['latitude'], row['longitude']
+
+            if row.get('altitude', 0) > 0:
+                alt_points.append(row['altitude'])
+            if row.get('speed', 0) > 0:
+                speed_points.append(row['speed'])
+
+        start_date = datetime.fromtimestamp(db_rows[0].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""
+        end_date = datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""    
+
+        self.nomadic.ui.GPSLogPoints.setText(f"Data Points: {len(alt_points) if len(alt_points) > 0 else 0}")
+        self.nomadic.ui.GPSLogDistance.setText(f"Distance: {round(distance, 2) if len(alt_points) > 0 else 0} km")
+        self.nomadic.ui.GPSLogMaxAltitude.setText(f"Max Altitude: {max(alt_points) if len(alt_points) > 0 else 0} m")  
+        self.nomadic.ui.GPSLogAvgAltitude.setText(f"Avg Altitude: {round(sum(alt_points) / len(alt_points)) if len(alt_points) > 0 else 0} m")   
+        self.nomadic.ui.GPSLogAvgSpeed.setText(f"Avg Speed: {round(sum(speed_points) / len(speed_points)) if sum(speed_points) > 0 else 0} km/h")   
+        self.nomadic.ui.GPSLogDateRange.setText(f"Period: {start_date} - {end_date}")                        
 
     def gps_location(self):
         """
