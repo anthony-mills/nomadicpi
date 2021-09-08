@@ -12,6 +12,7 @@ class LocationStatus():
 
         # Register the button actions on the location status page
         self.nomadic.ui.LocationReturnHome.clicked.connect(self.nomadic.view_home_widget)
+        self.nomadic.ui.ResetTripLogButton.clicked.connect(self.reset_trip_log)
 
     def update_page(self):
         """
@@ -33,6 +34,19 @@ class LocationStatus():
         self.gps_fix_type()
         self.gps_location()
         self.gps_log()
+
+    def reset_trip_log(self):
+        """
+        Reset the trip log
+        """
+        self.nomadic.db.delete_table_contents("gps_points")
+
+        self.nomadic.ui.GPSLogPoints.clear()
+        self.nomadic.ui.GPSLogDistance.clear()
+        self.nomadic.ui.GPSLogMaxAltitude.clear()  
+        self.nomadic.ui.GPSLogAvgAltitude.clear()   
+        self.nomadic.ui.GPSLogAvgSpeed.clear()   
+        self.nomadic.ui.GPSLogDateRange.clear()  
 
     def gps_log(self):
         """

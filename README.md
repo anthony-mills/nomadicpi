@@ -20,6 +20,8 @@ So the first aim with this rewrite will be extensibility so it can be modified t
 
 ![Playing via BlueTooth](/screenshots/bt_playing.png?raw=true "Playing music from an external device via BlueTooth")
 
+![GPS track log](/screenshots/gps_log.png?raw=true "Location status and GPS trip log")
+
 ### Licence
 
 Copyright (C) 2021 [Anthony Mills](http://www.anthony-mills.com)

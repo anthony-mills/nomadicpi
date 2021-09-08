@@ -72,6 +72,15 @@ class NomadicDb():
                 db_conn.commit()
                 db_conn.close()
 
+    def delete_table_contents(self, table:str):
+        db_conn = self.open_conn()
+        cursor = db_conn.cursor()
+        cursor.execute(f"DELETE FROM {table}")
+
+        LOGGER.info(f"Deleted contents of database tabe: {table}")
+        db_conn.commit()
+        db_conn.close()        
+
     def get_gps_log_summary(self) -> dict:
         """
         Get summary points of the GPS log
@@ -96,13 +105,13 @@ class NomadicDb():
                 speed_points.append(row['speed'])
 
         gps_log = {
-            'data_points' : len(alt_points),
-            'max_alt' : max(alt_points),
-            'avg_alt' : round(sum(alt_points) / len(alt_points)),
+            'data_points' : len(alt_points) if len(alt_points) > 0 else 0,
+            'max_alt' : max(alt_points) if len(alt_points) > 0 else 0 ,
+            'avg_alt' : round(sum(alt_points) / len(alt_points)) if len(alt_points) > 0 else 0,
             'avg_speed' : round(sum(speed_points) / len(speed_points) if sum(speed_points) > 0 else 0),
-            'distance' : distance,
-            'start_date' : datetime.fromtimestamp(db_rows[0].get('date')).strftime('%d/%m/%Y %H:%M'),
-            'end_date' : datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M')        
+            'distance' : round(distance, 2) if len(alt_points) > 0 else 0,
+            'start_date' : datetime.fromtimestamp(db_rows[0].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else "",
+            'end_date' : datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""       
         }
 
         return gps_log

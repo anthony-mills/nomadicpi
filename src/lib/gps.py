@@ -1,7 +1,7 @@
 import socket
 import json
 import logging
-import math
+from math import radians, cos, sin, asin, sqrt
 import datetime
 import threading
 
@@ -335,21 +335,28 @@ def get_current():
 
     return no_gps()
 
-def get_distance(lat_1, lng_1, lat_2, lng_2) -> int:
+def get_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> int:
     """
-    Calculate the distance between two GPS points in km
-    """ 
-    d_lat = lat_2 - lat_1
-    d_lng = lng_2 - lng_1 
+    Calculate the great circle distance in kilometers between two points 
+    on the earth (specified in decimal degrees)
 
-    temp = (  
-         math.sin(d_lat / 2) ** 2 
-       + math.cos(lat_1) 
-       * math.cos(lat_2) 
-       * math.sin(d_lng / 2) ** 2
-    )
+    :param: float lat1
+    :param: float lon1
+    :param: float lat2
+    :param: float lat2
 
-    return round(6373.0 * (2 * math.atan2(math.sqrt(temp), math.sqrt(1 - temp))))
+    :return: int
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+    return c * r    
 
 def ms_kmh_coversion(speed) -> int:
     """
