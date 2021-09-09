@@ -10,6 +10,7 @@ psutil = "*"
 humanize = "*"
 python-dateutil = "*"
 dbus-python = "*"
+gpxpy = "*"
 
 [dev-packages]
 

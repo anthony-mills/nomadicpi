@@ -2,7 +2,6 @@ import calendar
 import logging
 import sqlite3
 
-from datetime import datetime
 import dateutil.parser as dp
 
 import lib.gps as gps
@@ -79,39 +78,17 @@ class NomadicDb():
 
         LOGGER.info(f"Deleted contents of database tabe: {table}")
         db_conn.commit()
-        db_conn.close()        
+        db_conn.close()
 
-    def get_gps_log_summary(self) -> dict:
+    def get_gps_points(self) -> dict:
         """
         Get summary points of the GPS log
 
         :return: dict gps_log
         """
         db_conn = self.open_conn()
-        cursor = db_conn.cursor()        
+        cursor = db_conn.cursor()
         db_sql = cursor.execute("SELECT * FROM gps_points")
         db_rows = [dict(row) for row in db_sql.fetchall()]
-        alt_points, speed_points, distance, cur_lat, cur_lon = [], [], 0, None, None
 
-        for row in db_rows:
-            if cur_lat is not None and cur_lon is not None:
-                distance += gps.get_distance(cur_lat, cur_lon, row['latitude'], row['longitude'])
-
-            cur_lat, cur_lon = row['latitude'], row['longitude']
-
-            if row.get('altitude', 0) > 0:
-                alt_points.append(row['altitude'])
-            if row.get('speed', 0) > 0:
-                speed_points.append(row['speed'])
-
-        gps_log = {
-            'data_points' : len(alt_points) if len(alt_points) > 0 else 0,
-            'max_alt' : max(alt_points) if len(alt_points) > 0 else 0 ,
-            'avg_alt' : round(sum(alt_points) / len(alt_points)) if len(alt_points) > 0 else 0,
-            'avg_speed' : round(sum(speed_points) / len(speed_points) if sum(speed_points) > 0 else 0),
-            'distance' : round(distance, 2) if len(alt_points) > 0 else 0,
-            'start_date' : datetime.fromtimestamp(db_rows[0].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else "",
-            'end_date' : datetime.fromtimestamp(db_rows[-1].get('date')).strftime('%d/%m/%Y %H:%M') if len(alt_points) > 0 else ""       
-        }
-
-        return gps_log
+        return db_rows
