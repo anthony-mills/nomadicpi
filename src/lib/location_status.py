@@ -109,13 +109,16 @@ class LocationStatus():
 
         dir_path= QFileDialog.getExistingDirectory(None,"Select folder", expanduser("~"), QFileDialog.ShowDirsOnly)
 
-        filename = f"{dir_path}/gps_log_export_{(datetime.today().date()).isoformat()}.gpx"
+        try:
+            filename = f"{dir_path}/gps_log_export_{(datetime.today().date()).isoformat()}.gpx"
 
-        gpx_file = open(filename, "w+")
-        gpx_file.write(gpx.to_xml())
-        gpx_file.close()
+            gpx_file = open(filename, "w+")
+            gpx_file.write(gpx.to_xml())
+            gpx_file.close()
 
-        LOGGER.info(f"Exported stored GPS data to: {filename}")
+            LOGGER.info(f"Exported stored GPS data to: {filename}")
+        except Exception as e:
+                LOGGER.error(f"Error saving GPS export: {e}")
 
     def gps_location(self):
         """

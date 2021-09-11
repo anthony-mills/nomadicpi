@@ -183,6 +183,11 @@ class NomadicPi():
         try:
             self.mpd_status = self.mpd.update_status()
 
+            if self.mpd_status.get('state', '') == 'play' and hasattr(self.gps_info, 'time'):
+                if self.now_playing is None or self.now_playing != self.mpd_status['songid']:
+                    song_dets = self.mpd.playlist_info(self.mpd_status['song']) if len(self.mpd_status.get('song', '')) > 0 else None
+                    self.db.save_mpd_song(self.mpd_status.get('songid', ''), song_dets[0].get('title', ''), song_dets[0].get('artist', ''), self.gps_info.time)
+
         except Exception as e:
             LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 

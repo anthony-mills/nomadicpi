@@ -1,6 +1,7 @@
 import calendar
 import logging
 import sqlite3
+import sys
 
 import dateutil.parser as dp
 
@@ -22,7 +23,7 @@ class NomadicDb():
         db_conn = self.open_conn()
         db_conn.close()
 
-    def open_conn(self):
+    def open_conn(self) -> None:
         """
         Open a connection to the SQLite database and create any missing DB tables
 
@@ -36,13 +37,46 @@ class NomadicDb():
 
             cursor = db_conn.cursor()
             cursor.execute('''CREATE TABLE IF NOT EXISTS gps_points (date int, latitude real, longitude real, altitude int, speed int)''')
+            cursor.execute('''CREATE TABLE IF NOT EXISTS mpd_history (date int, song_id int, title string, artist string)''')
             db_conn.commit()
-        except Error as e:
+        except Exception as e:
             LOGGER.error(f"Line: {sys.exc_info()[-1].tb_lineno}: {e}")
 
         return db_conn
 
-    def save_location(self, gps_info: dict):
+    def delete_table_contents(self, table: str) -> None:
+        """
+        Delete the contents of a database table
+
+        :param: str table
+        """
+        db_conn = self.open_conn()
+        cursor = db_conn.cursor()
+        cursor.execute(f"DELETE FROM {table}")
+
+        LOGGER.info(f"Deleted contents of database tabe: {table}")
+        db_conn.commit()
+        db_conn.close()
+
+    def save_mpd_song(self, song_id: int, title: str, artist: str, playtime: str):
+        """
+        Saving a playing MPD track to the database
+
+        :param: int song_id
+        :param: str title
+        :param: str artist
+        :param: str playtime
+        """
+        db_conn = self.open_conn()
+        cursor = db_conn.cursor()
+
+        timestamp = calendar.timegm(dp.parse(playtime).timetuple())
+        cursor.execute('''INSERT INTO mpd_history VALUES (?, ?, ?, ?);''', (timestamp, song_id, title, artist))
+
+        LOGGER.info(f"Storing song history: {timestamp},{title},{artist} as {cursor.lastrowid}")
+        (db_conn.commit()).close()
+
+    def save_location(self, gps_info: dict) -> None:
         """
         Save the current location details to the database
 
@@ -65,20 +99,11 @@ class NomadicDb():
                 else:
                     alt = 0
 
-                cursor.execute('''INSERT INTO gps_points VALUES (?, ?, ?, ?, ?);''', (timestamp,round(gps_info.lat, 6), round(gps_info.lon, 6), alt, speed))
+                cursor.execute('''INSERT INTO gps_points VALUES (?, ?, ?, ?, ?);''', (timestamp, round(gps_info.lat, 6), round(gps_info.lon, 6), alt, speed))
 
                 LOGGER.info(f"Storing GPS point {timestamp},{round(gps_info.lat, 6)},{round(gps_info.lon, 6)} as {cursor.lastrowid}")
                 db_conn.commit()
                 db_conn.close()
-
-    def delete_table_contents(self, table:str):
-        db_conn = self.open_conn()
-        cursor = db_conn.cursor()
-        cursor.execute(f"DELETE FROM {table}")
-
-        LOGGER.info(f"Deleted contents of database tabe: {table}")
-        db_conn.commit()
-        db_conn.close()
 
     def get_gps_points(self) -> dict:
         """
@@ -92,3 +117,7 @@ class NomadicDb():
         db_rows = [dict(row) for row in db_sql.fetchall()]
 
         return db_rows
+
+if __name__ == '__main__':
+    print("This module cannot be run directly.")
+    sys.exit()
