@@ -118,7 +118,7 @@ class LocationStatus():
 
             LOGGER.info(f"Exported stored GPS data to: {filename}")
         except Exception as e:
-                LOGGER.error(f"Error saving GPS export: {e}")
+            LOGGER.error(f"Error saving GPS export: {e}")
 
     def gps_location(self):
         """
