@@ -7,6 +7,8 @@ LOGGER = logging.getLogger(__name__)
 class FileManagement():
     selected_file_item = 0
 
+    page_step_size = 10
+
     icons = {
         'file' : None,
         'folder' : None
@@ -20,6 +22,8 @@ class FileManagement():
         self.nomadic.ui.FileReturnHome.clicked.connect(self.nomadic.view_home_widget)
         self.nomadic.ui.FileListUp.clicked.connect(self.playlist_scroll_up)
         self.nomadic.ui.FileListDown.clicked.connect(self.playlist_scroll_down)
+        self.nomadic.ui.PageUpButton.clicked.connect(self.playlist_page_up)
+        self.nomadic.ui.PageDownButton.clicked.connect(self.playlist_page_down)
 
         self.nomadic.ui.FileOpenFolder.clicked.connect(self.open_folder)
         self.nomadic.ui.FileParentDirectory.clicked.connect(self.open_parent_folder)
@@ -57,6 +61,26 @@ class FileManagement():
         if int(self.selected_file_item) < int(self.dir_info['count']):
             self.selected_file_item += 1
             self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
+
+    def playlist_page_up(self):
+        """
+        Page up from the current selection
+        """
+        if (int(self.selected_file_item) - self.page_step_size) > 0:
+            self.selected_file_item -= self.page_step_size
+            self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
+        else:
+            self.nomadic.ui.FileList.setCurrentRow(0)
+
+    def playlist_page_down(self):
+        """
+        Page down from the current selection
+        """
+        if (int(self.selected_file_item) + self.page_step_size) < int(self.dir_info['count']):
+            self.selected_file_item += self.page_step_size
+            self.nomadic.ui.FileList.setCurrentRow(self.selected_file_item)
+        else:
+            self.nomadic.ui.FileList.setCurrentRow(self.dir_info['count'] - 1)
 
     def handle_item_click(self):
         """
