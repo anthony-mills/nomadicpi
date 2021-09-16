@@ -35,7 +35,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="home">
     <property name="font">
@@ -1543,6 +1543,32 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="PageUpButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>445</y>
+       <width>90</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Page Up</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="PageDownButton">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>445</y>
+       <width>90</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Page Down</string>
      </property>
     </widget>
    </widget>

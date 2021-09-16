@@ -107,7 +107,7 @@ class LocationStatus():
         for row in db_rows:
             gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(row['latitude'], row['longitude'], elevation=row['altitude'], speed=row['speed']))
 
-        dir_path= QFileDialog.getExistingDirectory(None,"Select folder", expanduser("~"), QFileDialog.ShowDirsOnly)
+        dir_path= QFileDialog.getExistingDirectory(None, "Select folder", expanduser("~"), QFileDialog.ShowDirsOnly)
 
         try:
             filename = f"{dir_path}/gps_log_export_{(datetime.today().date()).isoformat()}.gpx"
@@ -118,7 +118,7 @@ class LocationStatus():
 
             LOGGER.info(f"Exported stored GPS data to: {filename}")
         except Exception as e:
-                LOGGER.error(f"Error saving GPS export: {e}")
+            LOGGER.error(f"Error saving GPS export: {e}")
 
     def gps_location(self):
         """
