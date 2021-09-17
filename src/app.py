@@ -11,6 +11,9 @@ from ui.interface.main_window import Ui_NomadicPI
 class mainWindow(QtWidgets.QMainWindow):
     update_loop = None
 
+    # Time in milliseconds for cadence of update loop
+    loop_interval = 1000
+
     def __init__(self):
         super(mainWindow, self).__init__()
 
@@ -24,11 +27,10 @@ class mainWindow(QtWidgets.QMainWindow):
         self.showFullScreen()
 
         self.nomadic = lib.nomadic.NomadicPi(self.ui)
-        #self.showMaximized()
         app.aboutToQuit.connect(self.exit)
 
         self.update_loop = QTimer(self)
-        self.update_loop.setInterval(1000)          # Throw event timeout with an interval of 1000 milliseconds
+        self.update_loop.setInterval(self.loop_interval)
         self.update_loop.timeout.connect(self.nomadic.update_content)
         self.update_loop.start()
 
