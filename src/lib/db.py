@@ -102,8 +102,7 @@ class NomadicDb():
                 cursor.execute('''INSERT INTO gps_points VALUES (?, ?, ?, ?, ?);''', (timestamp, round(gps_info.lat, 6), round(gps_info.lon, 6), alt, speed))
 
                 LOGGER.info(f"Storing GPS point {timestamp},{round(gps_info.lat, 6)},{round(gps_info.lon, 6)} as {cursor.lastrowid}")
-                db_conn.commit()
-                db_conn.close()
+                (db_conn.commit()).close()
 
     def get_gps_points(self) -> dict:
         """
