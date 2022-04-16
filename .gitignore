@@ -6,3 +6,4 @@ src/album_art/*
 **/*.pyc
 **/**/*.pyc
 *.db
+.idea/*
