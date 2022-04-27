@@ -11,6 +11,7 @@ humanize = "*"
 python-dateutil = "*"
 dbus-python = "*"
 gpxpy = "*"
+pygobject = "*"
 
 [dev-packages]
 
@@ -18,4 +19,4 @@ gpxpy = "*"
 python_version = "3.8"
 
 [packages.python-mpd2]
-git = "git://github.com/Mic92/python-mpd2.git"
+git = "https://github.com/Mic92/python-mpd2.git"
