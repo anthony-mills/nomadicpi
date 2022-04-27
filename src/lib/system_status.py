@@ -3,11 +3,12 @@ import logging
 import humanize
 import psutil
 
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem
 
 LOGGER = logging.getLogger(__name__)
 
-class SystemStatus():
+
+class SystemStatus:
 
     def __init__(self, nomadic):
         self.nomadic = nomadic
@@ -29,7 +30,7 @@ class SystemStatus():
         self.mpd_daemon()
         self.network_info()
 
-        self.database_update_status(self.nomadic.mpd_status)
+        self.database_update_status()
 
     def disk_info(self):
         """
@@ -49,7 +50,7 @@ class SystemStatus():
             used = psutil.disk_usage(filesystem.mountpoint)
             self.nomadic.ui.SystemFileSystems.setItem(row, 3, QTableWidgetItem(humanize.naturalsize(used.total)))
             self.nomadic.ui.SystemFileSystems.setItem(row, 4, QTableWidgetItem(str(used.percent) + '%'))
-            row +=1
+            row += 1
 
     def network_info(self):
         """
@@ -74,7 +75,7 @@ class SystemStatus():
                     self.nomadic.ui.SystemNetwork.setItem(row, 2, QTableWidgetItem(humanize.naturalsize(interface_activity[interface].bytes_sent)))
                 if interface_activity[interface].bytes_recv is not None:
                     self.nomadic.ui.SystemNetwork.setItem(row, 3, QTableWidgetItem(humanize.naturalsize(interface_activity[interface].bytes_recv)))
-                row +=1
+                row += 1
 
     def mpd_daemon(self):
         """
@@ -136,8 +137,11 @@ class SystemStatus():
         """
         Update the system section with the current load average
         """
-        load_avg = psutil.getloadavg()
-        self.nomadic.ui.SystemLoadAvg.setText(f"Load Average: {load_avg[0]}")
+        if hasattr(psutil, 'getloadavg'):
+            load_avg = psutil.getloadavg()
+            self.nomadic.ui.SystemLoadAvg.setText(f"Load Average: {load_avg[0]}")
+        else:
+            self.nomadic.ui.SystemLoadAvg.setText(f"Load Average: Unknown")
 
     def update_system_memory(self):
         """
@@ -160,16 +164,11 @@ class SystemStatus():
         """
         LOGGER.debug("Manual update of the MPD library contents triggered.")
         self.nomadic.mpd.update_library()
-        self.database_update_status(self.nomadic.mpd_status)
+        self.database_update_status()
 
-    def database_update_status(self, mpd_status: dict):
+    def database_update_status(self):
         """
         Update the state of database update button
-
-        Parameters
-        ----------
-        mpd_status : dict
-            Dictionary of the MPD daemons current state
         """
         if self.nomadic.mpd_status.get('updating_db') is None:
             self.nomadic.ui.UpdateDatabase.setChecked(False)

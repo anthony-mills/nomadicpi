@@ -1,11 +1,6 @@
 import sys
 import configparser
 import logging
-import time
-import threading
-
-from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtCore import pyqtSlot
 
 import lib.application_home as application_home
 import lib.bluetooth as bluetooth
