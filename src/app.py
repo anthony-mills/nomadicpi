@@ -1,4 +1,5 @@
 import sys
+
 import os.path
 
 from PyQt5 import QtWidgets
@@ -8,14 +9,15 @@ import lib.nomadic
 
 from ui.interface.main_window import Ui_NomadicPI
 
-class mainWindow(QtWidgets.QMainWindow):
+
+class MainWindow(QtWidgets.QMainWindow):
     update_loop = None
 
     # Time in milliseconds for cadence of update loop
     loop_interval = 1000
 
     def __init__(self):
-        super(mainWindow, self).__init__()
+        super(MainWindow, self).__init__()
 
         self.setFixedSize(800, 490)
 
@@ -36,10 +38,11 @@ class mainWindow(QtWidgets.QMainWindow):
 
     def exit(self):
         self.update_loop.stop()
-        self.nomadic.exit_application
+        self.nomadic.exit_application()
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    application = mainWindow()
+    application = MainWindow()
     application.show()
     sys.exit(app.exec())
