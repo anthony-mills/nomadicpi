@@ -7,7 +7,7 @@ from gi.repository import GLib
 
 LOGGER = logging.getLogger(__name__)
 
-class Bluetooth():
+class Bluetooth:
     dbus_mgr, sys_bus = None, None
 
     player_iface, transport_iface = None, None
@@ -23,16 +23,16 @@ class Bluetooth():
 
     def reset_device_state(self):
         """
-        Set inital device flags
+        Set initial device flags
         """        
         self.bt_device = {
-            'name' : None,
-            'mac' : None,
-            'connection' : False,
-            'audio' : False,
-            'status' : None,
-            'artist' : None,
-            'track' : None,
+            'name': None,
+            'mac': None,
+            'connection': False,
+            'audio': False,
+            'status': None,
+            'artist': None,
+            'track': None,
         }
 
     def setup_audio(self):
