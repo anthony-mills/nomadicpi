@@ -28,14 +28,15 @@ LOGGER = logging.getLogger(__name__)
 
 logging.info(f"Running under Python version {py_ver}")
 
-class NomadicPi():
+
+class NomadicPi:
     pages = {
-        'home' : 0,
-        'playlist' : 1,
-        'system' : 2,
-        'files' : 3,
-        'location' : 4,
-        'night' : 5
+        'home': 0,
+        'playlist': 1,
+        'system': 2,
+        'files': 3,
+        'location': 4,
+        'night': 5
     }
 
     # Folder for album art
@@ -66,23 +67,23 @@ class NomadicPi():
         # Check the bluetooth status
         self.bluetooth = bluetooth.Bluetooth()
 
-        # Setup the handlers for user actions on the application home
+        # Set up the handlers for user actions on the application home
         self.application_home = application_home.UserActions(self)
         self.application_home.ui_button_state()
 
-        # Setup the handlers for user actions on the playlist page
+        # Set up the handlers for user actions on the playlist page
         self.current_playlist = playlist_management.PlaylistManagement(self)
 
-        # Setup the handlers for user actions on the file management page
+        # Set up the handlers for user actions on the file management page
         self.mpd_files = file_management.FileManagement(self)
 
-        # Setup the handlers for user actions on the system status page
+        # Set up the handlers for user actions on the system status page
         self.system_status = system_status.SystemStatus(self)
 
-        # Setup the handlers for user actions on the night mode view
+        # Set up the handlers for user actions on the night mode view
         self.night_mode = night_mode.NightMode(self)
 
-        # Setup the handlers for user actions on the location page
+        # Set up the handlers for user actions on the location page
         self.location_status = location_status.LocationStatus(self)
 
         self.ui.appContent.setCurrentIndex(self.pages['home'])
