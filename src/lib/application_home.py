@@ -186,7 +186,7 @@ class UserActions():
             song_elapsed = "%02d:%02d" % (m, s)
 
             if self.nomadic.bt_status.get('duration', 0) > 0:
-                m, s = format_time(self.nomadic.bt_status.get('duration'))
+                m, s = format_time(self.nomadic.bt_status.get('duration') / 1000)
                 song_elapsed = f"{song_elapsed} / {('%02d:%02d' % (m, s))}"
 
             self.nomadic.ui.SongPlayTime.setText(f"{song_elapsed}")                 
