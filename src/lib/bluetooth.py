@@ -1,6 +1,5 @@
 import logging
 import sys
-
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
@@ -82,13 +81,13 @@ class Bluetooth:
         Get the details of the device
         """
         dbus_objs = self.dbus_mgr.GetManagedObjects().items()
-        
+
         for path, ifaces in dbus_objs:
-            if 'org.bluez.Device1' in ifaces and 'Connected' in ifaces['org.bluez.Device1']:
-                if ifaces['org.bluez.Device1']['Connected'] == 1:
+            if 'org.bluez.Device1' in ifaces and 'org.bluez.MediaControl1' in ifaces:
+                if 'Player' in ifaces['org.bluez.MediaControl1']:
                     self.bt_device['name'] = str(ifaces['org.bluez.Device1']['Name'])
                     self.bt_device['mac'] = str(ifaces['org.bluez.Device1']['Address'])
-                    self.bt_device['connection'] = True                
+                    self.bt_device['connection'] = True
 
             if 'org.bluez.MediaPlayer1' in ifaces:
                 if 'Track' in ifaces['org.bluez.MediaPlayer1']:
